@@ -115,8 +115,8 @@ public class FTC_Robot extends LinearOpMode {
 
         // Ramp motor speeds till stop pressed.
         while(opModeIsActive()) {
-            throttle = gamepad1.left_stick_y;
-            direction = gamepad1.left_stick_x;
+            throttle = -gamepad1.left_stick_y;
+            direction = -gamepad1.left_stick_x;
 
             right = throttle - direction;
             left = throttle + direction;
