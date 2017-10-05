@@ -190,6 +190,25 @@ public class FTC_Robot extends LinearOpMode {
         }
     }
 
+    private double lowSensitivityScaleInput(double joystickInputValue){
+        /* For values <=0.4 we use y=(1/4)x
+           For values >0.4 we use y=(1.3)x^2 - (0.23)x
+         */
+        double scaledValue = 0.0;
+
+        if(joystickInputValue<=0.4){
+            scaledValue = 0.25 * joystickInputValue;
+        }
+        else{
+            scaledValue = (1.3*joystickInputValue*joystickInputValue) - ((0.23)*joystickInputValue);
+        }
+        if(scaledValue>1.0)
+            return 1.0;
+        if(scaledValue<0.0)
+            return 0.0;
+        return scaledValue;
+    }
+
     double scaleInput(double dVal)  {
         double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
                 0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00 };
