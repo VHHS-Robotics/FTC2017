@@ -87,6 +87,8 @@ public class FTC_Robot extends LinearOpMode {
 
         GlyphServoRight.setPosition(0.5);
         GlyphServoLeft.setPosition(0.5);
+        SmallRelicServo.setPosition(0.5);
+        BigRelicServo.setPosition(0.5);
 
         // Wheels Motors
         throttle = -gamepad1.left_stick_y;
@@ -203,12 +205,20 @@ public class FTC_Robot extends LinearOpMode {
             if (gamepad1.b)
             {
                 SmallRelicServo.setPosition(SmallRelicServo.getPosition()+0.05);
-
             }
             else if (gamepad1.y){
                 SmallRelicServo.setPosition(SmallRelicServo.getPosition()-0.05);
             }
 
+            while(gamepad1.right_bumper){
+                BigRelicServo.setPosition(0);
+                telemetry.addData("BigServo-Right", "%5.2f", BigRelicServo.getPosition());
+            }
+            while(gamepad1.left_bumper){
+                BigRelicServo.setPosition(1);
+                telemetry.addData("BigServo-Left", "%5.2f", BigRelicServo.getPosition());
+            }
+            BigRelicServo.setPosition(0.5);
 
             // Display the current value
             telemetry.addData("Motor Right", "%5.2f", right);
