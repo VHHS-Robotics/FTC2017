@@ -39,6 +39,9 @@ public class FTC_Robot extends LinearOpMode {
     DcMotor GlyphMotor; // up and down very quickly
     Servo GlyphServoRight; // close and open
     Servo GlyphServoLeft; // close and open
+    DcMotor RelicMotor; //Extending arm
+    Servo BigRelicServo; // Vertical and Horizontal lift
+    Servo SmallRelicServo; //Open and close claw
 
     double  power   = 0;
     boolean rampUp  = true;
@@ -58,27 +61,36 @@ public class FTC_Robot extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        // Connect to motor (Assume standard left wheel)
         // Change the text in quotes to match any motor name on your robot.
+        // Wheels Motors
         MotorFrontLeft = hardwareMap.dcMotor.get("motor1");
         MotorFrontRight = hardwareMap.dcMotor.get("motor2");
         MotorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         MotorBackLeft = hardwareMap.dcMotor.get("motor3");
         MotorBackRight = hardwareMap.dcMotor.get("motor4");
         MotorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        // Wait for the start button
+
+        //Glyph arm Motors and Servos
         GlyphMotor = hardwareMap.dcMotor.get("motor5");
         GlyphServoLeft = hardwareMap.servo.get("servo3");
         GlyphServoRight = hardwareMap.servo.get("servo4");
 
+        //Relic arm motors and Servos
+        RelicMotor = hardwareMap.dcMotor.get("motor6");
+        Servo BigRelicServo = hardwareMap.servo.get("servo5");
+        Servo SmallRelicServo = hardwareMap.servo.get("servo6");
+
+        // Wait for the start button
         telemetry.addData(">", "Press Start to run Motors.");
         telemetry.update();
         waitForStart();
 
         GlyphServoRight.setPosition(0.5);
         GlyphServoLeft.setPosition(0.5);
+        SmallRelicServo.setPosition(0.5);
+        BigRelicServo.setPosition(0.5);
 
-// Wheels Motors
+        // Wheels Motors
         throttle = -gamepad1.left_stick_y;
         direction = gamepad1.left_stick_x;
 
@@ -96,7 +108,7 @@ public class FTC_Robot extends LinearOpMode {
 
 
 
-// Arm Motor
+        // Arm Motor
         Armthrottle = gamepad1.left_trigger; //Dont think
         Armdirection = gamepad1.right_trigger;
 
@@ -168,16 +180,45 @@ public class FTC_Robot extends LinearOpMode {
             GlyphMotor.setPower(0.0);
 
             // Glyph Servo Controller Code
-            if (gamepad1.a )
+            if (gamepad1.a)
             {
                 GlyphServoRight.setPosition(GlyphServoRight.getPosition()+0.05);
                 GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()-0.05);
 
             }
-            else if (gamepad1.y  ){
+            else if (gamepad1.x){
                 GlyphServoRight.setPosition(GlyphServoRight.getPosition()-0.05);
                 GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()+0.05);
             }
+
+            // Relic Linear slide motor
+            while (gamepad1.dpad_up){
+                RelicMotor.setPower(-0.5);
+            }
+
+            while (gamepad1.dpad_down){
+                RelicMotor.setPower(0.5);
+            }
+            RelicMotor.setPower(0.0);
+
+            // Relic Servo Controller Code
+            if (gamepad1.b)
+            {
+                SmallRelicServo.setPosition(SmallRelicServo.getPosition()+0.05);
+            }
+            else if (gamepad1.y){
+                SmallRelicServo.setPosition(SmallRelicServo.getPosition()-0.05);
+            }
+
+            while(gamepad1.right_bumper){
+                BigRelicServo.setPosition(0);
+                telemetry.addData("BigServo-Right", "%5.2f", BigRelicServo.getPosition());
+            }
+            while(gamepad1.left_bumper){
+                BigRelicServo.setPosition(1);
+                telemetry.addData("BigServo-Left", "%5.2f", BigRelicServo.getPosition());
+            }
+            BigRelicServo.setPosition(0.5);
 
             // Display the current value
             telemetry.addData("Motor Right", "%5.2f", right);
@@ -237,6 +278,7 @@ public class FTC_Robot extends LinearOpMode {
         // return scaled value.
         return dScale;
     }
+
     double scaleInputRight(double dVal)  {
         double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
                 0.30, 0.36, 0.43, 0.50};
