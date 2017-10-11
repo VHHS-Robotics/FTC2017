@@ -103,8 +103,10 @@ public class FTC_Robot extends LinearOpMode {
 
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
-        right = (float)scaleInput(right);
-        left =  (float)scaleInput(left);
+        //right = (float)scaleInput(right);
+        //left =  (float)scaleInput(left);
+        right = (float)lowSensitivityScaleInput(right);
+        left =  (float)lowSensitivityScaleInput(left);
 
 
 
@@ -139,8 +141,10 @@ public class FTC_Robot extends LinearOpMode {
 
             // scale the joystick value to make it easier to control
             // the robot more precisely at slower speeds.
-            right = (float)scaleInput(right);
-            left =  (float)scaleInput(left);
+            //right = (float)scaleInput(right);
+            //left =  (float)scaleInput(left);
+            right = (float)lowSensitivityScaleInput(right);
+            left =  (float)lowSensitivityScaleInput(left);
 
 
 
@@ -210,15 +214,13 @@ public class FTC_Robot extends LinearOpMode {
                 SmallRelicServo.setPosition(SmallRelicServo.getPosition()-0.05);
             }
 
+            //1 degree equals 0.00055 decimal
             while(gamepad1.right_bumper){
-                BigRelicServo.setPosition(0);
-                telemetry.addData("BigServo-Right", "%5.2f", BigRelicServo.getPosition());
+                BigRelicServo.setPosition(0.5);
             }
             while(gamepad1.left_bumper){
-                BigRelicServo.setPosition(1);
-                telemetry.addData("BigServo-Left", "%5.2f", BigRelicServo.getPosition());
+                BigRelicServo.setPosition(0.55);
             }
-            BigRelicServo.setPosition(0.5);
 
             // Display the current value
             telemetry.addData("Motor Right", "%5.2f", right);
@@ -235,6 +237,11 @@ public class FTC_Robot extends LinearOpMode {
         /* For values <=0.4 we use y=(1/4)x
            For values >0.4 we use y=(1.3)x^2 - (0.23)x
          */
+        boolean positive = true;
+        if(joystickInputValue<0){
+            positive = false;
+        }
+        joystickInputValue = Math.abs(joystickInputValue);
         double scaledValue = 0.0;
 
         if(joystickInputValue<=0.4){
@@ -244,9 +251,11 @@ public class FTC_Robot extends LinearOpMode {
             scaledValue = (1.3*joystickInputValue*joystickInputValue) - ((0.23)*joystickInputValue);
         }
         if(scaledValue>1.0)
-            return 1.0;
-        if(scaledValue<0.0)
-            return 0.0;
+            scaledValue = 1.0;
+
+        if(!positive){
+            return -scaledValue;
+        }
         return scaledValue;
     }
 
