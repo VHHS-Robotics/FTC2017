@@ -222,6 +222,7 @@ public class FTC_Robot extends LinearOpMode {
                 BigRelicServo.setPosition(0.55);
             }
 
+
             // Display the current value
             telemetry.addData("Motor Right", "%5.2f", right);
             telemetry.addData("Motor Left Power", "%5.2f", left);
