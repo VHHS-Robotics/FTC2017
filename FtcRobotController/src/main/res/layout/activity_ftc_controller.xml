@@ -167,7 +167,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <TextView
       android:id="@+id/textRemoteProgrammingMode"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="225dp"
       android:background="?attr/backgroundLight"
       android:gravity="center"
       android:textColor="?attr/textWhite"
@@ -175,6 +175,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       android:textStyle="bold"
       android:visibility="invisible"
       android:text="" />
+
+    <ScrollView
+        android:id="@+id/scroll_view_debug_log"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/textRemoteProgrammingMode"
+        android:scrollbars="vertical"
+        android:fillViewport="true">
+
+        <TextView
+            android:id="@+id/text_debug_log"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Error Messages"
+            />
+    </ScrollView>
 
   </RelativeLayout>
 

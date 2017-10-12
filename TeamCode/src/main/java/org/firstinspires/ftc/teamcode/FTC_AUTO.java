@@ -47,40 +47,49 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-/**
- * This OpMode illustrates the basics of using the Vuforia engine to determine
- * the identity of Vuforia VuMarks encountered on the field. The code is structured as
- * a LinearOpMode. It shares much structure with {@link ConceptVuforiaNavigation}; we do not here
- * duplicate the core Vuforia documentation found there, but rather instead focus on the
- * differences between the use of Vuforia for navigation vs VuMark identification.
- *
- * @see ConceptVuforiaNavigation
- * @see VuforiaLocalizer
- * @see VuforiaTrackableDefaultListener
- * see  ftc_app/doc/tutorial/FTC_FieldCoordinateSystemDefinition.pdf
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
- *
- * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
- * is explained in {@link ConceptVuforiaNavigation}.
- */
 
-@Autonomous(name="Concept: VuMark Id", group ="Concept")
+@Autonomous(name="AUTO", group ="Competition")
 
-public class ConceptVuMarkIdentification extends LinearOpMode {
-
-    public static final String TAG = "Vuforia VuMark Sample";
+public class FTC_AUTO extends LinearOpMode {
 
     OpenGLMatrix lastLocation = null;
-
-    /**
-     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
-     * localization engine.
-     */
     VuforiaLocalizer vuforia;
+    VuforiaTrackable relicTemplate;
 
     @Override public void runOpMode() {
+
+
+        telemetry.addData(">", "Press Play to start");
+        telemetry.update();
+
+        //VuMark Initialization
+        VuMarkInit();
+        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+        relicTemplate = relicTrackables.get(0);
+        relicTrackables.activate();
+
+        waitForStart();
+
+        while (opModeIsActive()) {
+
+            if(VuMarkCheck().equals(RelicRecoveryVuMark.LEFT)){
+                telemetry.addLine("Left");
+            }
+            if(VuMarkCheck().equals(RelicRecoveryVuMark.CENTER)){
+                telemetry.addLine("Center");
+            }
+            if(VuMarkCheck().equals(RelicRecoveryVuMark.RIGHT)){
+                telemetry.addLine("Right");
+            }
+            telemetry.update();
+        }
+    }
+
+    String format(OpenGLMatrix transformationMatrix) {
+        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
+    }
+
+    private void VuMarkInit(){
 
         /*
          * To start up Vuforia, tell it the view that we wish to use for camera monitor (on the RC phone);
@@ -120,64 +129,53 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
          * but differ in their instance id information.
          * @see VuMarkInstanceId
          */
-        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
-        VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
 
-        telemetry.addData(">", "Press Play to start");
-        telemetry.update();
-        waitForStart();
+    }
+    private RelicRecoveryVuMark VuMarkCheck(){
 
-        relicTrackables.activate();
-
-        while (opModeIsActive()) {
-
-            /**
-             * See if any of the instances of {@link relicTemplate} are currently visible.
-             * {@link RelicRecoveryVuMark} is an enum which can have the following values:
-             * UNKNOWN, LEFT, CENTER, and RIGHT. When a VuMark is visible, something other than
-             * UNKNOWN will be returned by {@link RelicRecoveryVuMark#from(VuforiaTrackable)}.
-             */
-            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+        /**
+         * See if any of the instances of {@link relicTemplate} are currently visible.
+         * {@link RelicRecoveryVuMark} is an enum which can have the following values:
+         * UNKNOWN, LEFT, CENTER, and RIGHT. When a VuMark is visible, something other than
+         * UNKNOWN will be returned by {@link RelicRecoveryVuMark#from(VuforiaTrackable)}.
+         */
+        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+        if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
 
                 /* Found an instance of the template. In the actual game, you will probably
                  * loop until this condition occurs, then move on to act accordingly depending
                  * on which VuMark was visible. */
-                telemetry.addData("VuMark", "%s visible", vuMark);
+            telemetry.addData("VuMark", "%s visible", vuMark);
 
                 /* For fun, we also exhibit the navigational pose. In the Relic Recovery game,
                  * it is perhaps unlikely that you will actually need to act on this pose information, but
                  * we illustrate it nevertheless, for completeness. */
-                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
-                telemetry.addData("Pose", format(pose));
+            OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
+            telemetry.addData("Pose", format(pose));
 
                 /* We further illustrate how to decompose the pose into useful rotational and
                  * translational components */
-                if (pose != null) {
-                    VectorF trans = pose.getTranslation();
-                    Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+            if (pose != null) {
+                VectorF trans = pose.getTranslation();
+                Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
-                    // Extract the X, Y, and Z components of the offset of the target relative to the robot
-                    double tX = trans.get(0);
-                    double tY = trans.get(1);
-                    double tZ = trans.get(2);
+                // Extract the X, Y, and Z components of the offset of the target relative to the robot
+                double tX = trans.get(0);
+                double tY = trans.get(1);
+                double tZ = trans.get(2);
 
-                    // Extract the rotational components of the target relative to the robot
-                    double rX = rot.firstAngle;
-                    double rY = rot.secondAngle;
-                    double rZ = rot.thirdAngle;
-                }
+                // Extract the rotational components of the target relative to the robot
+                double rX = rot.firstAngle;
+                double rY = rot.secondAngle;
+                double rZ = rot.thirdAngle;
             }
-            else {
-                telemetry.addData("VuMark", "not visible");
-            }
-
-            telemetry.update();
         }
-    }
+        else {
+            telemetry.addData("VuMark", "not visible");
+        }
 
-    String format(OpenGLMatrix transformationMatrix) {
-        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
+        telemetry.update();
+
+        return vuMark;
     }
 }
