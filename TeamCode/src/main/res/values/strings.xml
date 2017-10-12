@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="motor1">motor1</string>
+    <string name="motor2">motor2</string>
+    <string name="motor3">motor3</string>
+    <string name="motor4">motor4</string>
 </resources>

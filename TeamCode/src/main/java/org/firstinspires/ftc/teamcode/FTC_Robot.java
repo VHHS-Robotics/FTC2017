@@ -64,6 +64,8 @@ public class FTC_Robot extends LinearOpMode {
         // Change the text in quotes to match any motor name on your robot.
         // Wheels Motors
         MotorFrontLeft = hardwareMap.dcMotor.get("motor1");
+        //MotorFrontLeft = hardwareMap.dcMotor.get(context.getString(0));
+
         MotorFrontRight = hardwareMap.dcMotor.get("motor2");
         MotorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         MotorBackLeft = hardwareMap.dcMotor.get("motor3");
@@ -107,8 +109,6 @@ public class FTC_Robot extends LinearOpMode {
         //left =  (float)scaleInput(left);
         right = (float)lowSensitivityScaleInput(right);
         left =  (float)lowSensitivityScaleInput(left);
-
-
 
         // Arm Motor
         Armthrottle = gamepad1.left_trigger; //Dont think
@@ -244,11 +244,16 @@ public class FTC_Robot extends LinearOpMode {
         joystickInputValue = Math.abs(joystickInputValue);
         double scaledValue = 0.0;
 
-        if(joystickInputValue<=0.4){
+        //joystickInputValue=0.4
+        if(joystickInputValue<=0.641){
             scaledValue = 0.25 * joystickInputValue;
         }
+        else if(joystickInputValue>0.641 && joystickInputValue<=0.834){
+            scaledValue = joystickInputValue*joystickInputValue - 0.25*joystickInputValue - 0.09;
+        }
         else{
-            scaledValue = (1.3*joystickInputValue*joystickInputValue) - ((0.23)*joystickInputValue);
+            //scaledValue = (1.3*joystickInputValue*joystickInputValue) - ((0.23)*joystickInputValue);
+            scaledValue = 2.2*joystickInputValue*joystickInputValue - 0.4*joystickInputValue - 0.8;
         }
         if(scaledValue>1.0)
             scaledValue = 1.0;

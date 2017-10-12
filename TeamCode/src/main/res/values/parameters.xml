@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="Arm_Servo_Angle_Max" format="float" type="dimen">1020.0</item>
+</resources>
