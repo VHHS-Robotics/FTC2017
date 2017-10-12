@@ -219,7 +219,8 @@ public class FTC_Robot extends LinearOpMode {
                 BigRelicServo.setPosition(0.5);
             }
             while(gamepad1.left_bumper){
-                BigRelicServo.setPosition(0.55);
+                BigRelicServo.setPosition(0.65);
+                //BigRelicServo.setPosition(0.55);
             }
 
             // Display the current value
