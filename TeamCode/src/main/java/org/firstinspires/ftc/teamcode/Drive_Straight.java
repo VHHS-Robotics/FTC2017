@@ -7,14 +7,16 @@ class Drive_Straight extends Drive_Command {
     private boolean finished = false;
     private long startTime = 0;
     private double distance;
-    private long timeToDistance;
+    private long timeToDistance = 500;
+    private boolean isPositive = true;
 
     public Drive_Straight(HardwareMap hardwareMap, double distance) {
         super(hardwareMap);
+        if(distance<0){
+            isPositive = false;
+        }
         this.distance = distance;
         finished = false;
-        start();
-
         //calculate time to get to distance with motor power
     }
 
@@ -42,9 +44,13 @@ class Drive_Straight extends Drive_Command {
     }
 
     private void startMotors(){
-        MotorFrontLeft.setPower(power);
-        MotorFrontRight.setPower(power);
-        MotorBackLeft.setPower(power);
-        MotorBackRight.setPower(power);
+        double motor_power = power;
+        if(isPositive){
+            motor_power = -power;
+        }
+        MotorFrontLeft.setPower(motor_power);
+        MotorFrontRight.setPower(motor_power);
+        MotorBackLeft.setPower(motor_power);
+        MotorBackRight.setPower(motor_power);
     }
 }
