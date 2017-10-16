@@ -51,6 +51,10 @@ public class FTC_AUTO extends LinearOpMode {
     VuforiaLocalizer vuforia;
     VuforiaTrackable relicTemplate;
 
+    public void initializeMotors(){
+
+    }
+
     @Override public void runOpMode() {
 
         //VuMark Initialization
