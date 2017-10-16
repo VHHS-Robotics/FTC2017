@@ -44,7 +44,7 @@ public class FTC_AUTO extends LinearOpMode {
     private VuforiaTrackable relicTemplate;
     private VuforiaTrackables relicTrackables;
 
-    @Override public void runOpMode() {
+    @Override public void runOpMode() throws InterruptedException{
         //Initialize VuMark Code
         VuMarkInit();
 
@@ -62,13 +62,10 @@ public class FTC_AUTO extends LinearOpMode {
             if(VuMarkCheck().equals(RelicRecoveryVuMark.RIGHT)){
                 telemetry.addLine("Right");
             }
+
             telemetry.update();
         }
 
-    }
-
-    public String format(OpenGLMatrix transformationMatrix) {
-        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
 
     private void VuMarkInit(){

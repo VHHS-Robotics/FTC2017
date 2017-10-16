@@ -13,10 +13,6 @@ import com.qualcomm.robotcore.util.Range;
  */
 @TeleOp(name = "Competition_Robot", group = "Competition")
 public class FTC_Robot extends LinearOpMode {
-    static final double INCREMENT   = 0.1;     // amount to ramp motor each CYCLE_MS cycle
-    static final int    CYCLE_MS    =   50;     // period of each cycle
-    static final double MAX_FWD     =  1.0;     // Maximum FWD power applied to motor
-    static final double MAX_REV     = -1.0;     // Maximum REV power applied to motor
 
     // Define class members
     DcMotor MotorFrontLeft;
@@ -30,9 +26,6 @@ public class FTC_Robot extends LinearOpMode {
     Servo BigRelicServo; // Vertical and Horizontal lift
     Servo SmallRelicServo; //Open and close claw
 
-    double  power   = 0;
-    boolean rampUp  = true;
-
     float throttle;
     float direction;
     float right;
@@ -42,8 +35,6 @@ public class FTC_Robot extends LinearOpMode {
     float Armdirection;
     float ArmUp;
     float ArmDown;
-
-
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -251,64 +242,6 @@ public class FTC_Robot extends LinearOpMode {
     double scaleInput(double dVal)  {
         double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
                 0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00 };
-
-        // get the corresponding index for the scaleInput array.
-        int index = (int) (dVal * 16.0);
-
-        // index should be positive.
-        if (index < 0) {
-            index = -index;
-        }
-
-        // index cannot exceed size of array minus 1.
-        if (index > 16) {
-            index = 16;
-        }
-
-        // get value from the array.
-        double dScale = 0.0;
-        if (dVal < 0) {
-            dScale = -scaleArray[index];
-        } else {
-            dScale = scaleArray[index];
-        }
-
-        // return scaled value.
-        return dScale;
-    }
-
-    double scaleInputRight(double dVal)  {
-        double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
-                0.30, 0.36, 0.43, 0.50};
-
-        // get the corresponding index for the scaleInput array.
-        int index = (int) (dVal * 12.0);
-
-        // index should be positive.
-        if (index < 0) {
-            index = -index;
-        }
-
-        // index cannot exceed size of array minus 1.
-        if (index > 12) {
-            index = 12;
-        }
-
-        // get value from the array.
-        double dScale = 0.0;
-        if (dVal < 0) {
-            dScale = -scaleArray[index];
-        } else {
-            dScale = scaleArray[index];
-        }
-
-        // return scaled value.
-        return dScale;
-    }
-
-    double ArmMotorscaleInput(double dVal)  {
-        double[] scaleArray = { -0.0, -0.05, -0.09, -0.10, -0.12, -0.15, -0.18, -0.24,
-                -0.30, -0.36, -0.43, -0.50, -0.60, -0.72, -0.85, -1.00, -1.00};
 
         // get the corresponding index for the scaleInput array.
         int index = (int) (dVal * 16.0);
