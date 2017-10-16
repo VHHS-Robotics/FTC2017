@@ -29,10 +29,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.ConceptVuforiaNavigation;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -47,9 +44,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-
 @Autonomous(name="AUTO", group ="Competition")
-
 public class FTC_AUTO extends LinearOpMode {
 
     OpenGLMatrix lastLocation = null;
@@ -57,10 +52,6 @@ public class FTC_AUTO extends LinearOpMode {
     VuforiaTrackable relicTemplate;
 
     @Override public void runOpMode() {
-
-
-        telemetry.addData(">", "Press Play to start");
-        telemetry.update();
 
         //VuMark Initialization
         VuMarkInit();
@@ -83,6 +74,7 @@ public class FTC_AUTO extends LinearOpMode {
             }
             telemetry.update();
         }
+
     }
 
     String format(OpenGLMatrix transformationMatrix) {

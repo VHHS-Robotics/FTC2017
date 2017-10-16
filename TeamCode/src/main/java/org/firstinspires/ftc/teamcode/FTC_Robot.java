@@ -6,19 +6,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 /**
  * TeleOp Mode
  * <p>
@@ -61,11 +48,8 @@ public class FTC_Robot extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        // Change the text in quotes to match any motor name on your robot.
         // Wheels Motors
         MotorFrontLeft = hardwareMap.dcMotor.get("motor1");
-        //MotorFrontLeft = hardwareMap.dcMotor.get(context.getString(0));
-
         MotorFrontRight = hardwareMap.dcMotor.get("motor2");
         MotorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         MotorBackLeft = hardwareMap.dcMotor.get("motor3");
@@ -79,8 +63,8 @@ public class FTC_Robot extends LinearOpMode {
 
         //Relic arm motors and Servos
         RelicMotor = hardwareMap.dcMotor.get("motor6");
-        Servo BigRelicServo = hardwareMap.servo.get("servo5");
-        Servo SmallRelicServo = hardwareMap.servo.get("servo6");
+        BigRelicServo = hardwareMap.servo.get("servo5");
+        SmallRelicServo = hardwareMap.servo.get("servo6");
 
         // Wait for the start button
         telemetry.addData(">", "Press Start to run Motors.");
@@ -149,7 +133,6 @@ public class FTC_Robot extends LinearOpMode {
 
 
             // Arm Motor
-
             Armthrottle = gamepad1.left_trigger;
             Armdirection = gamepad1.right_trigger;
 
@@ -220,7 +203,6 @@ public class FTC_Robot extends LinearOpMode {
             }
             while(gamepad1.left_bumper){
                 BigRelicServo.setPosition(0.65);
-                //BigRelicServo.setPosition(0.55);
             }
 
 
