@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
  * Created by Daniel on 10/13/2017.
  */
 
-public abstract class Drive_Command {
-    public double power = 0.5;
+public abstract class Drive_Command implements Command{
+    public double power = 0.3;
     protected static DcMotor MotorFrontLeft;
     protected static DcMotor MotorFrontRight;
     protected static DcMotor MotorBackLeft;
@@ -30,6 +30,12 @@ public abstract class Drive_Command {
         MotorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    abstract void start();
-    abstract boolean isFinished();
+    abstract void startMotors();
+
+    protected void stopMotors(){
+        MotorFrontLeft.setPower(0.0);
+        MotorFrontRight.setPower(0.0);
+        MotorBackLeft.setPower(0.0);
+        MotorBackRight.setPower(0.0);
+    }
 }

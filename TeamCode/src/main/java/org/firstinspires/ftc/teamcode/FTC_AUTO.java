@@ -30,19 +30,14 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 @Autonomous(name="AUTO", group ="Competition")
@@ -51,7 +46,7 @@ public class FTC_AUTO extends LinearOpMode {
     private VuforiaLocalizer vuforia;
     private VuforiaTrackable relicTemplate;
     private VuforiaTrackables relicTrackables;
-    private Queue<Drive_Command> commands = new LinkedList<Drive_Command>();
+    private Queue<Command> commands = new LinkedList<Command>();
 
     @Override public void runOpMode() throws InterruptedException{
 
@@ -63,11 +58,17 @@ public class FTC_AUTO extends LinearOpMode {
         while (opModeIsActive()) {
             //Enter all commands here
             commands.add(new Drive_Straight(hardwareMap, 1));
+            commands.add(new Command_Wait(100));
+            commands.add(new Drive_Turn(hardwareMap, 90.0));
+            commands.add(new Command_Wait(100));
+            commands.add(new Drive_Turn(hardwareMap, -90.0));
+            commands.add(new Command_Wait(100));
             commands.add(new Drive_Straight(hardwareMap, -1));
             //-----------------------
 
+            //executes commands for autonomous
             while(!commands.isEmpty()){
-                Drive_Command command = commands.poll();
+                Command command = commands.poll();
                 command.start();
             }
 

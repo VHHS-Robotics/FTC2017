@@ -10,7 +10,7 @@ class Drive_Straight extends Drive_Command {
     private long timeToDistance = 500;
     private boolean isPositive = true;
 
-    public Drive_Straight(HardwareMap hardwareMap, double distance) {
+    protected Drive_Straight(HardwareMap hardwareMap, double distance) {
         super(hardwareMap);
         if(distance<0){
             isPositive = false;
@@ -24,7 +24,7 @@ class Drive_Straight extends Drive_Command {
     public void start() {
         startTime = System.currentTimeMillis();
         startMotors();
-        while(System.currentTimeMillis()-startTime<timeToDistance){
+        while(System.currentTimeMillis()-startTime<=timeToDistance){
             //wait
         }
         stopMotors();
@@ -36,14 +36,7 @@ class Drive_Straight extends Drive_Command {
         return finished;
     }
 
-    private void stopMotors(){
-        MotorFrontLeft.setPower(0.0);
-        MotorFrontRight.setPower(0.0);
-        MotorBackLeft.setPower(0.0);
-        MotorBackRight.setPower(0.0);
-    }
-
-    private void startMotors(){
+    void startMotors(){
         double motor_power = power;
         if(!isPositive){
             motor_power = -power;
@@ -52,5 +45,10 @@ class Drive_Straight extends Drive_Command {
         MotorFrontRight.setPower(motor_power);
         MotorBackLeft.setPower(motor_power);
         MotorBackRight.setPower(motor_power);
+    }
+
+    @Override
+    protected void stopMotors() {
+        super.stopMotors();
     }
 }

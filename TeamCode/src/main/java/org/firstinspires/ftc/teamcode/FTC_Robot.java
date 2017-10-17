@@ -57,7 +57,7 @@ public class FTC_Robot extends LinearOpMode {
         BigRelicServo = hardwareMap.servo.get("servo5");
         SmallRelicServo = hardwareMap.servo.get("servo6");
 
-        // Wait for the start button
+        // Command_Wait for the start button
         telemetry.addData(">", "Press Start to run Motors.");
         telemetry.update();
         waitForStart();
