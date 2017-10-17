@@ -45,7 +45,7 @@ class Drive_Straight extends Drive_Command {
 
     private void startMotors(){
         double motor_power = power;
-        if(isPositive){
+        if(!isPositive){
             motor_power = -power;
         }
         MotorFrontLeft.setPower(motor_power);

@@ -41,6 +41,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -50,10 +51,9 @@ public class FTC_AUTO extends LinearOpMode {
     private VuforiaLocalizer vuforia;
     private VuforiaTrackable relicTemplate;
     private VuforiaTrackables relicTrackables;
-    private PriorityQueue<Drive_Command> commands = new PriorityQueue<>();
+    private Queue<Drive_Command> commands = new LinkedList<Drive_Command>();
 
     @Override public void runOpMode() throws InterruptedException{
-        //Initialize Motors and Servos
 
         //Initialize VuMark Code
         VuMarkInit();
