@@ -34,7 +34,7 @@ abstract class Servo_Command implements Command {
 }
 
 
-class Servo_Claw extends Servo_Command{
+class Servo_Small_Relic extends Servo_Command{
 
     private double incrementValue = 0.05;
     private String position;
@@ -44,9 +44,9 @@ class Servo_Claw extends Servo_Command{
 
     /**
      *
-     * @param position use Servo_Claw.OPEN or Servo_Claw.CLOSE
+     * @param position use Servo_Small_Relic.OPEN or Servo_Small_Relic.CLOSE
      */
-    public Servo_Claw(String position){
+    public Servo_Small_Relic(String position){
         super();
         finished = false;
         this.position = position;
@@ -68,4 +68,45 @@ class Servo_Claw extends Servo_Command{
     public boolean isFinished() {
         return finished;
     }
+}
+
+class Servo_Glyph extends Servo_Command{
+    private double incrementValue = 0.05;
+    private boolean finished;
+    private long startTime = 0;
+    private long timeToOpenClose = 550;
+    private String position;
+
+    public Servo_Glyph(String position){
+        super();
+        finished = false;
+        this.position = position;
+        GlyphServoRight.setPosition(0.5);
+        GlyphServoLeft.setPosition(0.5);
+    }
+
+    @Override
+    public void start() {
+        startTime= System.currentTimeMillis();
+        if(position.equals(OPEN)){
+            while(System.currentTimeMillis()-startTime<=timeToOpenClose){
+                GlyphServoRight.setPosition(GlyphServoRight.getPosition()+incrementValue);
+                GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()-incrementValue);
+            }
+        }
+        else if(position.equals(CLOSE)){
+            while(System.currentTimeMillis()-startTime<=timeToOpenClose){
+                GlyphServoRight.setPosition(GlyphServoRight.getPosition()-incrementValue);
+                GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()+incrementValue);
+            }
+        }
+
+        finished = true;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return finished;
+    }
+
 }

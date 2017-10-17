@@ -30,7 +30,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
@@ -69,35 +68,29 @@ public class FTC_AUTO extends LinearOpMode {
     //Enter all Autonomous commands here
     private void setCommands(){
 
-        commands.add(new Drive_Straight(1));
-        //knock jewel over
-
-        commands.add(new Drive_Straight(-1));
-        commands.add(new Drive_Turn(-90.0));
-
         //Check Vumark and act based on Vumark seen
         if(VuMarkCheck().equals(RelicRecoveryVuMark.LEFT)){
-            commands.add(new Drive_Straight(1));
+
             telemetry.addLine("Left");
         }
         else if(VuMarkCheck().equals(RelicRecoveryVuMark.CENTER)){
-            commands.add(new Drive_Straight(2));
+
             telemetry.addLine("Center");
         }
         else if(VuMarkCheck().equals(RelicRecoveryVuMark.RIGHT)){
-            commands.add(new Drive_Straight(3));
+
             telemetry.addLine("Right");
         }
         telemetry.update();
 
+        /*Sample Commands
         commands.add(new Drive_Turn(90.0));
         commands.add(new Drive_Straight(0.5));
-        commands.add(new Servo_Claw(Servo_Claw.OPEN));
+        commands.add(new Servo_Glyph(Servo_Glyph.OPEN));
         commands.add(new Drive_Straight(-1));
-        commands.add(new Servo_Claw(Servo_Claw.CLOSE));
+        commands.add(new Servo_Glyph(Servo_Glyph.CLOSE));
+        */
 
-        //wait 30 seconds to guarantee timeout
-        commands.add(new Command_Wait(30000));
     }
 
     private void runCommands(){
@@ -105,7 +98,7 @@ public class FTC_AUTO extends LinearOpMode {
             Command command = commands.poll();
             command.start();
             //always wait after a command
-            command = new Command_Wait(100);
+            command = new Command_Wait(250);
             command.start();
         }
     }
