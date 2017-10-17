@@ -30,6 +30,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
@@ -56,37 +57,57 @@ public class FTC_AUTO extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            //Enter all commands here
-            commands.add(new Drive_Straight(hardwareMap, 1));
-            commands.add(new Command_Wait(100));
-            commands.add(new Drive_Turn(hardwareMap, 90.0));
-            commands.add(new Command_Wait(100));
-            commands.add(new Drive_Turn(hardwareMap, -90.0));
-            commands.add(new Command_Wait(100));
-            commands.add(new Drive_Straight(hardwareMap, -1));
-            //-----------------------
+            //initialize hardwareMap in both command classes
+            Drive_Command.hardwareMap = hardwareMap;
+            Servo_Command.hardwareMap = hardwareMap;
 
-            //executes commands for autonomous
-            while(!commands.isEmpty()){
-                Command command = commands.poll();
-                command.start();
-            }
-
-
-            //Check Vumark and act based on Vumark seen
-            if(VuMarkCheck().equals(RelicRecoveryVuMark.LEFT)){
-                telemetry.addLine("Left");
-            }
-            if(VuMarkCheck().equals(RelicRecoveryVuMark.CENTER)){
-                telemetry.addLine("Center");
-            }
-            if(VuMarkCheck().equals(RelicRecoveryVuMark.RIGHT)){
-                telemetry.addLine("Right");
-            }
-
-            telemetry.update();
+            setCommands();
+            runCommands();
         }
+    }
 
+    //Enter all Autonomous commands here
+    private void setCommands(){
+
+        commands.add(new Drive_Straight(1));
+        //knock jewel over
+
+        commands.add(new Drive_Straight(-1));
+        commands.add(new Drive_Turn(-90.0));
+
+        //Check Vumark and act based on Vumark seen
+        if(VuMarkCheck().equals(RelicRecoveryVuMark.LEFT)){
+            commands.add(new Drive_Straight(1));
+            telemetry.addLine("Left");
+        }
+        else if(VuMarkCheck().equals(RelicRecoveryVuMark.CENTER)){
+            commands.add(new Drive_Straight(2));
+            telemetry.addLine("Center");
+        }
+        else if(VuMarkCheck().equals(RelicRecoveryVuMark.RIGHT)){
+            commands.add(new Drive_Straight(3));
+            telemetry.addLine("Right");
+        }
+        telemetry.update();
+
+        commands.add(new Drive_Turn(90.0));
+        commands.add(new Drive_Straight(0.5));
+        commands.add(new Servo_Claw(Servo_Claw.OPEN));
+        commands.add(new Drive_Straight(-1));
+        commands.add(new Servo_Claw(Servo_Claw.CLOSE));
+
+        //wait 30 seconds to guarantee timeout
+        commands.add(new Command_Wait(30000));
+    }
+
+    private void runCommands(){
+        while(!commands.isEmpty()){
+            Command command = commands.poll();
+            command.start();
+            //always wait after a command
+            command = new Command_Wait(100);
+            command.start();
+        }
     }
 
     private void VuMarkInit(){
@@ -99,6 +120,7 @@ public class FTC_AUTO extends LinearOpMode {
         relicTemplate = relicTrackables.get(0);
         relicTrackables.activate();
     }
+
     private RelicRecoveryVuMark VuMarkCheck(){
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
         if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
