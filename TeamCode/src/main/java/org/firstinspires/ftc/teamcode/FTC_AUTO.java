@@ -68,6 +68,9 @@ public class FTC_AUTO extends LinearOpMode {
     //Enter all Autonomous commands here
     private void setCommands(){
 
+        commands.add(new Drive_Straight(0.3, 18, 18));
+        commands.add(new Command_Wait(30000));
+
         //Check Vumark and act based on Vumark seen
         if(VuMarkCheck().equals(RelicRecoveryVuMark.LEFT)){
 

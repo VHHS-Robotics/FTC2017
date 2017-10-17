@@ -33,43 +33,6 @@ abstract class Servo_Command implements Command {
     }
 }
 
-
-class Servo_Small_Relic extends Servo_Command{
-
-    private double incrementValue = 0.05;
-    private String position;
-    private boolean finished;
-    private long startTime = 0;
-    private long timeToOpenClose = 200;
-
-    /**
-     *
-     * @param position use Servo_Small_Relic.OPEN or Servo_Small_Relic.CLOSE
-     */
-    public Servo_Small_Relic(String position){
-        super();
-        finished = false;
-        this.position = position;
-    }
-
-    @Override
-    public void start() {
-        startTime= System.currentTimeMillis();
-        if(position.equals(CLOSE))
-            incrementValue = -incrementValue;
-
-        while(System.currentTimeMillis()-startTime<timeToOpenClose){
-            SmallRelicServo.setPosition(SmallRelicServo.getPosition()+incrementValue);
-        }
-        finished = true;
-    }
-
-    @Override
-    public boolean isFinished() {
-        return finished;
-    }
-}
-
 class Servo_Glyph extends Servo_Command{
     private double incrementValue = 0.05;
     private boolean finished;

@@ -1,10 +1,21 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.drm.DrmStore;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public abstract class Drive_Command implements Command{
+    //Encoder Initialization
+    protected static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+    protected static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
+    protected static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    protected static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415);
+    protected static final double     DRIVE_SPEED             = 0.6;
+    protected static final double     TURN_SPEED              = 0.5;
+
     protected double power = 0.3;
     protected static DcMotor MotorFrontLeft;
     protected static DcMotor MotorFrontRight;
@@ -23,6 +34,18 @@ public abstract class Drive_Command implements Command{
         MotorBackLeft = hardwareMap.dcMotor.get("motor3");
         MotorBackRight = hardwareMap.dcMotor.get("motor4");
         MotorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        MotorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        MotorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        MotorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        MotorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        MotorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
 
     abstract void startMotors();
@@ -32,6 +55,11 @@ public abstract class Drive_Command implements Command{
         MotorFrontRight.setPower(0.0);
         MotorBackLeft.setPower(0.0);
         MotorBackRight.setPower(0.0);
+
+        MotorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
 
@@ -39,25 +67,28 @@ class Drive_Straight extends Drive_Command {
 
     private boolean finished = false;
     private long startTime = 0;
-    private double distance;
-    private long timeToDistance = 500;
+    private double leftInches, rightInches, speed;
+    private long timeToDistance = 0;
     private boolean isPositive = true;
 
-    protected Drive_Straight(double distance) {
+    protected Drive_Straight(double speed, double leftInches, double rightInches) {
         super();
-        if(distance<0.0){
-            isPositive = false;
-        }
-        this.distance = distance;
+        this.speed = speed;
+        this.leftInches = leftInches;
+        this.rightInches = rightInches;
         finished = false;
         //calculate time to get to distance with motor power
     }
 
     @Override
     public void start() {
-        startTime = System.currentTimeMillis();
+        //startTime = System.currentTimeMillis();
         startMotors();
+       /* timeToDistance = (long) (Math.abs(leftInches/speed) * 1000);
         while(System.currentTimeMillis()-startTime<=timeToDistance){
+            //wait
+        }*/
+        while(MotorBackLeft.isBusy() || MotorBackRight.isBusy() || MotorFrontLeft.isBusy() || MotorFrontRight.isBusy()){
             //wait
         }
         stopMotors();
@@ -70,6 +101,7 @@ class Drive_Straight extends Drive_Command {
     }
 
     void startMotors(){
+        /*
         double motor_power = power;
         if(!isPositive){
             motor_power = -power;
@@ -78,6 +110,21 @@ class Drive_Straight extends Drive_Command {
         MotorFrontRight.setPower(motor_power);
         MotorBackLeft.setPower(motor_power);
         MotorBackRight.setPower(motor_power);
+        */
+        MotorFrontLeft.setTargetPosition(MotorFrontLeft.getCurrentPosition()+(int)(leftInches+COUNTS_PER_INCH));
+        MotorBackLeft.setTargetPosition(MotorBackLeft.getCurrentPosition()+(int)(leftInches+COUNTS_PER_INCH));
+        MotorFrontRight.setTargetPosition(MotorFrontRight.getCurrentPosition()+(int)(rightInches+COUNTS_PER_INCH));
+        MotorBackRight.setTargetPosition(MotorBackRight.getCurrentPosition()+(int)(rightInches+COUNTS_PER_INCH));
+
+        MotorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        MotorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        MotorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        MotorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        MotorFrontLeft.setPower(Math.abs(speed));
+        MotorBackLeft.setPower(Math.abs(speed));
+        MotorFrontRight.setPower(Math.abs(speed));
+        MotorBackRight.setPower(Math.abs(speed));
     }
 
     @Override
