@@ -36,6 +36,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.robotcore.internal.network.RecvLoopRunnable;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -45,8 +46,8 @@ public class FTC_AUTO extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;
     private VuforiaTrackable relicTemplate;
-    private VuforiaTrackables relicTrackables;
     private Queue<Command> commands = new LinkedList<Command>();
+    private int relicPosition;  //0=LEFT 1=CENTER 2=RIGHT
 
     @Override public void runOpMode() throws InterruptedException{
 
@@ -56,6 +57,7 @@ public class FTC_AUTO extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            checkRelicPosition();
             //initialize hardwareMap in both command classes
             Drive_Command.hardwareMap = hardwareMap;
             Servo_Command.hardwareMap = hardwareMap;
@@ -65,47 +67,72 @@ public class FTC_AUTO extends LinearOpMode {
         }
     }
 
-    //Enter all Autonomous commands here
+    /**
+       Enter all Autonomous Commands here
+       List of Commands:
+
+       Drive_Straight(inches)               inches is a double, positive moves forward, negative moves backwards
+       Drive_Turn(degrees)                  degrees is a double, positive moves clockwise, negative moves counter-clockwise
+       Servo_Glyph(Servo_Command.OPEN))     opens the block holder
+       Servo_Glyph(Servo_Command.CLOSE))    closes the block holder
+       Command_Wait(milliseconds)           makes the robot wait the desired time in milliseconds (thousandths of a second)
+     */
     private void setCommands(){
 
-        commands.add(new Drive_Straight(18, 18));
-        commands.add(new Drive_Straight(-18, -18));
-
-
-
-
-
+        commands.add(new Drive_Straight(18.0));
+        commands.add(new Drive_Turn(-30.0));
+        commands.add(new Drive_Straight(-18.0));
 
         commands.add(new Command_Wait(30000));
 
-        //Check Vumark and act based on Vumark seen
-        if(VuMarkCheck().equals(RelicRecoveryVuMark.LEFT)){
-
-            telemetry.addLine("Left");
+        /*
+        if(relicPosition==0){   //LEFT
+            commands.add(new Drive_Straight(24.0));
         }
-        else if(VuMarkCheck().equals(RelicRecoveryVuMark.CENTER)){
-
-            telemetry.addLine("Center");
+        else if(relicPosition==1){  //CENTER
+            commands.add(new Drive_Straight(20.0));
         }
-        else if(VuMarkCheck().equals(RelicRecoveryVuMark.RIGHT)){
-
-            telemetry.addLine("Right");
+        else if(relicPosition==2){  //RIGHT
+            commands.add(new Drive_Straight(16.0));
         }
-        telemetry.update();
-
+        else{
+            //ERROR
+        }
+`       */
     }
 
     private void runCommands(){
+        Command command;
+
         while(!commands.isEmpty()){
-            Command command = commands.poll();
+            command = commands.poll();
             command.start();
-            //always wait after a command
+            //always wait after a command to kill momentum
             command = new Command_Wait(250);
             command.start();
         }
     }
 
+    private void checkRelicPosition(){
+        //Check Vumark and act based on Vumark seen
+        if(VuMarkCheck().equals(RelicRecoveryVuMark.LEFT)){
+            relicPosition = 0;
+            telemetry.addLine("Left");
+        }
+        else if(VuMarkCheck().equals(RelicRecoveryVuMark.CENTER)){
+            relicPosition = 1;
+            telemetry.addLine("Center");
+        }
+        else if(VuMarkCheck().equals(RelicRecoveryVuMark.RIGHT)){
+            relicPosition = 2;
+            telemetry.addLine("Right");
+        }
+        telemetry.update();
+    }
+
     private void VuMarkInit(){
+        VuforiaTrackables relicTrackables;
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = "AXHqge7/////AAAAGenGHENAYE1qoSAsuGF8810cJsPkYPfPvtKoveVcdLDzK46GCUu14Tc8oGqzdynacNWZNLD1guU8EZbFPoQNdH2SucwUFBo/bOsW0mlHtXp/eYmyAtuLjwVp4HtvH0Hit5G4YthBouXAa89954OBiG5cBPCWilFG+2ZCzQ4IPEN7ams3nyksoBZxCD03XHbSEdJ+AkRC14iZmjnWKDxlsCg70C33QiDHQ0KGV8NB2uM4WUFoRrjXK87VAry9nGMzf4p58AD6SViaov0kDo6oFtIGDZ2Ot9QrhVlCtL1GaJiNeUXENmAyrGBvkB1NNaMPFUsJnlnNoR5KmaYYKHWOEtl8K/T6rXVaNnzeXhcyHK1e";

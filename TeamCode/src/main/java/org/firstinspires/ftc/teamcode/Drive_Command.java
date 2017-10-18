@@ -1,29 +1,29 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.drm.DrmStore;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class Drive_Command implements Command{
     //Encoder Initialization
     protected static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
     protected static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     protected static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     protected static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
+            (WHEEL_DIAMETER_INCHES * Math.PI);
     protected static final double     DRIVE_SPEED             = 0.5; //time to move 18in = 1 sec
-    protected static final double     TURN_SPEED              = 1.0;
+    protected static final double     CIRCUMFERENCE           = Math.PI * WHEEL_DIAMETER_INCHES;
+    protected static final double     ONE_DEGREE_INCHES       = CIRCUMFERENCE/360.0;
 
-    protected double power = 0.3;
+    //protected double power = 0.3;
     protected static DcMotor MotorFrontLeft;
     protected static DcMotor MotorFrontRight;
     protected static DcMotor MotorBackLeft;
     protected static DcMotor MotorBackRight;
     public static HardwareMap hardwareMap;
 
-    public Drive_Command(){
+    protected Drive_Command(){
         initializeMotors();
     }
 
@@ -40,12 +40,10 @@ public abstract class Drive_Command implements Command{
         MotorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         MotorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-
         MotorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         MotorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         MotorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         MotorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
     }
 
     abstract void startMotors();
@@ -63,30 +61,31 @@ public abstract class Drive_Command implements Command{
     }
 }
 
+@SuppressWarnings("WeakerAccess")
 class Drive_Straight extends Drive_Command {
 
     private boolean finished = false;
-    private long startTime = 0;
-    private double leftInches, rightInches;
-    private long timeToDistance = 0;
-    private boolean isPositive = true;
+    private double distanceInches;
 
-    protected Drive_Straight(double leftInches, double rightInches) {
+    protected Drive_Straight(double distanceInches) {
         super();
-        this.leftInches = leftInches;
-        this.rightInches = rightInches;
+        this.distanceInches = distanceInches;
         finished = false;
-        //calculate time to get to distance with motor power
     }
 
     @Override
     public void start() {
-      //  startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
+        long timeToDistance = (long) (distanceInches/18.0 * 1250.0); //this is only true if DRIVE_SPEED = 0.5
         startMotors();
-        //timeToDistance = 2000;//(long) (Math.abs(leftInches/speed) * 1000);
+        while(System.currentTimeMillis()-startTime<=timeToDistance){
+            //wait
+        }
+        /*
         while(MotorBackLeft.isBusy() || MotorBackRight.isBusy() || MotorFrontLeft.isBusy() || MotorFrontRight.isBusy()){
             //wait
         }
+        */
         stopMotors();
         finished = true;
     }
@@ -107,10 +106,10 @@ class Drive_Straight extends Drive_Command {
         MotorBackLeft.setPower(motor_power);
         MotorBackRight.setPower(motor_power);
         */
-        MotorFrontLeft.setTargetPosition(MotorFrontLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH));
-        MotorBackLeft.setTargetPosition(MotorBackLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH));
-        MotorFrontRight.setTargetPosition(MotorFrontRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH));
-        MotorBackRight.setTargetPosition(MotorBackRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH));
+        MotorFrontLeft.setTargetPosition(MotorFrontLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
+        MotorBackLeft.setTargetPosition(MotorBackLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
+        MotorFrontRight.setTargetPosition(MotorFrontRight.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
+        MotorBackRight.setTargetPosition(MotorBackRight.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
 
         MotorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         MotorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -129,26 +128,26 @@ class Drive_Straight extends Drive_Command {
     }
 }
 
+@SuppressWarnings("WeakerAccess")
 class Drive_Turn extends Drive_Command {
 
     private boolean isPositive = true;
-    private double degrees = 0.0;
     private boolean finished = false;
-    private long startTime = 0;
-    private long timeToDistance = 250;
+    private double distanceInches;
 
-    public Drive_Turn(double degrees){
+    protected Drive_Turn(double degrees){
         super();
         if(degrees<0.0){
             isPositive = false;
         }
-        this.degrees = degrees;
+        distanceInches = Math.abs(degrees)*ONE_DEGREE_INCHES;
         finished = false;
     }
 
     @Override
     public void start() {
-        startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
+        long timeToDistance = 1000; //times out at 1 second
         startMotors();
         while(System.currentTimeMillis()-startTime<=timeToDistance){
             //wait
@@ -164,6 +163,7 @@ class Drive_Turn extends Drive_Command {
 
     @Override
     void startMotors() {
+        /*
         if(isPositive) {
             MotorFrontLeft.setPower(power);
             MotorBackLeft.setPower(power);
@@ -176,6 +176,29 @@ class Drive_Turn extends Drive_Command {
             MotorFrontRight.setPower(power);
             MotorBackRight.setPower(power);
         }
+        */
+        if(isPositive) {
+            MotorFrontLeft.setTargetPosition(MotorFrontLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
+            MotorBackLeft.setTargetPosition(MotorBackLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
+            MotorFrontRight.setTargetPosition(MotorFrontRight.getCurrentPosition() - (int) (distanceInches * COUNTS_PER_INCH));
+            MotorBackRight.setTargetPosition(MotorBackRight.getCurrentPosition() - (int) (distanceInches * COUNTS_PER_INCH));
+        }
+        else{
+            MotorFrontLeft.setTargetPosition(MotorFrontLeft.getCurrentPosition() - (int) (distanceInches * COUNTS_PER_INCH));
+            MotorBackLeft.setTargetPosition(MotorBackLeft.getCurrentPosition() - (int) (distanceInches * COUNTS_PER_INCH));
+            MotorFrontRight.setTargetPosition(MotorFrontRight.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
+            MotorBackRight.setTargetPosition(MotorBackRight.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
+        }
+
+        MotorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        MotorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        MotorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        MotorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        MotorFrontLeft.setPower(Math.abs(DRIVE_SPEED));
+        MotorBackLeft.setPower(Math.abs(DRIVE_SPEED));
+        MotorFrontRight.setPower(Math.abs(DRIVE_SPEED));
+        MotorBackRight.setPower(Math.abs(DRIVE_SPEED));
     }
 
     @Override

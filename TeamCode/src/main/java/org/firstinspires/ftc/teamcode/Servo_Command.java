@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@SuppressWarnings("WeakerAccess")
 abstract class Servo_Command implements Command {
     protected final static String OPEN = "OPEN";
     protected final static String CLOSE = "CLOSE";
@@ -16,7 +17,7 @@ abstract class Servo_Command implements Command {
     protected Servo SmallRelicServo; //Open and close claw
     public static HardwareMap hardwareMap;
 
-    public Servo_Command(){
+    protected Servo_Command(){
         initializeServos();
     }
 
@@ -33,10 +34,10 @@ abstract class Servo_Command implements Command {
     }
 }
 
+@SuppressWarnings("FieldCanBeLocal")
 class Servo_Glyph extends Servo_Command{
     private double incrementValue = 0.05;
     private boolean finished;
-    private long startTime = 0;
     private long timeToOpenClose = 550;
     private String position;
 
@@ -50,7 +51,8 @@ class Servo_Glyph extends Servo_Command{
 
     @Override
     public void start() {
-        startTime= System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
+
         if(position.equals(OPEN)){
             while(System.currentTimeMillis()-startTime<=timeToOpenClose){
                 GlyphServoRight.setPosition(GlyphServoRight.getPosition()+incrementValue);
