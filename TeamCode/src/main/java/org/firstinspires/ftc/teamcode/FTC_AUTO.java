@@ -68,7 +68,14 @@ public class FTC_AUTO extends LinearOpMode {
     //Enter all Autonomous commands here
     private void setCommands(){
 
-        commands.add(new Drive_Straight(0.3, 18, 18));
+        commands.add(new Drive_Straight(18, 18));
+        commands.add(new Drive_Straight(-18, -18));
+
+
+
+
+
+
         commands.add(new Command_Wait(30000));
 
         //Check Vumark and act based on Vumark seen
@@ -85,14 +92,6 @@ public class FTC_AUTO extends LinearOpMode {
             telemetry.addLine("Right");
         }
         telemetry.update();
-
-        /*Sample Commands
-        commands.add(new Drive_Turn(90.0));
-        commands.add(new Drive_Straight(0.5));
-        commands.add(new Servo_Glyph(Servo_Glyph.OPEN));
-        commands.add(new Drive_Straight(-1));
-        commands.add(new Servo_Glyph(Servo_Glyph.CLOSE));
-        */
 
     }
 
