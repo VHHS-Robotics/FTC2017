@@ -10,11 +10,12 @@ public abstract class Drive_Command implements Command{
     protected static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
     protected static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     protected static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    protected static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * Math.PI);
+    protected static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
     protected static final double     DRIVE_SPEED             = 0.5; //time to move 18in = 1 sec
     protected static final double     CIRCUMFERENCE           = Math.PI * WHEEL_DIAMETER_INCHES;
-    protected static final double     ONE_DEGREE_INCHES       = CIRCUMFERENCE/360.0;
+    protected static final double     ROBOT_DIAMETER          = 15.0; //inches
+    protected static final double     ROBOT_CIRCUMFERENCE     = (Math.PI*ROBOT_DIAMETER);
+    protected static final double     ONE_DEGREE_INCHES       = ROBOT_CIRCUMFERENCE/360.0;
 
     //protected double power = 0.3;
     protected static DcMotor MotorFrontLeft;
@@ -76,7 +77,7 @@ class Drive_Straight extends Drive_Command {
     @Override
     public void start() {
         long startTime = System.currentTimeMillis();
-        long timeToDistance = (long) (distanceInches/18.0 * 1250.0); //this is only true if DRIVE_SPEED = 0.5
+        long timeToDistance = (long) (distanceInches/CIRCUMFERENCE * 1250.0); //this is only true if DRIVE_SPEED = 0.5
         startMotors();
         while(System.currentTimeMillis()-startTime<=timeToDistance){
             //wait
@@ -147,7 +148,7 @@ class Drive_Turn extends Drive_Command {
     @Override
     public void start() {
         long startTime = System.currentTimeMillis();
-        long timeToDistance = 1000; //times out at 1 second
+        long timeToDistance = (long) (distanceInches/CIRCUMFERENCE * 1250.0); //this is only true if DRIVE_SPEED = 0.5
         startMotors();
         while(System.currentTimeMillis()-startTime<=timeToDistance){
             //wait

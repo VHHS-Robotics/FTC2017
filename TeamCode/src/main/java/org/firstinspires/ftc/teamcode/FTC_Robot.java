@@ -148,6 +148,7 @@ public class FTC_Robot extends LinearOpMode {
             MotorBackLeft.setPower(right); // motor 3
             MotorBackRight.setPower(left); // motor 4
 
+            //1.2 seconds for full movement
             // Glyph Linear slide motor
             while (gamepad1.dpad_up){
                 GlyphMotor.setPower(-0.5);
@@ -171,11 +172,11 @@ public class FTC_Robot extends LinearOpMode {
             }
 
             // Relic Linear slide motor
-            while (gamepad1.dpad_up){
+            while (gamepad1.dpad_left){
                 RelicMotor.setPower(-0.5);
             }
 
-            while (gamepad1.dpad_down){
+            while (gamepad1.dpad_right){
                 RelicMotor.setPower(0.5);
             }
             RelicMotor.setPower(0.0);
@@ -194,7 +195,7 @@ public class FTC_Robot extends LinearOpMode {
                 BigRelicServo.setPosition(0.5);
             }
             while(gamepad1.left_bumper){
-                BigRelicServo.setPosition(0.65);
+                BigRelicServo.setPosition(0.585);
             }
 
 
@@ -221,15 +222,15 @@ public class FTC_Robot extends LinearOpMode {
         double scaledValue = 0.0;
 
         //joystickInputValue=0.4
-        if(joystickInputValue<=0.641){
+        if(joystickInputValue<=0.8376){
             scaledValue = 0.25 * joystickInputValue;
         }
-        else if(joystickInputValue>0.641 && joystickInputValue<=0.834){
-            scaledValue = joystickInputValue*joystickInputValue - 0.25*joystickInputValue - 0.09;
+        else if(joystickInputValue>0.8375 && joystickInputValue<=0.9434){
+            scaledValue = (joystickInputValue-0.38)*(joystickInputValue-0.38);
         }
         else{
             //scaledValue = (1.3*joystickInputValue*joystickInputValue) - ((0.23)*joystickInputValue);
-            scaledValue = 2.2*joystickInputValue*joystickInputValue - 0.4*joystickInputValue - 0.8;
+            scaledValue = 12.5*(joystickInputValue-.92);
         }
         if(scaledValue>1.0)
             scaledValue = 1.0;

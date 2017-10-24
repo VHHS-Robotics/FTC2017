@@ -48,6 +48,7 @@ public class FTC_AUTO extends LinearOpMode {
     private VuforiaTrackable relicTemplate;
     private Queue<Command> commands = new LinkedList<Command>();
     private int relicPosition;  //0=LEFT 1=CENTER 2=RIGHT
+    private static boolean once = false;
 
     @Override public void runOpMode() throws InterruptedException{
 
@@ -62,8 +63,13 @@ public class FTC_AUTO extends LinearOpMode {
             Drive_Command.hardwareMap = hardwareMap;
             Servo_Command.hardwareMap = hardwareMap;
 
-            setCommands();
-            runCommands();
+            if(!once) {
+                setCommands();
+                runCommands();
+            }
+            once = true;
+
+            idle();
         }
     }
 
@@ -79,11 +85,9 @@ public class FTC_AUTO extends LinearOpMode {
      */
     private void setCommands(){
 
-        commands.add(new Drive_Straight(18.0));
-        commands.add(new Drive_Turn(-30.0));
-        commands.add(new Drive_Straight(-18.0));
-
-        commands.add(new Command_Wait(30000));
+        commands.add(new Drive_Straight(28.0));
+        commands.add(new Drive_Turn(90.0));
+        commands.add(new Drive_Turn(-45.0));
 
         /*
         if(relicPosition==0){   //LEFT
