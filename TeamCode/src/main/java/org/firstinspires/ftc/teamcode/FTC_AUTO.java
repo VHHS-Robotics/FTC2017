@@ -36,17 +36,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.internal.network.RecvLoopRunnable;
+//import org.firstinspires.ftc.robotcore.internal.network.RecvLoopRunnable;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 @Autonomous(name="AUTO", group ="Competition")
 public class FTC_AUTO extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;
     private VuforiaTrackable relicTemplate;
-    private Queue<Command> commands = new LinkedList<Command>();
+    private Queue<Command> commands = new LinkedList<>();
     private int relicPosition;  //0=LEFT 1=CENTER 2=RIGHT
     private static boolean once = false;
 
@@ -85,24 +86,29 @@ public class FTC_AUTO extends LinearOpMode {
      */
     private void setCommands(){
 
-        commands.add(new Drive_Straight(28.0));
-        commands.add(new Drive_Turn(90.0));
-        commands.add(new Drive_Turn(-45.0));
+        //do jewel operations
 
-        /*
+        commands.add(new Drive_Straight(28.0));
+
         if(relicPosition==0){   //LEFT
+            commands.add(new Drive_Turn(-140));
             commands.add(new Drive_Straight(24.0));
+            commands.add(new Drive_Turn(50));
         }
         else if(relicPosition==1){  //CENTER
+            commands.add(new Drive_Turn(-125));
             commands.add(new Drive_Straight(20.0));
+            commands.add(new Drive_Turn(35));
         }
         else if(relicPosition==2){  //RIGHT
+            commands.add(new Drive_Turn(-110));
             commands.add(new Drive_Straight(16.0));
+            commands.add(new Drive_Turn(20));
         }
-        else{
-            //ERROR
-        }
-`       */
+
+        commands.add(new Drive_Straight(4));
+        commands.add(new Servo_Glyph(Servo_Command.OPEN));
+        commands.add(new Drive_Straight(-6));
     }
 
     private void runCommands(){
@@ -112,7 +118,7 @@ public class FTC_AUTO extends LinearOpMode {
             command = commands.poll();
             command.start();
             //always wait after a command to kill momentum
-            command = new Command_Wait(250);
+            command = new Command_Wait(200);
             command.start();
         }
     }

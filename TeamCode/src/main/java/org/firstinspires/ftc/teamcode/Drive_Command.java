@@ -47,6 +47,7 @@ public abstract class Drive_Command implements Command{
         MotorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    @SuppressWarnings("unused")
     abstract void startMotors();
 
     protected void stopMotors(){
@@ -82,11 +83,6 @@ class Drive_Straight extends Drive_Command {
         while(System.currentTimeMillis()-startTime<=timeToDistance){
             //wait
         }
-        /*
-        while(MotorBackLeft.isBusy() || MotorBackRight.isBusy() || MotorFrontLeft.isBusy() || MotorFrontRight.isBusy()){
-            //wait
-        }
-        */
         stopMotors();
         finished = true;
     }
@@ -97,16 +93,6 @@ class Drive_Straight extends Drive_Command {
     }
 
     void startMotors() {
-        /*
-        double motor_power = power;
-        if(!isPositive){
-            motor_power = -power;
-        }
-        MotorFrontLeft.setPower(motor_power);
-        MotorFrontRight.setPower(motor_power);
-        MotorBackLeft.setPower(motor_power);
-        MotorBackRight.setPower(motor_power);
-        */
         MotorFrontLeft.setTargetPosition(MotorFrontLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
         MotorBackLeft.setTargetPosition(MotorBackLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
         MotorFrontRight.setTargetPosition(MotorFrontRight.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
@@ -164,20 +150,6 @@ class Drive_Turn extends Drive_Command {
 
     @Override
     void startMotors() {
-        /*
-        if(isPositive) {
-            MotorFrontLeft.setPower(power);
-            MotorBackLeft.setPower(power);
-            MotorFrontRight.setPower(-power);
-            MotorBackRight.setPower(-power);
-        }
-        else{
-            MotorFrontLeft.setPower(-power);
-            MotorBackLeft.setPower(-power);
-            MotorFrontRight.setPower(power);
-            MotorBackRight.setPower(power);
-        }
-        */
         if(isPositive) {
             MotorFrontLeft.setTargetPosition(MotorFrontLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
             MotorBackLeft.setTargetPosition(MotorBackLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));

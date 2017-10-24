@@ -14,6 +14,7 @@ class Command_Wait implements Command {
     public Command_Wait(long timeInMillis){
         waitTime = timeInMillis;
     }
+
     @Override
     public void start() {
         long startTime = System.currentTimeMillis();
