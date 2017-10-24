@@ -39,7 +39,7 @@ public class FTC_Robot extends LinearOpMode {
     private static int GlyphMotorPosition = 0;              //Positions are 0:Down, 1:Mid, 2:UP
     private static final int GLYPH_MOTOR_UP = 1;
     private static final int GLYPH_MOTOR_DOWN = -1;
-    private static final long TIME_TO_MOVE_GLYPH = 2400;    //Time to move the GlyphSlide from bottom to top
+    private static final long TIME_TO_MOVE_GLYPH = 2200;    //Time to move the GlyphSlide from bottom to top
     private static boolean GlyphMotorMoving = false;
     private static long glyphStartTime = 0;
 
