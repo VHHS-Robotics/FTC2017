@@ -31,7 +31,8 @@ public class FTC_Robot extends LinearOpMode {
     float right;
     float left;
 
-    float Armthrottle;
+    //TODO get ride of extra arm throttle
+    private float Armthrottle;
     float Armdirection;
     float ArmUp;
     float ArmDown;
