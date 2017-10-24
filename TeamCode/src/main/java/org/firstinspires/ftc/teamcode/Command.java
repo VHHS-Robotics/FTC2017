@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+@SuppressWarnings("unused")
 interface Command {
     void start();
     boolean isFinished();

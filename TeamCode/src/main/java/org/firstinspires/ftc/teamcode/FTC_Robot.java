@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+
 /**
  * TeleOp Mode
  * <p>
@@ -28,21 +29,17 @@ public class FTC_Robot extends LinearOpMode {
     private Servo BigRelicServo;    // Vertical and Horizontal lift
     private Servo SmallRelicServo;  //Open and close claw
 
+    //Driving
     private float throttle;
     private float direction;
     private float right;
     private float left;
 
-    private float ArmThrottle;
-    private float ArmDirection;
-    private float ArmUp;
-    private float ArmDown;
-
     //Members for moving the GlyphMotors
     private static int GlyphMotorPosition = 0;              //Positions are 0:Down, 1:Mid, 2:UP
     private static final int GLYPH_MOTOR_UP = 1;
     private static final int GLYPH_MOTOR_DOWN = -1;
-    private static final long TIME_TO_MOVE_GLYPH = 1200;    //Time to move the GlyphSlide from bottom to top
+    private static final long TIME_TO_MOVE_GLYPH = 2400;    //Time to move the GlyphSlide from bottom to top
     private static boolean GlyphMotorMoving = false;
     private static long glyphStartTime = 0;
 
@@ -67,48 +64,12 @@ public class FTC_Robot extends LinearOpMode {
         BigRelicServo = hardwareMap.servo.get("servo5");
         SmallRelicServo = hardwareMap.servo.get("servo6");
 
-        // Command_Wait for the start button
-        telemetry.addData(">", "Press Start to run Motors.");
-        telemetry.update();
-        waitForStart();
-
         GlyphServoRight.setPosition(0.5);
         GlyphServoLeft.setPosition(0.5);
         SmallRelicServo.setPosition(0.5);
         BigRelicServo.setPosition(0.5);
 
-        // Wheels Motors
-        throttle = -gamepad1.left_stick_y;
-        direction = gamepad1.left_stick_x;
-
-        right = throttle - direction;
-        left = throttle + direction;
-
-        // clip the right/left values so that the values never exceed +/- 1
-        right = Range.clip(right, -1, 1);
-        left = Range.clip(left, -1, 1);
-
-        // scale the joystick value to make it easier to control
-        // the robot more precisely at slower speeds.
-        right = (float)lowSensitivityScaleInput(right);
-        left =  (float)lowSensitivityScaleInput(left);
-
-        // Arm Motor
-        ArmThrottle = gamepad1.left_trigger; //Dont think
-        ArmDirection = gamepad1.right_trigger;
-
-        ArmUp = ArmThrottle - ArmDirection;
-        ArmDown = ArmThrottle + ArmDirection;
-
-        // clip the right/left values so that the values never exceed +/- 1
-        ArmUp = Range.clip(ArmUp, -0.5f, 0.5f);
-        ArmDown = Range.clip(ArmDown, -0.5f, 0.5f);
-
-        // scale the joystick value to make it easier to control
-        // the robot more precisely at slower speeds.
-        ArmUp = (float)scaleInput(ArmUp);
-        ArmDown =  (float)scaleInput(ArmDown);
-
+        waitForStart();
 
         // Ramp motor speeds till stop pressed.
         while(opModeIsActive()) {
@@ -128,44 +89,13 @@ public class FTC_Robot extends LinearOpMode {
             left =  (float)lowSensitivityScaleInput(left);
 
 
-            // Arm Motor
-            ArmThrottle = gamepad1.left_trigger;
-            ArmDirection = gamepad1.right_trigger;
-
-            ArmUp = ArmThrottle - ArmDirection;
-            ArmDown = ArmThrottle + ArmDirection;
-
-            // clip the right/left values so that the values never exceed +/- 1
-            ArmUp = Range.clip(ArmUp, -0.5f, 0.5f);
-            ArmDown = Range.clip(ArmDown, -0.5f, 0.5f);
-
-            // scale the joystick value to make it easier to control
-            // the robot more precisely at slower speeds.
-            ArmUp = (float)scaleInput(ArmUp);
-            ArmDown =  (float)scaleInput(ArmDown);
-            // End of Arm Motor
-
-
             MotorFrontLeft.setPower(right); //motor 1
             MotorFrontRight.setPower(left); // motor 2
             MotorBackLeft.setPower(right); // motor 3
             MotorBackRight.setPower(left); // motor 4
 
 
-
-            //1.2 seconds for full movement
-            // Glyph Linear slide motor
-            /*
-            while (gamepad1.dpad_up){
-                GlyphMotor.setPower(-0.5);
-            }
-
-            while (gamepad1.dpad_down){
-                GlyphMotor.setPower(0.5);
-            }
-            GlyphMotor.setPower(0.0);
-            */
-
+            //Move Glyph motor UP and DOWN
             if(gamepad1.dpad_up && !GlyphMotorMoving){
                 moveGlyphMotor(GLYPH_MOTOR_UP);
             }
@@ -182,38 +112,37 @@ public class FTC_Robot extends LinearOpMode {
 
 
             // Glyph Servo Controller Code
-            if (gamepad1.a)//close
-            {
+            if(gamepad1.a){    //close
                 GlyphServoRight.setPosition(GlyphServoRight.getPosition()+0.05);
                 GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()-0.05);
-
             }
-            else if (gamepad1.x){//open
+            else if(gamepad1.x){//open
                 GlyphServoRight.setPosition(GlyphServoRight.getPosition()-0.05);
                 GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()+0.05);
             }
 
 
             // Relic Linear slide motor
-            while (gamepad1.dpad_left){
+            while(gamepad1.dpad_left){
                 RelicMotor.setPower(-0.5);
             }
 
-            while (gamepad1.dpad_right){
+            while(gamepad1.dpad_right){
                 RelicMotor.setPower(0.5);
             }
             RelicMotor.setPower(0.0);
 
 
             // Relic Servo Controller Code
-            if (gamepad1.b)
-            {
+            if(gamepad1.b) {
                 SmallRelicServo.setPosition(SmallRelicServo.getPosition()+0.05);
             }
-            else if (gamepad1.y){
+            else if(gamepad1.y){
                 SmallRelicServo.setPosition(SmallRelicServo.getPosition()-0.05);
             }
 
+
+            //TODO: Get rid of while statements in the runOpMode while loop
             //1 degree equals 0.00055 decimal
             while(gamepad1.right_bumper){
                 BigRelicServo.setPosition(0.5);
@@ -221,16 +150,6 @@ public class FTC_Robot extends LinearOpMode {
             while(gamepad1.left_bumper){
                 BigRelicServo.setPosition(0.585);
             }
-
-
-            // Display the current value
-            telemetry.addData("Motor Right", "%5.2f", right);
-            telemetry.addData("Motor Left Power", "%5.2f", left);
-            telemetry.addData(">", "Press Stop to end test." );
-            telemetry.update();
-
-            telemetry.addData(">", "Done");
-            telemetry.update();
         }
     }
 
@@ -242,11 +161,11 @@ public class FTC_Robot extends LinearOpMode {
         }
 
         glyphStartTime = System.currentTimeMillis();
-        if(motorUpDown==GLYPH_MOTOR_UP){
+        if(motorUpDown == GLYPH_MOTOR_UP){
             GlyphMotor.setPower(-0.5);
         }
-        else{
-            GlyphMotor.setPower(0.5);
+        else if(motorUpDown == GLYPH_MOTOR_DOWN){
+            GlyphMotor.setPower(0.42);
         }
         GlyphMotorMoving = true;
     }

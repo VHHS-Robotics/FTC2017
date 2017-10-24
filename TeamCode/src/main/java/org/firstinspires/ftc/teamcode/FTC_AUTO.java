@@ -59,17 +59,16 @@ public class FTC_AUTO extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            checkRelicPosition();
-            //initialize hardwareMap in both command classes
-            Drive_Command.hardwareMap = hardwareMap;
-            Servo_Command.hardwareMap = hardwareMap;
-
             if(!once) {
+                checkRelicPosition();
+                //initialize hardwareMap in both command classes
+                Drive_Command.hardwareMap = hardwareMap;
+                Servo_Command.hardwareMap = hardwareMap;
+
                 setCommands();
                 runCommands();
             }
             once = true;
-
             idle();
         }
     }
@@ -90,17 +89,17 @@ public class FTC_AUTO extends LinearOpMode {
 
         commands.add(new Drive_Straight(28.0));
 
-        if(relicPosition==0){   //LEFT
+        if(relicPosition == 0){   //LEFT
             commands.add(new Drive_Turn(-140));
             commands.add(new Drive_Straight(24.0));
             commands.add(new Drive_Turn(50));
         }
-        else if(relicPosition==1){  //CENTER
+        else if(relicPosition == 1){  //CENTER
             commands.add(new Drive_Turn(-125));
             commands.add(new Drive_Straight(20.0));
             commands.add(new Drive_Turn(35));
         }
-        else if(relicPosition==2){  //RIGHT
+        else if(relicPosition == 2){  //RIGHT
             commands.add(new Drive_Turn(-110));
             commands.add(new Drive_Straight(16.0));
             commands.add(new Drive_Turn(20));
