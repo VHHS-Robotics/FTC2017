@@ -49,7 +49,7 @@ public class FTC_AUTO extends LinearOpMode {
     private VuforiaTrackable relicTemplate;
     private Queue<Command> commands = new LinkedList<>();
     private int relicPosition;  //0=LEFT 1=CENTER 2=RIGHT
-    private static boolean once = false;
+    private boolean once = false;
 
     @Override public void runOpMode() throws InterruptedException{
 
@@ -87,25 +87,25 @@ public class FTC_AUTO extends LinearOpMode {
 
         //do jewel operations
 
-        commands.add(new Drive_Straight(28.0));
+        commands.add(new Drive_Straight(34.0));
 
         if(relicPosition == 0){   //LEFT
             commands.add(new Drive_Turn(-140));
-            commands.add(new Drive_Straight(24.0));
+            commands.add(new Drive_Straight(30.0));
             commands.add(new Drive_Turn(50));
         }
         else if(relicPosition == 1){  //CENTER
             commands.add(new Drive_Turn(-125));
-            commands.add(new Drive_Straight(20.0));
+            commands.add(new Drive_Straight(26.0));
             commands.add(new Drive_Turn(35));
         }
         else if(relicPosition == 2){  //RIGHT
             commands.add(new Drive_Turn(-110));
-            commands.add(new Drive_Straight(16.0));
+            commands.add(new Drive_Straight(22.0));
             commands.add(new Drive_Turn(20));
         }
 
-        commands.add(new Drive_Straight(4));
+        commands.add(new Drive_Straight(6));
         commands.add(new Servo_Glyph(Servo_Command.OPEN));
         commands.add(new Drive_Straight(-6));
     }

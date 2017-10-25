@@ -37,11 +37,18 @@ public class FTC_Robot extends LinearOpMode {
 
     //Members for moving the GlyphMotors
     private static int GlyphMotorPosition = 0;              //Positions are 0:Down, 1:Mid, 2:UP
-    private static final int GLYPH_MOTOR_UP = 1;
-    private static final int GLYPH_MOTOR_DOWN = -1;
-    private static final long TIME_TO_MOVE_GLYPH = 2200;    //Time to move the GlyphSlide from bottom to top
+    private static final int        GLYPH_MOTOR_UP          = 1;
+    private static final int        GLYPH_MOTOR_DOWN        = -1;
+    private static final long       TIME_TO_MOVE_GLYPH      = 750;    //Time to move the GlyphSlide one block height
     private static boolean GlyphMotorMoving = false;
     private static long glyphStartTime = 0;
+
+    private static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
+    private static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
+    private static final double     WHEEL_DIAMETER_INCHES   = 2.0 ;     // For figuring circumference
+    private static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
+    private static final double     GLYPH_HEIGHT            = 6.5;
+    private static final double     GLYPH_MOTOR_SPEED       = 0.3;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -103,10 +110,11 @@ public class FTC_Robot extends LinearOpMode {
                 moveGlyphMotor(GLYPH_MOTOR_DOWN);
             }
             if(GlyphMotorMoving){
-                if(System.currentTimeMillis()-glyphStartTime>=(TIME_TO_MOVE_GLYPH/3)){
-                    GlyphMotorMoving = false;
-                    glyphStartTime = 0;
+                //timeout for the glyph motor
+                if(System.currentTimeMillis()-glyphStartTime>=TIME_TO_MOVE_GLYPH){
                     GlyphMotor.setPower(0.0);
+                    GlyphMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    GlyphMotorMoving = false;
                 }
             }
 
@@ -159,29 +167,19 @@ public class FTC_Robot extends LinearOpMode {
             return;
         }
 
-        //for encoder use: block size is 6 inches.
-        //spool inside diameter is 2 inches
-        if(motorUpDown == GLYPH_MOTOR_UP){
-            if(GlyphMotorPosition==1) {
-                glyphStartTime = System.currentTimeMillis();
-                GlyphMotor.setPower(-0.5);
-            }
-            if(GlyphMotorPosition==2){
-                glyphStartTime = System.currentTimeMillis();
-                GlyphMotor.setPower(-0.3);
-            }
+        GlyphMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        GlyphMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        if(motorUpDown == GLYPH_MOTOR_UP){
+            GlyphMotor.setTargetPosition(GlyphMotor.getCurrentPosition() - (int)(GLYPH_HEIGHT * COUNTS_PER_INCH));
         }
         else if(motorUpDown == GLYPH_MOTOR_DOWN){
-            if(GlyphMotorPosition==0) {
-                glyphStartTime = System.currentTimeMillis();
-                GlyphMotor.setPower(0.22);
-            }
-            if(GlyphMotorPosition==1){
-                glyphStartTime = System.currentTimeMillis();
-                GlyphMotor.setPower(0.1);
-            }
+            GlyphMotor.setTargetPosition(GlyphMotor.getCurrentPosition() + (int)(GLYPH_HEIGHT * COUNTS_PER_INCH));
         }
+
+        GlyphMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        glyphStartTime = System.currentTimeMillis();
+        GlyphMotor.setPower(GLYPH_MOTOR_SPEED);
         GlyphMotorMoving = true;
     }
 

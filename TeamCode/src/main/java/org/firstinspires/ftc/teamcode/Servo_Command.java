@@ -35,11 +35,11 @@ abstract class Servo_Command implements Command {
         BigRelicServo = hardwareMap.servo.get("servo5");
         SmallRelicServo = hardwareMap.servo.get("servo6");
 
-        JewelServo = hardwareMap.servo.get("servo7");
+       // JewelServo = hardwareMap.servo.get("servo1");
     }
 }
 
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "WeakerAccess"})
 class Servo_Glyph extends Servo_Command{
     private double incrementValue = 0.05;
     private boolean finished;
@@ -80,6 +80,7 @@ class Servo_Glyph extends Servo_Command{
     }
 }
 
+@SuppressWarnings("FieldCanBeLocal")
 class Servo_Jewel_Sensor extends Servo_Command{
 
     private static int position = 0;
@@ -103,13 +104,12 @@ class Servo_Jewel_Sensor extends Servo_Command{
         double incrementValue = 0.05;
         long startTime = System.currentTimeMillis();
         long timeToMove = 1000;
+
+        if(upDown.equals(DOWN))
+            incrementValue = -incrementValue;
+
         while(System.currentTimeMillis()-startTime<=timeToMove){
-            if(upDown.equals(UP)) {
-                JewelServo.setPosition(GlyphMotor.getCurrentPosition()+incrementValue);
-            }
-            if(upDown.equals(DOWN)){
-                JewelServo.setPosition(GlyphMotor.getCurrentPosition()-incrementValue);
-            }
+            JewelServo.setPosition(GlyphMotor.getCurrentPosition()+incrementValue);
         }
         finished = true;
     }
