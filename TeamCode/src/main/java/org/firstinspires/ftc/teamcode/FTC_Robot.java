@@ -39,7 +39,7 @@ public class FTC_Robot extends LinearOpMode {
     private static int GlyphMotorPosition = 0;              //Positions are 0:Down, 1:Mid, 2:UP
     private static final int GLYPH_MOTOR_UP = 1;
     private static final int GLYPH_MOTOR_DOWN = -1;
-    private static final long TIME_TO_MOVE_GLYPH = 2400;    //Time to move the GlyphSlide from bottom to top
+    private static final long TIME_TO_MOVE_GLYPH = 2200;    //Time to move the GlyphSlide from bottom to top
     private static boolean GlyphMotorMoving = false;
     private static long glyphStartTime = 0;
 
@@ -126,7 +126,6 @@ public class FTC_Robot extends LinearOpMode {
             while(gamepad1.dpad_left){
                 RelicMotor.setPower(-0.5);
             }
-
             while(gamepad1.dpad_right){
                 RelicMotor.setPower(0.5);
             }
@@ -144,10 +143,10 @@ public class FTC_Robot extends LinearOpMode {
 
             //TODO: Get rid of while statements in the runOpMode while loop
             //1 degree equals 0.00055 decimal
-            while(gamepad1.right_bumper){
+            if(gamepad1.right_bumper){
                 BigRelicServo.setPosition(0.5);
             }
-            while(gamepad1.left_bumper){
+            if(gamepad1.left_bumper){
                 BigRelicServo.setPosition(0.585);
             }
         }
@@ -160,20 +159,33 @@ public class FTC_Robot extends LinearOpMode {
             return;
         }
 
-        glyphStartTime = System.currentTimeMillis();
+        //for encoder use: block size is 6 inches.
+        //spool inside diameter is 2 inches
         if(motorUpDown == GLYPH_MOTOR_UP){
-            GlyphMotor.setPower(-0.5);
+            if(GlyphMotorPosition==1) {
+                glyphStartTime = System.currentTimeMillis();
+                GlyphMotor.setPower(-0.5);
+            }
+            if(GlyphMotorPosition==2){
+                glyphStartTime = System.currentTimeMillis();
+                GlyphMotor.setPower(-0.3);
+            }
+
         }
         else if(motorUpDown == GLYPH_MOTOR_DOWN){
-            GlyphMotor.setPower(0.42);
+            if(GlyphMotorPosition==0) {
+                glyphStartTime = System.currentTimeMillis();
+                GlyphMotor.setPower(0.22);
+            }
+            if(GlyphMotorPosition==1){
+                glyphStartTime = System.currentTimeMillis();
+                GlyphMotor.setPower(0.1);
+            }
         }
         GlyphMotorMoving = true;
     }
 
     private double lowSensitivityScaleInput(double joystickInputValue){
-        /* For values <=0.4 we use y=(1/4)x
-           For values >0.4 we use y=(1.3)x^2 - (0.23)x
-         */
         boolean positive = true;
         if(joystickInputValue<0){
             positive = false;
