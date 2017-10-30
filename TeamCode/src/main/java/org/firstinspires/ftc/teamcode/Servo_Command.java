@@ -11,13 +11,13 @@ abstract class Servo_Command implements Command {
     protected final static String UP = "UP";
     protected final static String DOWN = "DOWN";
 
-    protected DcMotor GlyphMotor;       // up and down very quickly
-    protected Servo GlyphServoRight;    // close and open
-    protected Servo GlyphServoLeft;     // close and open
+    protected DcMotor GlyphMotor;       //up and down very quickly
+    protected Servo GlyphServoRight;    //close and open
+    protected Servo GlyphServoLeft;     //close and open
     protected DcMotor RelicMotor;       //Extending arm
-    protected Servo BigRelicServo;      // Vertical and Horizontal lift
+    protected Servo BigRelicServo;      //Vertical and Horizontal lift
     protected Servo SmallRelicServo;    //Open and close claw
-    protected Servo JewelServo;
+    protected Servo JewelServo;         //Move jewel sensor up and down
     public static HardwareMap hardwareMap;
 
     protected Servo_Command(){
@@ -78,6 +78,11 @@ class Servo_Glyph extends Servo_Command{
     public boolean isFinished() {
         return finished;
     }
+
+    @Override
+    public String printString() {
+        return "GlyphServo "+position;
+    }
 }
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -117,5 +122,10 @@ class Servo_Jewel_Sensor extends Servo_Command{
     @Override
     public boolean isFinished() {
         return finished;
+    }
+
+    @Override
+    public String printString() {
+        return "JewelServo detected "+getColor();
     }
 }

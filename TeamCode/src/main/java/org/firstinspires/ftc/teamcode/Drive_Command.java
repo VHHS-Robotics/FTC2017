@@ -92,6 +92,11 @@ class Drive_Straight extends Drive_Command {
         return finished;
     }
 
+    @Override
+    public String printString() {
+        return "Drive Straight "+distanceInches+" inches.";
+    }
+
     void startMotors() {
         MotorFrontLeft.setTargetPosition(MotorFrontLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
         MotorBackLeft.setTargetPosition(MotorBackLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
@@ -121,9 +126,11 @@ class Drive_Turn extends Drive_Command {
     private boolean isPositive = true;
     private boolean finished = false;
     private double distanceInches;
+    private double degrees;
 
     protected Drive_Turn(double degrees){
         super();
+        this.degrees = degrees;
         if(degrees<0.0){
             isPositive = false;
         }
@@ -146,6 +153,11 @@ class Drive_Turn extends Drive_Command {
     @Override
     public boolean isFinished() {
         return finished;
+    }
+
+    @Override
+    public String printString() {
+        return "Turn "+degrees+" degrees";
     }
 
     @Override

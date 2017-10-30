@@ -89,7 +89,7 @@ public class FTC_AUTO extends LinearOpMode {
 
         commands.add(new Drive_Straight(34.0));
 
-        if(relicPosition == 0){   //LEFT
+        if(relicPosition == 0){      //LEFT
             commands.add(new Drive_Turn(-140));
             commands.add(new Drive_Straight(30.0));
             commands.add(new Drive_Turn(50));
@@ -115,6 +115,8 @@ public class FTC_AUTO extends LinearOpMode {
 
         while(!commands.isEmpty()){
             command = commands.poll();
+            telemetry.addLine(command.printString());       //print what the robot is doing
+            telemetry.update();
             command.start();
             //always wait after a command to kill momentum
             command = new Command_Wait(200);

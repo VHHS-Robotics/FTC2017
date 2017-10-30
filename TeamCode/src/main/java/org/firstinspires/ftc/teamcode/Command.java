@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode;
 interface Command {
     void start();
     boolean isFinished();
+    String printString();
 }
 
 @SuppressWarnings("WeakerAccess")
@@ -28,6 +29,11 @@ class Command_Wait implements Command {
     @Override
     public boolean isFinished() {
         return finished;
+    }
+
+    @Override
+    public String printString() {
+        return "Waiting "+waitTime;
     }
 }
 
