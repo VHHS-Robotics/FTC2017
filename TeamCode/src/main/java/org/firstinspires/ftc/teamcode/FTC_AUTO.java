@@ -88,23 +88,21 @@ public class FTC_AUTO extends LinearOpMode {
         //do jewel operations
 
         commands.add(new Drive_Straight(34.0));
+        commands.add(new Drive_Turn(-90.0));
+        commands.add(new Drive_Straight(29.0));
+        commands.add(new Drive_Turn(-90.0));
 
         if(relicPosition == 0){      //LEFT
-            commands.add(new Drive_Turn(-140));
             commands.add(new Drive_Straight(30.0));
-            commands.add(new Drive_Turn(50));
         }
         else if(relicPosition == 1){  //CENTER
-            commands.add(new Drive_Turn(-125));
-            commands.add(new Drive_Straight(26.0));
-            commands.add(new Drive_Turn(35));
+            commands.add(new Drive_Straight(22.5));
         }
         else if(relicPosition == 2){  //RIGHT
-            commands.add(new Drive_Turn(-110));
-            commands.add(new Drive_Straight(22.0));
-            commands.add(new Drive_Turn(20));
+            commands.add(new Drive_Straight(15.0));
         }
 
+        commands.add(new Drive_Turn(90.0));
         commands.add(new Drive_Straight(6));
         commands.add(new Servo_Glyph(Servo_Command.OPEN));
         commands.add(new Drive_Straight(-6));

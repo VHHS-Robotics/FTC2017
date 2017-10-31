@@ -39,16 +39,16 @@ public class FTC_Robot extends LinearOpMode {
     private static int GlyphMotorPosition = 0;      //Positions are 0:Down, 1:Mid, 2:Up
     private static final int        GLYPH_MOTOR_UP          = 1;
     private static final int        GLYPH_MOTOR_DOWN        = -1;
-    private static final long       TIME_TO_MOVE_GLYPH      = 750;    //Time to move the GlyphSlide one block height
+    private static final long       TIME_TO_MOVE_GLYPH      = 1000;    //Time to move the GlyphSlide one block height
     private static boolean GlyphMotorMoving = false;
     private static long glyphStartTime = 0;
 
-    private static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
+    private static final double     COUNTS_PER_MOTOR_REV    = 1680 ;    // eg: TETRIX Motor Encoder
     private static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     private static final double     WHEEL_DIAMETER_INCHES   = 2.0 ;     // For figuring circumference
     private static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
-    private static final double     GLYPH_HEIGHT            = 6.5;      //6.5 inches, actual is 6 inches but we need to clear the cube
-    private static final double     GLYPH_MOTOR_SPEED       = 0.3;      //this can be adjusted, possibly increase to 0.5
+    private static final double     GLYPH_HEIGHT            = 6.25;      //6.5 inches, actual is 6 inches but we need to clear the cube
+    private static final double     GLYPH_MOTOR_SPEED       = 0.8;      //this can be adjusted, possibly increase to 0.5
 
     @Override
     public void runOpMode() throws InterruptedException {

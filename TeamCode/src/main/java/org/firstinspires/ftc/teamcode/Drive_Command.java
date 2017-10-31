@@ -10,9 +10,9 @@ public abstract class Drive_Command implements Command{
     protected static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
     protected static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     protected static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    protected static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
-    protected static final double     DRIVE_SPEED             = 0.5;      //time to move 18in = 1 sec at 0.5 speed
     protected static final double     CIRCUMFERENCE           = Math.PI * WHEEL_DIAMETER_INCHES;
+    protected static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (CIRCUMFERENCE);
+    protected static final double     DRIVE_SPEED             = 0.5;      //time to move 18in = 1 sec at 0.5 speed
     protected static final double     ROBOT_DIAMETER          = 15.0;     //inches
     protected static final double     ROBOT_CIRCUMFERENCE     = (Math.PI*ROBOT_DIAMETER);
     protected static final double     ONE_DEGREE_INCHES       = ROBOT_CIRCUMFERENCE/360.0;
