@@ -105,6 +105,7 @@ class Servo_Jewel_Sensor extends Servo_Command{
         //get colorSensor reference and turn the light on
         colorSensor = hardwareMap.get(ColorSensor.class, "sensor");
         colorSensor.enableLed(true);
+        JewelServo.setPosition(0.75);
 
         colorDetected = null;
         if((position==0 && upDown.equals(UP)) || (position==1 && upDown.equals(DOWN))){
@@ -129,7 +130,7 @@ class Servo_Jewel_Sensor extends Servo_Command{
 
         //move motor down
         while(System.currentTimeMillis()-startTime<=timeToMove){
-            JewelServo.setPosition(JewelServo.getPosition()+incrementValue);
+            JewelServo.setPosition(JewelServo.getPosition()+ incrementValue);
         }
 
         //do not check color if moving motor up
