@@ -1,8 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @SuppressWarnings("WeakerAccess")
 abstract class Servo_Command implements Command {
@@ -14,9 +22,6 @@ abstract class Servo_Command implements Command {
     protected DcMotor GlyphMotor;       //up and down very quickly
     protected Servo GlyphServoRight;    //close and open
     protected Servo GlyphServoLeft;     //close and open
-    protected DcMotor RelicMotor;       //Extending arm
-    protected Servo BigRelicServo;      //Vertical and Horizontal lift
-    protected Servo SmallRelicServo;    //Open and close claw
     protected Servo JewelServo;         //Move jewel sensor up and down
     public static HardwareMap hardwareMap;
 
@@ -27,15 +32,9 @@ abstract class Servo_Command implements Command {
     private void initializeServos(){
         //Glyph arm Motors and Servos
         GlyphMotor = hardwareMap.dcMotor.get("motor5");
-        GlyphServoLeft = hardwareMap.servo.get("servo3");
-        GlyphServoRight = hardwareMap.servo.get("servo4");
-
-        //Relic arm motors and Servos
-        RelicMotor = hardwareMap.dcMotor.get("motor6");
-        BigRelicServo = hardwareMap.servo.get("servo5");
-        SmallRelicServo = hardwareMap.servo.get("servo6");
-
-       // JewelServo = hardwareMap.servo.get("servo1");
+        GlyphServoLeft = hardwareMap.servo.get("servo5");
+        GlyphServoRight = hardwareMap.servo.get("servo6");
+        JewelServo = hardwareMap.servo.get("servo4");
     }
 }
 
@@ -90,32 +89,69 @@ class Servo_Jewel_Sensor extends Servo_Command{
 
     private static int position = 0;
     private String upDown;
+    private ColorSensor colorSensor;
+    private float[] hsvValues = new float[3];
+    private NormalizedRGBA colors;
+    static final String RED = "RED";
+    static final String BLUE = "BLUE";
     private boolean finished = false;
+    private static String colorDetected;
+    static Telemetry telemetry;
+
 
     public Servo_Jewel_Sensor(String upDown){
         super();
+
+        //get colorSensor reference and turn the light on
+        colorSensor = hardwareMap.get(ColorSensor.class, "sensor");
+        colorSensor.enableLed(true);
+
+        colorDetected = null;
         if((position==0 && upDown.equals(UP)) || (position==1 && upDown.equals(DOWN))){
             return;
         }
         this.upDown = upDown;
     }
 
-    public String getColor(){
-        return "RED";
+    public static String getColor(){
+        return colorDetected;
     }
 
     @Override
     public void start() {
         double incrementValue = 0.05;
         long startTime = System.currentTimeMillis();
-        long timeToMove = 1000;
+        long timeToMove = 500;  //TODO: check the amount of time needed
 
+        //TODO: check if positive and negative values are reversed or not
         if(upDown.equals(DOWN))
             incrementValue = -incrementValue;
 
+        //move motor down
         while(System.currentTimeMillis()-startTime<=timeToMove){
-            JewelServo.setPosition(GlyphMotor.getCurrentPosition()+incrementValue);
+            JewelServo.setPosition(JewelServo.getPosition()+incrementValue);
         }
+
+        //do not check color if moving motor up
+        if(upDown.equals(UP)){
+            finished = true;
+            return;
+        }
+
+        Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
+        telemetry.addData("Clear", colorSensor.alpha());
+        telemetry.addData("Red  ", colorSensor.red());
+        telemetry.addData("Green", colorSensor.green());
+        telemetry.addData("Blue ", colorSensor.blue());
+        telemetry.addData("Hue", hsvValues[0]);
+
+        if(true)         //check values for red
+            colorDetected = RED;
+        else if(false)  //check values for blue
+            colorDetected = BLUE;
+        else            //if undetected
+            colorDetected = null;
+
         finished = true;
     }
 

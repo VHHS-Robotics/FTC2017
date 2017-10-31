@@ -65,6 +65,11 @@ public class FTC_AUTO extends LinearOpMode {
                 Drive_Command.hardwareMap = hardwareMap;
                 Servo_Command.hardwareMap = hardwareMap;
 
+                //pre detect color before setting move commands
+                Servo_Jewel_Sensor.telemetry = telemetry;
+                Servo_Command command = new Servo_Jewel_Sensor(Servo_Command.DOWN);
+                command.start();
+
                 setCommands();
                 runCommands();
             }
@@ -81,12 +86,32 @@ public class FTC_AUTO extends LinearOpMode {
        Drive_Turn(degrees)                  degrees is a double, positive moves clockwise, negative moves counter-clockwise
        Servo_Glyph(Servo_Command.OPEN))     opens the block holder
        Servo_Glyph(Servo_Command.CLOSE))    closes the block holder
+       Servo_Jewel_Sensor(Servo_Command.UP) move the color sensor up
+       Servo_Jewel_Sensor.getColor()        returns either Servo_Jewel_Sensor.BLUE or Servo_Jewel_Sensor.RED
        Command_Wait(milliseconds)           makes the robot wait the desired time in milliseconds (thousandths of a second)
      */
     private void setCommands(){
 
         //do jewel operations
+        if(Servo_Jewel_Sensor.getColor().equals(Servo_Jewel_Sensor.BLUE)){
+            if(true){   //we are BLUE
+                //rotate counter-clockwise
+                commands.add(new Drive_Turn(-15.0));
+                commands.add(new Drive_Turn(15.0));
+            }
+            else{       //we are RED
+                //rotate clockwise
+                commands.add(new Drive_Turn(15.0));
+                commands.add(new Drive_Turn(-15.0));
+            }
+        }
+        else{
+            //do nothing
+        }
+        commands.add(new Servo_Jewel_Sensor(Servo_Command.UP));
 
+
+        //Drive commands
         commands.add(new Drive_Straight(34.0));
         commands.add(new Drive_Turn(-90.0));
         commands.add(new Drive_Straight(29.0));

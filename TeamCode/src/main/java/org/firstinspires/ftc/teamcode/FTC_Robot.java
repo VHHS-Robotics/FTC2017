@@ -63,13 +63,13 @@ public class FTC_Robot extends LinearOpMode {
 
         //Glyph arm Motors and Servos
         GlyphMotor = hardwareMap.dcMotor.get("motor5");
-        GlyphServoLeft = hardwareMap.servo.get("servo3");
-        GlyphServoRight = hardwareMap.servo.get("servo4");
+        GlyphServoLeft = hardwareMap.servo.get("servo5");
+        GlyphServoRight = hardwareMap.servo.get("servo6");
 
         //Relic arm motors and Servos
         RelicMotor = hardwareMap.dcMotor.get("motor6");
-        BigRelicServo = hardwareMap.servo.get("servo5");
-        SmallRelicServo = hardwareMap.servo.get("servo6");
+        BigRelicServo = hardwareMap.servo.get("servo1");
+        SmallRelicServo = hardwareMap.servo.get("servo2");
 
         GlyphServoRight.setPosition(0.5);
         GlyphServoLeft.setPosition(0.5);
