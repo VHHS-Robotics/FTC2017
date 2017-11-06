@@ -101,6 +101,7 @@ public class FTC_AUTO extends LinearOpMode {
                 commands.add(new Drive_Turn(15.0));
             }
             else{       //we are RED
+                //TODO: Check if correct
                 //rotate clockwise
                 commands.add(new Drive_Turn(15.0));
                 commands.add(new Drive_Turn(-15.0));
