@@ -88,13 +88,13 @@ class Servo_Glyph extends Servo_Command{
 class Servo_Jewel_Sensor extends Servo_Command{
 
     private static int position = 0;
-    private String upDown;
-    private ColorSensor colorSensor;
-    private float[] hsvValues = new float[3];
-    private NormalizedRGBA colors;
+    private static String upDown;
+    private static ColorSensor colorSensor;
+    private static float[] hsvValues = new float[3];
+    private static NormalizedRGBA colors;
     static final String RED = "RED";
     static final String BLUE = "BLUE";
-    private boolean finished = false;
+    private static boolean finished = false;
     private static String colorDetected;
     static Telemetry telemetry;
 
@@ -147,8 +147,9 @@ class Servo_Jewel_Sensor extends Servo_Command{
         telemetry.addData("Blue ", colorSensor.blue());
         telemetry.addData("Hue", hsvValues[0]);
 
-        if(true)         //check values for red
+        if(true) {         //check values for red
             colorDetected = RED;
+        }
         else if(false)  //check values for blue
             colorDetected = BLUE;
         else            //if undetected

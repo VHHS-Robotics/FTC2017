@@ -93,7 +93,9 @@ public class FTC_AUTO extends LinearOpMode {
     private void setCommands(){
 
         //do jewel operations
-        commands.add(new Servo_Jewel_Sensor(Servo_Command.DOWN));
+        //commands.add(new Servo_Jewel_Sensor(Servo_Command.DOWN));
+        //runCommands();
+        //commands.clear();
         if(Servo_Jewel_Sensor.getColor().equals(Servo_Jewel_Sensor.BLUE)){
             if(true){   //we are BLUE
                 //rotate counter-clockwise
