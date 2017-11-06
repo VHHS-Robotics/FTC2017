@@ -123,6 +123,7 @@ class Servo_Jewel_Sensor extends Servo_Command{
         double incrementValue = 0.05;
         long startTime = System.currentTimeMillis();
         long timeToMove = 500;  //TODO: check the amount of time needed
+        //TODO: delete this line for the pull
 
         //TODO: check if positive and negative values are reversed or not
         if(upDown.equals(DOWN))
