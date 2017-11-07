@@ -63,6 +63,9 @@ public class FTC_AUTO extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            /// If needed add code here
+
+
             if(!once) {
                 checkRelicPosition();
 
@@ -97,13 +100,13 @@ public class FTC_AUTO extends LinearOpMode {
         if(color != null){
             if(color.equals(Servo_Jewel_Sensor.BLUE)){   //we are BLUE
                 //rotate counter-clockwise
-                commands.add(new Drive_Turn(25.0));
-                commands.add(new Drive_Turn(-25.0));
+                commands.add(new Drive_Turn(30.0));
+                commands.add(new Drive_Turn(-30.0));
             }
             else{       //we see RED
                 //rotate clockwise
-                commands.add(new Drive_Turn(-25.0));
-                commands.add(new Drive_Turn(25.0));
+                commands.add(new Drive_Turn(-30.0));
+                commands.add(new Drive_Turn(30.0));
             }
         }
         else{
@@ -111,9 +114,9 @@ public class FTC_AUTO extends LinearOpMode {
             telemetry.update();
             //do nothing
         }
-        commands.add(new Servo_Jewel_Sensor(Servo_Command.UP));
         runCommands();  //run the jewel commands before running the drive commands
         commands.clear();
+        commands.add(new Servo_Jewel_Sensor(Servo_Command.UP));
 
         //Drive commands
         commands.add(new Drive_Straight(34.0));
