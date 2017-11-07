@@ -88,11 +88,6 @@ class Drive_Straight extends Drive_Command {
     }
 
     @Override
-    public boolean isFinished() {
-        return finished;
-    }
-
-    @Override
     public String printString() {
         return "Drive Straight "+distanceInches+" inches.";
     }
@@ -148,11 +143,6 @@ class Drive_Turn extends Drive_Command {
         }
         stopMotors();
         finished = true;
-    }
-
-    @Override
-    public boolean isFinished() {
-        return finished;
     }
 
     @Override

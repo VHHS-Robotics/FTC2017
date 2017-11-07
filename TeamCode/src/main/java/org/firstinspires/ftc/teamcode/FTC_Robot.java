@@ -28,6 +28,7 @@ public class FTC_Robot extends LinearOpMode {
     private DcMotor RelicMotor;     //Extending arm
     private Servo BigRelicServo;    // Vertical and Horizontal lift
     private Servo SmallRelicServo;  //Open and close claw
+    private Servo JewelServo;      //Jewel Servo
 
     //Driving
     private float throttle;
@@ -66,6 +67,9 @@ public class FTC_Robot extends LinearOpMode {
         GlyphServoLeft = hardwareMap.servo.get("servo5");
         GlyphServoRight = hardwareMap.servo.get("servo6");
 
+        //Jewel Servo
+        JewelServo = hardwareMap.servo.get("servo4");
+
         //Relic arm motors and Servos
         RelicMotor = hardwareMap.dcMotor.get("motor6");
         BigRelicServo = hardwareMap.servo.get("servo1");
@@ -73,6 +77,7 @@ public class FTC_Robot extends LinearOpMode {
 
         GlyphServoRight.setPosition(0.5);
         GlyphServoLeft.setPosition(0.5);
+        JewelServo.setPosition(0.1);
         SmallRelicServo.setPosition(0.5);
         BigRelicServo.setPosition(0.5);
 
@@ -149,7 +154,6 @@ public class FTC_Robot extends LinearOpMode {
             }
 
 
-            //TODO: Get rid of while statements in the runOpMode while loop
             //1 degree equals 0.00055 decimal
             if(gamepad1.right_bumper){
                 BigRelicServo.setPosition(0.5);

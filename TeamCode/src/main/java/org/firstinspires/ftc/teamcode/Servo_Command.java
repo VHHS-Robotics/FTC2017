@@ -5,7 +5,6 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @SuppressWarnings("WeakerAccess")
@@ -15,9 +14,9 @@ abstract class Servo_Command implements Command {
     protected final static String UP = "UP";
     protected final static String DOWN = "DOWN";
 
-    protected DcMotor GlyphMotor;       //up and down very quickly
-    protected Servo GlyphServoRight;    //close and open
-    protected Servo GlyphServoLeft;     //close and open
+    //protected DcMotor GlyphMotor;       //up and down very quickly
+    protected static Servo GlyphServoRight;    //close and open
+    protected static Servo GlyphServoLeft;     //close and open
     protected Servo JewelServo;         //Move jewel sensor up and down
     protected DcMotor RelicMotor;
     protected Servo BigRelicServo;
@@ -29,9 +28,17 @@ abstract class Servo_Command implements Command {
         initializeServos();
     }
 
+    public static void initGlyphServos(){
+        GlyphServoLeft = hardwareMap.servo.get("servo5");
+        GlyphServoRight = hardwareMap.servo.get("servo6");
+
+        GlyphServoLeft.setPosition(0.5);
+        GlyphServoRight.setPosition(0.5);
+    }
+
     private void initializeServos(){
         //Glyph arm Motors and Servos
-        GlyphMotor = hardwareMap.dcMotor.get("motor5");
+        //GlyphMotor = hardwareMap.dcMotor.get("motor5");
         GlyphServoLeft = hardwareMap.servo.get("servo5");
         GlyphServoRight = hardwareMap.servo.get("servo6");
         JewelServo = hardwareMap.servo.get("servo4");
@@ -52,13 +59,11 @@ abstract class Servo_Command implements Command {
 @SuppressWarnings({"FieldCanBeLocal", "WeakerAccess"})
 class Servo_Glyph extends Servo_Command{
     private double incrementValue = 0.05;
-    private boolean finished;
     private long timeToOpenClose = 550;
     private String position;
 
     public Servo_Glyph(String position){
         super();
-        finished = false;
         this.position = position;
         GlyphServoRight.setPosition(0.5);
         GlyphServoLeft.setPosition(0.5);
@@ -80,13 +85,6 @@ class Servo_Glyph extends Servo_Command{
                 GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()+incrementValue);
             }
         }
-
-        finished = true;
-    }
-
-    @Override
-    public boolean isFinished() {
-        return finished;
     }
 
     @Override
@@ -95,16 +93,14 @@ class Servo_Glyph extends Servo_Command{
     }
 }
 
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "WeakerAccess"})
 class Servo_Jewel_Sensor extends Servo_Command{
 
-    private static String upDown;
+    private String upDown;
     private static ColorSensor colorSensor;
     private static float[] hsvValues = new float[3];
-    private static NormalizedRGBA colors;
     static final String RED = "RED";
     static final String BLUE = "BLUE";
-    private static boolean finished = false;
     private static String colorDetected;
 
     public Servo_Jewel_Sensor(String upDown){
@@ -133,7 +129,6 @@ class Servo_Jewel_Sensor extends Servo_Command{
         //do not check color if moving motor up
         if(upDown.equals(UP)){
             JewelServo.setPosition(0.1);
-            finished = true;
             return;
         }
 
@@ -151,13 +146,6 @@ class Servo_Jewel_Sensor extends Servo_Command{
             colorDetected = BLUE;
         else            //if undetected
             colorDetected = null;
-
-        finished = true;
-    }
-
-    @Override
-    public boolean isFinished() {
-        return finished;
     }
 
     @Override

@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 @SuppressWarnings("unused")
 interface Command {
     void start();
-    boolean isFinished();
     String printString();
 }
 
@@ -24,11 +23,6 @@ class Command_Wait implements Command {
             //wait
         }
         finished = true;
-    }
-
-    @Override
-    public boolean isFinished() {
-        return finished;
     }
 
     @Override

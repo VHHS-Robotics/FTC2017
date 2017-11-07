@@ -47,9 +47,9 @@ public class FTC_AUTO extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;
     private VuforiaTrackable relicTemplate;
-    private Queue<Command> commands = new LinkedList<>();
+    private Queue<Command> commands = new LinkedList<>();   //list of commands that will run autonomous
     private int relicPosition;  //0=LEFT 1=CENTER 2=RIGHT
-    private boolean once = false;
+    private boolean firstTime = true;
 
     @Override public void runOpMode() throws InterruptedException{
 
@@ -60,23 +60,25 @@ public class FTC_AUTO extends LinearOpMode {
         Drive_Command.hardwareMap = hardwareMap;
         Servo_Command.hardwareMap = hardwareMap;
 
+        //initialize Glyph servos before Autonomous
+        Servo_Command.initGlyphServos();
+
         waitForStart();
 
         while (opModeIsActive()) {
-            /// If needed add code here
-
-
-            if(!once) {
+            if(firstTime) {
+                //check the relic to determine which position to place the glyph
                 checkRelicPosition();
 
                 //pre detect color before setting move commands
                 Servo_Command jewelDownCommand = new Servo_Jewel_Sensor(Servo_Command.DOWN);
                 jewelDownCommand.start();
 
+                //set and run the commands for autonomous
                 setCommands();
                 runCommands();
             }
-            once = true;
+            firstTime = false;
             idle();
         }
     }
@@ -95,28 +97,36 @@ public class FTC_AUTO extends LinearOpMode {
      */
     private void setCommands(){
 
-        //do jewel operations
+        //jewel commands
+        //get color from the Jewel_Sensor
         String color = Servo_Jewel_Sensor.getColor();
+        telemetry.addLine("color"+color+"");
+        //assuming we are BLUE
+        Command jewelTurn;
         if(color != null){
-            if(color.equals(Servo_Jewel_Sensor.BLUE)){   //we are BLUE
-                //rotate counter-clockwise
-                commands.add(new Drive_Turn(30.0));
-                commands.add(new Drive_Turn(-30.0));
-            }
-            else{       //we see RED
+            //if we see BLUE
+            if(color.equals(Servo_Jewel_Sensor.BLUE)){
                 //rotate clockwise
-                commands.add(new Drive_Turn(-30.0));
-                commands.add(new Drive_Turn(30.0));
+                jewelTurn = new Drive_Turn(30.0);
+                jewelTurn.start();
+                jewelTurn = new Drive_Turn(30.0);
+                jewelTurn.start();
+            }//if we see RED
+            else{
+                //rotate counter-clockwise
+                jewelTurn = new Drive_Turn(-30.0);
+                jewelTurn.start();
+                jewelTurn = new Drive_Turn(30.0);
+                jewelTurn.start();
             }
         }
         else{
-            telemetry.addLine("color"+color+"");
-            telemetry.update();
-            //do nothing
+            //if we did not detect a color
+            telemetry.addLine("Do nothing for jewel turn");
         }
-        runCommands();  //run the jewel commands before running the drive commands
-        commands.clear();
+        telemetry.update();
         commands.add(new Servo_Jewel_Sensor(Servo_Command.UP));
+
 
         //Drive commands
         commands.add(new Drive_Straight(34.0));
