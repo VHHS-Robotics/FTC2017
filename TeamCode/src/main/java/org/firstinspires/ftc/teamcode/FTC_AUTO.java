@@ -56,19 +56,19 @@ public class FTC_AUTO extends LinearOpMode {
         //Initialize VuMark Code
         VuMarkInit();
 
+        //initialize hardwareMap in both command classes
+        Drive_Command.hardwareMap = hardwareMap;
+        Servo_Command.hardwareMap = hardwareMap;
+
         waitForStart();
 
         while (opModeIsActive()) {
             if(!once) {
                 checkRelicPosition();
-                //initialize hardwareMap in both command classes
-                Drive_Command.hardwareMap = hardwareMap;
-                Servo_Command.hardwareMap = hardwareMap;
 
                 //pre detect color before setting move commands
-                Servo_Jewel_Sensor.telemetry = telemetry;
-                Servo_Command command = new Servo_Jewel_Sensor(Servo_Command.DOWN);
-                command.start();
+                Servo_Command jewelDownCommand = new Servo_Jewel_Sensor(Servo_Command.DOWN);
+                jewelDownCommand.start();
 
                 setCommands();
                 runCommands();
@@ -93,49 +93,49 @@ public class FTC_AUTO extends LinearOpMode {
     private void setCommands(){
 
         //do jewel operations
-        //commands.add(new Servo_Jewel_Sensor(Servo_Command.DOWN));
-        //runCommands();
-        //commands.clear();
-        if(Servo_Jewel_Sensor.getColor().equals(Servo_Jewel_Sensor.BLUE)){
-            if(true){   //we are BLUE
+        String color = Servo_Jewel_Sensor.getColor();
+        if(color != null){
+            if(color.equals(Servo_Jewel_Sensor.BLUE)){   //we are BLUE
                 //rotate counter-clockwise
-                commands.add(new Drive_Turn(-15.0));
-                commands.add(new Drive_Turn(15.0));
+                commands.add(new Drive_Turn(25.0));
+                commands.add(new Drive_Turn(-25.0));
             }
-            else{       //we are RED
-                //TODO: Check if correct
+            else{       //we see RED
                 //rotate clockwise
-                commands.add(new Drive_Turn(15.0));
-                commands.add(new Drive_Turn(-15.0));
+                commands.add(new Drive_Turn(-25.0));
+                commands.add(new Drive_Turn(25.0));
             }
         }
         else{
+            telemetry.addLine("color"+color+"");
+            telemetry.update();
             //do nothing
         }
         commands.add(new Servo_Jewel_Sensor(Servo_Command.UP));
+        runCommands();  //run the jewel commands before running the drive commands
+        commands.clear();
 
-/*
         //Drive commands
         commands.add(new Drive_Straight(34.0));
         commands.add(new Drive_Turn(-90.0));
         commands.add(new Drive_Straight(29.0));
         commands.add(new Drive_Turn(-90.0));
 
-        if(relicPosition == 0){      //LEFT
-            commands.add(new Drive_Straight(30.0));
+        if(relicPosition == 0){       //LEFT
+            commands.add(new Drive_Straight(29.0));
         }
         else if(relicPosition == 1){  //CENTER
-            commands.add(new Drive_Straight(22.5));
+            commands.add(new Drive_Straight(21.0));
         }
         else if(relicPosition == 2){  //RIGHT
-            commands.add(new Drive_Straight(15.0));
+            commands.add(new Drive_Straight(14.0));
         }
 
         commands.add(new Drive_Turn(90.0));
         commands.add(new Drive_Straight(6));
         commands.add(new Servo_Glyph(Servo_Command.OPEN));
         commands.add(new Drive_Straight(-6));
-        */
+
     }
 
     private void runCommands(){
