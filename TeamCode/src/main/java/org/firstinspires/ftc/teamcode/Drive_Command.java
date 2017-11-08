@@ -136,7 +136,7 @@ class Drive_Turn extends Drive_Command {
     @Override
     public void start() {
         long startTime = System.currentTimeMillis();
-        long timeToDistance = (long) (distanceInches/CIRCUMFERENCE * 1250.0); //this is only true if DRIVE_SPEED = 0.5
+        long timeToDistance = (long) (distanceInches/CIRCUMFERENCE * 1750.0); //this is only true if DRIVE_SPEED = 0.5, for 0.2 use 1750
         startMotors();
         while(System.currentTimeMillis()-startTime<=timeToDistance){
             //wait
@@ -170,10 +170,11 @@ class Drive_Turn extends Drive_Command {
         MotorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         MotorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        MotorFrontLeft.setPower(Math.abs(DRIVE_SPEED));
-        MotorBackLeft.setPower(Math.abs(DRIVE_SPEED));
-        MotorFrontRight.setPower(Math.abs(DRIVE_SPEED));
-        MotorBackRight.setPower(Math.abs(DRIVE_SPEED));
+        double driveSpeed = 0.2;
+        MotorFrontLeft.setPower(Math.abs(driveSpeed));
+        MotorBackLeft.setPower(Math.abs(driveSpeed));
+        MotorFrontRight.setPower(Math.abs(driveSpeed));
+        MotorBackRight.setPower(Math.abs(driveSpeed));
     }
 
     @Override

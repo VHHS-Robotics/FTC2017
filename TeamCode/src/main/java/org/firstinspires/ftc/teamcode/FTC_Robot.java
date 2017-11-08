@@ -28,7 +28,7 @@ public class FTC_Robot extends LinearOpMode {
     private DcMotor RelicMotor;     //Extending arm
     private Servo BigRelicServo;    // Vertical and Horizontal lift
     private Servo SmallRelicServo;  //Open and close claw
-    private Servo JewelServo;      //Jewel Servo
+    private Servo JewelServo;       //Jewel Servo
 
     //Driving
     private float throttle;
@@ -126,12 +126,16 @@ public class FTC_Robot extends LinearOpMode {
 
             // Glyph Servo Controller Code
             if(gamepad1.a){    //close
-                GlyphServoRight.setPosition(GlyphServoRight.getPosition()+0.05);
-                GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()-0.05);
+                GlyphServoRight.setPosition(0.20);
+                GlyphServoLeft.setPosition(0.80);
+                //GlyphServoRight.setPosition(GlyphServoRight.getPosition()+0.05);
+                //GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()-0.05);
             }
             else if(gamepad1.x){//open
-                GlyphServoRight.setPosition(GlyphServoRight.getPosition()-0.05);
-                GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()+0.05);
+                GlyphServoRight.setPosition(1.0);
+                GlyphServoLeft.setPosition(0.0);
+                //GlyphServoRight.setPosition(GlyphServoRight.getPosition()-0.05);
+                //GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()+0.05);
             }
 
 

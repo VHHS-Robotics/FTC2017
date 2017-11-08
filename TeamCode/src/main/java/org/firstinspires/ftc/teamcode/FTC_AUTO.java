@@ -50,19 +50,22 @@ public class FTC_AUTO extends LinearOpMode {
     private Queue<Command> commands = new LinkedList<>();   //list of commands that will run autonomous
     private int relicPosition;  //0=LEFT 1=CENTER 2=RIGHT
     private boolean firstTime = true;
+    private boolean firstTimeInit = true;
 
     @Override public void runOpMode() throws InterruptedException{
 
-        //Initialize VuMark Code
-        VuMarkInit();
+        if(firstTimeInit) {
+            //Initialize VuMark Code
+            VuMarkInit();
 
-        //initialize hardwareMap in both command classes
-        Drive_Command.hardwareMap = hardwareMap;
-        Servo_Command.hardwareMap = hardwareMap;
+            //initialize hardwareMap in both command classes
+            Drive_Command.hardwareMap = hardwareMap;
+            Servo_Command.hardwareMap = hardwareMap;
 
-        //initialize Glyph servos before Autonomous
-        Servo_Command.initGlyphServos();
-
+            //initialize Glyph servos before Autonomous
+            Servo_Command.initGlyphServos();
+        }
+        firstTimeInit = false;
         waitForStart();
 
         while (opModeIsActive()) {
@@ -77,6 +80,9 @@ public class FTC_AUTO extends LinearOpMode {
                 //set and run the commands for autonomous
                 setCommands();
                 runCommands();
+
+               // Command command = new Drive_Straight(-8.0);
+               // command.start();
             }
             firstTime = false;
             idle();
@@ -109,7 +115,7 @@ public class FTC_AUTO extends LinearOpMode {
                 //rotate clockwise
                 jewelTurn = new Drive_Turn(30.0);
                 jewelTurn.start();
-                jewelTurn = new Drive_Turn(30.0);
+                jewelTurn = new Drive_Turn(-30.0);
                 jewelTurn.start();
             }//if we see RED
             else{
@@ -130,8 +136,8 @@ public class FTC_AUTO extends LinearOpMode {
 
         //Drive commands
         commands.add(new Drive_Straight(34.0));
-        commands.add(new Drive_Turn(-90.0));
-        commands.add(new Drive_Straight(29.0));
+        commands.add(new Drive_Turn(-95.0));        //TODO: Check for accuracy should change back to -90.0 in best case
+        commands.add(new Drive_Straight(26.0));
         commands.add(new Drive_Turn(-90.0));
 
         if(relicPosition == 0){       //LEFT
@@ -145,9 +151,10 @@ public class FTC_AUTO extends LinearOpMode {
         }
 
         commands.add(new Drive_Turn(90.0));
-        commands.add(new Drive_Straight(6));
+        commands.add(new Drive_Straight(10.0));
         commands.add(new Servo_Glyph(Servo_Command.OPEN));
-        commands.add(new Drive_Straight(-6));
+        //commands.add(new Command_Wait(500));
+        commands.add(new Drive_Straight(-3.0));
 
     }
 

@@ -19,7 +19,7 @@ abstract class Servo_Command implements Command {
     protected static Servo GlyphServoLeft;     //close and open
     protected Servo JewelServo;         //Move jewel sensor up and down
     protected DcMotor RelicMotor;
-    protected Servo BigRelicServo;
+    protected static Servo BigRelicServo;
     protected Servo SmallRelicServo;
 
     public static HardwareMap hardwareMap;
@@ -31,9 +31,11 @@ abstract class Servo_Command implements Command {
     public static void initGlyphServos(){
         GlyphServoLeft = hardwareMap.servo.get("servo5");
         GlyphServoRight = hardwareMap.servo.get("servo6");
+        BigRelicServo = hardwareMap.servo.get("servo1");
 
         GlyphServoLeft.setPosition(0.5);
         GlyphServoRight.setPosition(0.5);
+        BigRelicServo.setPosition(0.5);
     }
 
     private void initializeServos(){
@@ -74,16 +76,24 @@ class Servo_Glyph extends Servo_Command{
         long startTime = System.currentTimeMillis();
 
         if(position.equals(OPEN)){
+            GlyphServoLeft.setPosition(0.0);
+            GlyphServoRight.setPosition(1.0);
+            /*
             while(System.currentTimeMillis()-startTime<=timeToOpenClose){
                 GlyphServoRight.setPosition(GlyphServoRight.getPosition()+incrementValue);
                 GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()-incrementValue);
             }
+            */
         }
         else if(position.equals(CLOSE)){
+            GlyphServoLeft.setPosition(0.5);
+            GlyphServoRight.setPosition(0.5);
+            /*
             while(System.currentTimeMillis()-startTime<=timeToOpenClose){
                 GlyphServoRight.setPosition(GlyphServoRight.getPosition()-incrementValue);
                 GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()+incrementValue);
             }
+            */
         }
     }
 
