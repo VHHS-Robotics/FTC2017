@@ -113,16 +113,16 @@ public class FTC_AUTO extends LinearOpMode {
             //if we see BLUE
             if(color.equals(Servo_Jewel_Sensor.BLUE)){
                 //rotate clockwise
-                jewelTurn = new Drive_Turn(30.0);
+                jewelTurn = new Drive_Turn(30.0, 0.2);
                 jewelTurn.start();
-                jewelTurn = new Drive_Turn(-30.0);
+                jewelTurn = new Drive_Turn(-30.0, 0.2);
                 jewelTurn.start();
             }//if we see RED
             else{
                 //rotate counter-clockwise
-                jewelTurn = new Drive_Turn(-30.0);
+                jewelTurn = new Drive_Turn(-30.0, 0.2);
                 jewelTurn.start();
-                jewelTurn = new Drive_Turn(30.0);
+                jewelTurn = new Drive_Turn(30.0, 0.2);
                 jewelTurn.start();
             }
         }
@@ -136,9 +136,9 @@ public class FTC_AUTO extends LinearOpMode {
 
         //Drive commands
         commands.add(new Drive_Straight(34.0));
-        commands.add(new Drive_Turn(-95.0));        //TODO: Check for accuracy should change back to -90.0 in best case
+        commands.add(new Drive_Turn(-95.0, 0.5));        //TODO: Check for accuracy should change back to -90.0 in best case
         commands.add(new Drive_Straight(26.0));
-        commands.add(new Drive_Turn(-90.0));
+        commands.add(new Drive_Turn(-90.0, 0.5));
 
         if(relicPosition == 0){       //LEFT
             commands.add(new Drive_Straight(29.0));
@@ -150,7 +150,7 @@ public class FTC_AUTO extends LinearOpMode {
             commands.add(new Drive_Straight(14.0));
         }
 
-        commands.add(new Drive_Turn(90.0));
+        commands.add(new Drive_Turn(90.0, 0.5));
         commands.add(new Drive_Straight(10.0));
         commands.add(new Servo_Glyph(Servo_Command.OPEN));
         //commands.add(new Command_Wait(500));

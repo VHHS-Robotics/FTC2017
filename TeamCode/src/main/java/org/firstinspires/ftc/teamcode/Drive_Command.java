@@ -122,13 +122,21 @@ class Drive_Turn extends Drive_Command {
     private boolean finished = false;
     private double distanceInches;
     private double degrees;
+    private double speed;
 
-    protected Drive_Turn(double degrees){
+    //TODO Need to test speed parameter to see if it has enough time to turn
+    protected Drive_Turn(double degrees, double speed){
         super();
-        this.degrees = degrees;
+        if(speed<0.0){
+            this.speed = -speed; //No negative speed for turning
+        }
+        else{
+            this.speed = speed;
+        }
         if(degrees<0.0){
             isPositive = false;
         }
+        this.degrees = degrees;
         distanceInches = Math.abs(degrees)*ONE_DEGREE_INCHES;
         finished = false;
     }
@@ -136,7 +144,7 @@ class Drive_Turn extends Drive_Command {
     @Override
     public void start() {
         long startTime = System.currentTimeMillis();
-        long timeToDistance = (long) (distanceInches/CIRCUMFERENCE * 1750.0); //this is only true if DRIVE_SPEED = 0.5, for 0.2 use 1750
+        long timeToDistance = (long) (distanceInches/CIRCUMFERENCE * (-1666.67*speed+2083.33)); //time based on speed
         startMotors();
         while(System.currentTimeMillis()-startTime<=timeToDistance){
             //wait
@@ -170,11 +178,10 @@ class Drive_Turn extends Drive_Command {
         MotorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         MotorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        double driveSpeed = 0.2;
-        MotorFrontLeft.setPower(Math.abs(driveSpeed));
-        MotorBackLeft.setPower(Math.abs(driveSpeed));
-        MotorFrontRight.setPower(Math.abs(driveSpeed));
-        MotorBackRight.setPower(Math.abs(driveSpeed));
+        MotorFrontLeft.setPower(Math.abs(speed));
+        MotorBackLeft.setPower(Math.abs(speed));
+        MotorFrontRight.setPower(Math.abs(speed));
+        MotorBackRight.setPower(Math.abs(speed));
     }
 
     @Override
