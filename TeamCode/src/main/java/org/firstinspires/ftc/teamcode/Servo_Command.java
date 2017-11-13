@@ -60,15 +60,15 @@ abstract class Servo_Command implements Command {
 
 @SuppressWarnings({"FieldCanBeLocal", "WeakerAccess"})
 class Servo_Glyph extends Servo_Command{
-    private double incrementValue = 0.05;
-    private long timeToOpenClose = 550;
+    //private double incrementValue = 0.05;
+    //private long timeToOpenClose = 550;
     private String position;
 
     public Servo_Glyph(String position){
         super();
         this.position = position;
-        GlyphServoRight.setPosition(0.5);
-        GlyphServoLeft.setPosition(0.5);
+        GlyphServoRight.setPosition(0.2);
+        GlyphServoLeft.setPosition(0.8);
     }
 
     @Override
@@ -86,8 +86,8 @@ class Servo_Glyph extends Servo_Command{
             */
         }
         else if(position.equals(CLOSE)){
-            GlyphServoLeft.setPosition(0.5);
-            GlyphServoRight.setPosition(0.5);
+            GlyphServoLeft.setPosition(0.2);
+            GlyphServoRight.setPosition(0.8);
             /*
             while(System.currentTimeMillis()-startTime<=timeToOpenClose){
                 GlyphServoRight.setPosition(GlyphServoRight.getPosition()-incrementValue);
@@ -131,7 +131,7 @@ class Servo_Jewel_Sensor extends Servo_Command{
     @Override
     public void start() {
 
-        long timeToMove = 1000;  //TODO: check the amount of time needed
+        long timeToMove = 1000;
 
         if(upDown.equals(DOWN))
             JewelServo.setPosition(0.9);

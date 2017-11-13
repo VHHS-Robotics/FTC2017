@@ -66,13 +66,11 @@ public abstract class Drive_Command implements Command{
 @SuppressWarnings("WeakerAccess")
 class Drive_Straight extends Drive_Command {
 
-    private boolean finished = false;
     private double distanceInches;
 
     protected Drive_Straight(double distanceInches) {
         super();
         this.distanceInches = distanceInches;
-        finished = false;
     }
 
     @Override
@@ -84,7 +82,6 @@ class Drive_Straight extends Drive_Command {
             //wait
         }
         stopMotors();
-        finished = true;
     }
 
     @Override
@@ -119,7 +116,6 @@ class Drive_Straight extends Drive_Command {
 class Drive_Turn extends Drive_Command {
 
     private boolean isPositive = true;
-    private boolean finished = false;
     private double distanceInches;
     private double degrees;
     private double speed;
@@ -138,7 +134,6 @@ class Drive_Turn extends Drive_Command {
         }
         this.degrees = degrees;
         distanceInches = Math.abs(degrees)*ONE_DEGREE_INCHES;
-        finished = false;
     }
 
     @Override
@@ -150,7 +145,6 @@ class Drive_Turn extends Drive_Command {
             //wait
         }
         stopMotors();
-        finished = true;
     }
 
     @Override

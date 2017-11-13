@@ -128,14 +128,10 @@ public class FTC_Robot extends LinearOpMode {
             if(gamepad1.a){    //close
                 GlyphServoRight.setPosition(0.20);
                 GlyphServoLeft.setPosition(0.80);
-                //GlyphServoRight.setPosition(GlyphServoRight.getPosition()+0.05);
-                //GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()-0.05);
             }
             else if(gamepad1.x){//open
                 GlyphServoRight.setPosition(1.0);
                 GlyphServoLeft.setPosition(0.0);
-                //GlyphServoRight.setPosition(GlyphServoRight.getPosition()-0.05);
-                //GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()+0.05);
             }
 
 

@@ -153,7 +153,6 @@ public class FTC_AUTO extends LinearOpMode {
         commands.add(new Drive_Turn(90.0, 0.5));
         commands.add(new Drive_Straight(10.0));
         commands.add(new Servo_Glyph(Servo_Command.OPEN));
-        //commands.add(new Command_Wait(500));
         commands.add(new Drive_Straight(-3.0));
 
     }
