@@ -76,20 +76,11 @@ class Servo_Glyph extends Servo_Command{
 
     @Override
     public void start() {
-        telemetry.addLine("In OPEN/CLOSE start()");
-        telemetry.update();
-
         long startTime = System.currentTimeMillis();
 
         if(position.equals(OPEN)){
-            telemetry.addLine("OPEN before setPosition()");
-            telemetry.update();
-
             GlyphServoLeft.setPosition(0.0);
             GlyphServoRight.setPosition(1.0);
-            telemetry.addLine("OPEN after setPosition()");
-            telemetry.update();
-
             /*
             while(System.currentTimeMillis()-startTime<=timeToOpenClose){
                 GlyphServoRight.setPosition(GlyphServoRight.getPosition()+incrementValue);
@@ -98,12 +89,8 @@ class Servo_Glyph extends Servo_Command{
             */
         }
         else if(position.equals(CLOSE)){
-            telemetry.addLine("CLOSE before setPosition()");
-            telemetry.update();
             GlyphServoLeft.setPosition(0.2);
             GlyphServoRight.setPosition(0.8);
-            telemetry.addLine("CLOSE after setPosition()");
-            telemetry.update();
             /*
             while(System.currentTimeMillis()-startTime<=timeToOpenClose){
                 GlyphServoRight.setPosition(GlyphServoRight.getPosition()-incrementValue);
@@ -111,13 +98,9 @@ class Servo_Glyph extends Servo_Command{
             }
             */
         }
-        telemetry.addLine("OPEN/CLOSE before wait");
-        telemetry.update();
         while(System.currentTimeMillis()-startTime<timeToOpenClose){
             //wait while it moves to position
         }
-        telemetry.addLine("OPEN/CLOSE after wait, before return");
-        telemetry.update();
         return;
     }
 

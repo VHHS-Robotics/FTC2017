@@ -47,7 +47,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -217,6 +216,7 @@ public class FtcRobotControllerActivity extends Activity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    RobotLog.onApplicationStart();  // robustify against onCreate() following onDestroy() but using the same app instance, which apparently does happen
     RobotLog.vv(TAG, "onCreate()");
     ThemedActivity.appAppThemeToActivity(getTag(), this); // do this way instead of inherit to help AppInventor
 
@@ -284,11 +284,6 @@ public class FtcRobotControllerActivity extends Activity
     immersion = new ImmersiveMode(getWindow().getDecorView());
     dimmer = new Dimmer(this);
     dimmer.longBright();
-
-      //This should make the telemetry output window scrollable
-      //TODO: Debug this implementation
-      TextView textView = (TextView) findViewById(R.id.textRemoteProgrammingMode);
-      textView.setMovementMethod(new ScrollingMovementMethod());
 
     programmingWebHandlers = new ProgrammingWebHandlers();
     programmingModeController = new ProgrammingModeControllerImpl(

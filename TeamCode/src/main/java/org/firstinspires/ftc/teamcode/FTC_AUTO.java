@@ -49,7 +49,7 @@ public class FTC_AUTO extends LinearOpMode {
     private VuforiaTrackable relicTemplate;
     private Queue<Command> commands = new LinkedList<>();   //list of commands that will run autonomous
     private int relicPosition;  //0=LEFT 1=CENTER 2=RIGHT
-    private double centerDistance = 21.0;
+    private double centerDistance = 12.5;
     private boolean firstTime = true;
     private boolean firstTimeInit = true;
 
@@ -86,8 +86,10 @@ public class FTC_AUTO extends LinearOpMode {
                 telemetry.addLine("After runCommands()");
                 telemetry.update();
 
-                Command command = new Drive_Straight(-3.0);
+                Command command = new Drive_Straight(-10.0);
                 command.start();
+                telemetry.addLine(""+command.printString());
+                telemetry.update();
             }
             firstTime = false;
             idle();
@@ -144,7 +146,7 @@ public class FTC_AUTO extends LinearOpMode {
         commands.add(new Drive_Straight(34.0));
         commands.add(new Drive_Turn(-95.0, 0.5));        //TODO: Check for accuracy should change back to -90.0 in best case
         commands.add(new Drive_Straight(26.0));
-        commands.add(new Drive_Turn(-90.0, 0.5));
+        commands.add(new Drive_Turn(-95.0, 0.5));
 
         if(relicPosition == 0){       //LEFT
             commands.add(new Drive_Straight(centerDistance+7.0));
@@ -156,7 +158,7 @@ public class FTC_AUTO extends LinearOpMode {
             commands.add(new Drive_Straight(centerDistance-7.0));
         }
         else{
-            commands.add(new Drive_Straight(21.0));
+            commands.add(new Drive_Straight(centerDistance));
         }
 
         commands.add(new Drive_Turn(90.0, 0.5));
