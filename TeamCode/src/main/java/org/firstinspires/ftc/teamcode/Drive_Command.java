@@ -120,15 +120,12 @@ class Drive_Turn extends Drive_Command {
     private double degrees;
     private double speed;
 
-    //TODO Need to test speed parameter to see if it has enough time to turn
     protected Drive_Turn(double degrees, double speed){
         super();
-        if(speed<0.0){
-            this.speed = -speed; //No negative speed for turning
-        }
-        else{
-            this.speed = speed;
-        }
+        if(degrees==0.0)
+            return;
+
+        this.speed = Math.abs(speed);   //no negative speed for turning
         if(degrees<0.0){
             isPositive = false;
         }

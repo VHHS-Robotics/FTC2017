@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @SuppressWarnings("WeakerAccess")
 abstract class Servo_Command implements Command {
@@ -25,7 +24,6 @@ abstract class Servo_Command implements Command {
     protected Servo SmallRelicServo;
 
     public static HardwareMap hardwareMap;
-    public static Telemetry telemetry;
 
     protected Servo_Command(){
         initializeServos();
@@ -101,7 +99,6 @@ class Servo_Glyph extends Servo_Command{
         while(System.currentTimeMillis()-startTime<timeToOpenClose){
             //wait while it moves to position
         }
-        return;
     }
 
     @Override
