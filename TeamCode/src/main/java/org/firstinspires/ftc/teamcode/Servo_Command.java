@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 @SuppressWarnings("WeakerAccess")
 abstract class Servo_Command implements Command {
     protected final static String OPEN = "OPEN";
@@ -23,6 +25,7 @@ abstract class Servo_Command implements Command {
     protected Servo SmallRelicServo;
 
     public static HardwareMap hardwareMap;
+    public static Telemetry telemetry;
 
     protected Servo_Command(){
         initializeServos();
@@ -53,7 +56,7 @@ abstract class Servo_Command implements Command {
 
         GlyphServoRight.setPosition(0.5);
         GlyphServoLeft.setPosition(0.5);
-        JewelServo.setPosition(0.1);
+        JewelServo.setPosition(0.9);
         BigRelicServo.setPosition(0.5);
     }
 }
@@ -61,7 +64,7 @@ abstract class Servo_Command implements Command {
 @SuppressWarnings({"FieldCanBeLocal", "WeakerAccess"})
 class Servo_Glyph extends Servo_Command{
     //private double incrementValue = 0.05;
-    //private long timeToOpenClose = 550;
+    private long timeToOpenClose = 1000;
     private String position;
 
     public Servo_Glyph(String position){
@@ -73,11 +76,20 @@ class Servo_Glyph extends Servo_Command{
 
     @Override
     public void start() {
+        telemetry.addLine("In OPEN/CLOSE start()");
+        telemetry.update();
+
         long startTime = System.currentTimeMillis();
 
         if(position.equals(OPEN)){
+            telemetry.addLine("OPEN before setPosition()");
+            telemetry.update();
+
             GlyphServoLeft.setPosition(0.0);
             GlyphServoRight.setPosition(1.0);
+            telemetry.addLine("OPEN after setPosition()");
+            telemetry.update();
+
             /*
             while(System.currentTimeMillis()-startTime<=timeToOpenClose){
                 GlyphServoRight.setPosition(GlyphServoRight.getPosition()+incrementValue);
@@ -86,8 +98,12 @@ class Servo_Glyph extends Servo_Command{
             */
         }
         else if(position.equals(CLOSE)){
+            telemetry.addLine("CLOSE before setPosition()");
+            telemetry.update();
             GlyphServoLeft.setPosition(0.2);
             GlyphServoRight.setPosition(0.8);
+            telemetry.addLine("CLOSE after setPosition()");
+            telemetry.update();
             /*
             while(System.currentTimeMillis()-startTime<=timeToOpenClose){
                 GlyphServoRight.setPosition(GlyphServoRight.getPosition()-incrementValue);
@@ -95,6 +111,14 @@ class Servo_Glyph extends Servo_Command{
             }
             */
         }
+        telemetry.addLine("OPEN/CLOSE before wait");
+        telemetry.update();
+        while(System.currentTimeMillis()-startTime<timeToOpenClose){
+            //wait while it moves to position
+        }
+        telemetry.addLine("OPEN/CLOSE after wait, before return");
+        telemetry.update();
+        return;
     }
 
     @Override
@@ -134,17 +158,17 @@ class Servo_Jewel_Sensor extends Servo_Command{
         long timeToMove = 1000;
 
         if(upDown.equals(DOWN))
-            JewelServo.setPosition(0.9);
+            JewelServo.setPosition(0.1);
 
         //do not check color if moving motor up
         if(upDown.equals(UP)){
-            JewelServo.setPosition(0.1);
+            JewelServo.setPosition(0.9);
             return;
         }
 
         long startTime = System.currentTimeMillis();
         while(System.currentTimeMillis()-startTime<=timeToMove){
-            //do nothing until sensor moves into position
+            //do nothing until servo moves the sensor into position
         }
 
         Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);

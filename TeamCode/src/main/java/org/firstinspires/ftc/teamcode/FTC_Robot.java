@@ -75,8 +75,9 @@ public class FTC_Robot extends LinearOpMode {
         BigRelicServo = hardwareMap.servo.get("servo1");
         SmallRelicServo = hardwareMap.servo.get("servo2");
 
-        GlyphServoRight.setPosition(0.5);
-        GlyphServoLeft.setPosition(0.5);
+        GlyphServoRight.setPosition(1.0);
+        GlyphServoLeft.setPosition(0.0);
+
         JewelServo.setPosition(0.1);
         SmallRelicServo.setPosition(0.5);
         BigRelicServo.setPosition(0.5);
