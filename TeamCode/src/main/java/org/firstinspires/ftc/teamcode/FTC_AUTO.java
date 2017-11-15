@@ -42,90 +42,32 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import java.util.LinkedList;
 import java.util.Queue;
 
-@SuppressWarnings({"FieldCanBeLocal", "unused"})
-@Autonomous(name="AUTO", group ="Competition")
-public class FTC_AUTO extends LinearOpMode {
+/**
+ commands.add(new Command());
+ List of Commands:
 
-    private VuforiaLocalizer vuforia;
-    private VuforiaTrackable relicTemplate;
-    private Queue<Command> commands = new LinkedList<>();   //list of commands that will run autonomous
-    private final double CENTER_DISTANCE = 21.0;
-    private double relicPositionDistance = CENTER_DISTANCE ;
-    private boolean firstTime = true;
-    private boolean firstTimeInit = true;
+ Drive_Straight(inches)               inches is a double, positive moves forward, negative moves backwards
+ Drive_Turn(degrees)                  degrees is a double, positive moves clockwise, negative moves counter-clockwise
+ Servo_Glyph(Servo_Command.OPEN))     opens the block holder
+ Servo_Glyph(Servo_Command.CLOSE))    closes the block holder
+ Servo_Jewel_Sensor(Servo_Command.UP) move the color sensor up
+ Servo_Jewel_Sensor.getColor()        returns either Servo_Jewel_Sensor.BLUE or Servo_Jewel_Sensor.RED or null
+ Command_Wait(milliseconds)           makes the robot wait the desired time in milliseconds (thousandths of a second)
+ */
 
-    @Override
-    public void runOpMode() throws InterruptedException{
+@SuppressWarnings({"WeakerAccess", "unused"})
+public abstract class FTC_AUTO extends LinearOpMode{
 
-        if(firstTimeInit) {
-            //Initialize VuMark Code
-            VuMarkInit();
+    protected VuforiaLocalizer vuforia;
+    protected VuforiaTrackable relicTemplate;
+    protected Queue<Command> commands = new LinkedList<>();   //list of commands that will run autonomous
+    protected int glyphLocation = 0; //LEFT=0, CENTER=1, RIGHT=2
+    protected boolean firstTime = true;
+    protected boolean firstTimeInit = true;
 
-            //initialize hardwareMap in both command classes
-            Drive_Command.hardwareMap = hardwareMap;
-            Servo_Command.hardwareMap = hardwareMap;
+    abstract void setCommands();
 
-            //initialize Glyph servos before Autonomous begins
-            Servo_Command.initGlyphServos();
-        }
-        firstTimeInit = false;
-        waitForStart();
-
-        while (opModeIsActive()) {
-            if(firstTime) {
-                //check the relic to determine which position to place the glyph
-                checkRelicPosition();
-
-                //do all the jewel commands before the drive commands
-                runJewelCommands();
-
-                //set and run the commands for autonomous driving
-                setCommands();
-                runCommands();
-
-                telemetry.addLine("Before Run Backwards");
-                telemetry.update();
-                //drive robot backwards manually
-                driveRobotBackwards();
-                telemetry.addLine("After Run Backwards");
-                telemetry.update();
-            }
-            firstTime = false;
-            idle();
-        }
-    }
-
-    /**
-       Enter all Autonomous Commands here
-       commands.add(new Command());
-       List of Commands:
-
-       Drive_Straight(inches)               inches is a double, positive moves forward, negative moves backwards
-       Drive_Turn(degrees)                  degrees is a double, positive moves clockwise, negative moves counter-clockwise
-       Servo_Glyph(Servo_Command.OPEN))     opens the block holder
-       Servo_Glyph(Servo_Command.CLOSE))    closes the block holder
-       Servo_Jewel_Sensor(Servo_Command.UP) move the color sensor up
-       Servo_Jewel_Sensor.getColor()        returns either Servo_Jewel_Sensor.BLUE or Servo_Jewel_Sensor.RED or null
-       Command_Wait(milliseconds)           makes the robot wait the desired time in milliseconds (thousandths of a second)
-     */
-    private void setCommands(){
-        //always set the position of the Servo_Jewel_Sensor UP so it doesn't fall down during autonomous driving
-        commands.add(new Servo_Jewel_Sensor(Servo_Command.UP));
-
-        //Drive commands
-        commands.add(new Drive_Straight(34.0));
-        commands.add(new Drive_Turn(-95.0, 0.5));   //turns out 95.0 degrees equates to about 90.0 degrees on Robot_1
-        commands.add(new Drive_Straight(26.0));
-        commands.add(new Drive_Turn(-95.0, 0.5));
-
-        commands.add(new Drive_Straight(relicPositionDistance));
-
-        commands.add(new Drive_Turn(90.0, 0.5));
-        commands.add(new Drive_Straight(10.0));
-        commands.add(new Servo_Glyph(Servo_Command.OPEN));
-    }
-
-    private void runCommands(){
+    protected void runCommands(){
         Command command;
 
         while(!commands.isEmpty()){
@@ -139,28 +81,53 @@ public class FTC_AUTO extends LinearOpMode {
         }
     }
 
-    private void checkRelicPosition(){
+    protected void VuMarkInit(){
+        VuforiaTrackables relicTrackables;
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        parameters.vuforiaLicenseKey = "AXHqge7/////AAAAGenGHENAYE1qoSAsuGF8810cJsPkYPfPvtKoveVcdLDzK46GCUu14Tc8oGqzdynacNWZNLD1guU8EZbFPoQNdH2SucwUFBo/bOsW0mlHtXp/eYmyAtuLjwVp4HtvH0Hit5G4YthBouXAa89954OBiG5cBPCWilFG+2ZCzQ4IPEN7ams3nyksoBZxCD03XHbSEdJ+AkRC14iZmjnWKDxlsCg70C33QiDHQ0KGV8NB2uM4WUFoRrjXK87VAry9nGMzf4p58AD6SViaov0kDo6oFtIGDZ2Ot9QrhVlCtL1GaJiNeUXENmAyrGBvkB1NNaMPFUsJnlnNoR5KmaYYKHWOEtl8K/T6rXVaNnzeXhcyHK1e";
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+        relicTemplate = relicTrackables.get(0);
+        relicTrackables.activate();
+    }
+
+    protected RelicRecoveryVuMark VuMarkCheck(){
+        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+        if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+            telemetry.addData("VuMark", "%s visible", vuMark);
+        }
+        else {
+            telemetry.addData("VuMark", "not visible");
+        }
+        telemetry.update();
+        return vuMark;
+    }
+
+    protected void checkRelicPosition(){
         //Check Vumark and set relicPositionDistance based on Vumark seen
         if(VuMarkCheck().equals(RelicRecoveryVuMark.LEFT)){
-            relicPositionDistance = CENTER_DISTANCE + 7.0;
+            glyphLocation = 0;
             telemetry.addLine("Left");
         }
         else if(VuMarkCheck().equals(RelicRecoveryVuMark.CENTER)){
-            relicPositionDistance = CENTER_DISTANCE;
+            glyphLocation = 1;
             telemetry.addLine("Center");
         }
         else if(VuMarkCheck().equals(RelicRecoveryVuMark.RIGHT)){
-            relicPositionDistance = CENTER_DISTANCE - 7.0;
+            glyphLocation = 2;
             telemetry.addLine("Right");
         }
         else{
-            relicPositionDistance = CENTER_DISTANCE;
+            glyphLocation = 1;
             telemetry.addLine("No Relic Found");
         }
         telemetry.update();
     }
 
-    private void driveRobotBackwards(){
+    protected void driveRobotBackwards(){
         //move backwards at 0.5 speed for 250 milliseconds
         long time = 250;
         double power = -0.5;
@@ -190,7 +157,7 @@ public class FTC_AUTO extends LinearOpMode {
         MotorBackRight.setPower(0);
     }
 
-    private void runJewelCommands(){
+    protected void runJewelCommands(){
         //move the Servo_Jewel_Sensor DOWN to detect the color
         Servo_Command jewelDownCommand = new Servo_Jewel_Sensor(Servo_Command.DOWN);
         jewelDownCommand.start();
@@ -224,30 +191,236 @@ public class FTC_AUTO extends LinearOpMode {
             telemetry.addLine("Do nothing for jewel turn");
         }
         telemetry.update();
+
+        //move jewel servo UP
+        jewelDownCommand = new Servo_Jewel_Sensor(Servo_Command.UP);
+        jewelDownCommand.start();
     }
 
-    private void VuMarkInit(){
-        VuforiaTrackables relicTrackables;
+}
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = "AXHqge7/////AAAAGenGHENAYE1qoSAsuGF8810cJsPkYPfPvtKoveVcdLDzK46GCUu14Tc8oGqzdynacNWZNLD1guU8EZbFPoQNdH2SucwUFBo/bOsW0mlHtXp/eYmyAtuLjwVp4HtvH0Hit5G4YthBouXAa89954OBiG5cBPCWilFG+2ZCzQ4IPEN7ams3nyksoBZxCD03XHbSEdJ+AkRC14iZmjnWKDxlsCg70C33QiDHQ0KGV8NB2uM4WUFoRrjXK87VAry9nGMzf4p58AD6SViaov0kDo6oFtIGDZ2Ot9QrhVlCtL1GaJiNeUXENmAyrGBvkB1NNaMPFUsJnlnNoR5KmaYYKHWOEtl8K/T6rXVaNnzeXhcyHK1e";
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
-        relicTemplate = relicTrackables.get(0);
-        relicTrackables.activate();
+@SuppressWarnings({"FieldCanBeLocal","unused"})
+@Autonomous(name="AUTO", group ="Competition")
+class FTC_AUTO_BLUE_1 extends FTC_AUTO {
+
+    private double CENTER_DISTANCE = 21.0;
+
+    @Override
+    public void runOpMode() throws InterruptedException{
+        if(firstTimeInit) {
+            //Initialize VuMark Code
+            VuMarkInit();
+
+            //initialize hardwareMap in both command classes
+            Drive_Command.hardwareMap = hardwareMap;
+            Servo_Command.hardwareMap = hardwareMap;
+
+            //initialize Glyph servos before Autonomous begins
+            Servo_Command.initGlyphServos();
+        }
+        firstTimeInit = false;
+        waitForStart();
+
+        while (opModeIsActive()) {
+            if(firstTime) {
+                //check the relic to determine which position to place the glyph
+                checkRelicPosition();
+
+                //do all the jewel commands before the drive commands
+                runJewelCommands();
+
+                //set and run the commands for autonomous driving
+                setCommands();
+                runCommands();
+
+                //drive robot backwards manually
+                driveRobotBackwards();
+            }
+            firstTime = false;
+            idle();
+        }
     }
 
-    private RelicRecoveryVuMark VuMarkCheck(){
-        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-        if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-            telemetry.addData("VuMark", "%s visible", vuMark);
+    @Override
+    void setCommands(){
+        //Drive commands
+        commands.add(new Drive_Straight(34.0));
+        commands.add(new Drive_Turn(-95.0, 0.5));   //turns out 95.0 degrees equates to about 90.0 degrees on Robot_1
+        commands.add(new Drive_Straight(26.0));
+        commands.add(new Drive_Turn(-95.0, 0.5));
+
+        if(glyphLocation==0)        //LEFT
+            commands.add(new Drive_Straight(CENTER_DISTANCE+7.0));
+        else if (glyphLocation==1)  //CENTER
+            commands.add(new Drive_Straight(CENTER_DISTANCE));
+        else if (glyphLocation==2)  //RIGHT
+            commands.add(new Drive_Straight(CENTER_DISTANCE-7.0));
+
+        commands.add(new Drive_Turn(90.0, 0.5));
+        commands.add(new Drive_Straight(10.0));
+        commands.add(new Servo_Glyph(Servo_Command.OPEN));
+    }
+}
+
+@SuppressWarnings({"FieldCanBeLocal","unused"})
+@Autonomous(name="AUTO", group ="Competition")
+class FTC_AUTO_RED_1 extends FTC_AUTO{
+
+    private double CENTER_DISTANCE = 21.0;
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        if(firstTimeInit) {
+            //Initialize VuMark Code
+            VuMarkInit();
+
+            //initialize hardwareMap in both command classes
+            Drive_Command.hardwareMap = hardwareMap;
+            Servo_Command.hardwareMap = hardwareMap;
+
+            //initialize Glyph servos before Autonomous begins
+            Servo_Command.initGlyphServos();
         }
-        else {
-            telemetry.addData("VuMark", "not visible");
+        firstTimeInit = false;
+        waitForStart();
+
+        while (opModeIsActive()) {
+            if(firstTime) {
+                //check the relic to determine which position to place the glyph
+                checkRelicPosition();
+
+                //do all the jewel commands before the drive commands
+                runJewelCommands();
+
+                //set and run the commands for autonomous driving
+                setCommands();
+                runCommands();
+
+                //drive robot backwards manually
+                driveRobotBackwards();
+            }
+            firstTime = false;
+            idle();
         }
-        telemetry.update();
-        return vuMark;
+    }
+
+    @Override
+    void setCommands() {
+        //Drive commands
+        commands.add(new Drive_Straight(34.0));
+        commands.add(new Drive_Turn(95.0, 0.5));   //turns out 95.0 degrees equates to about 90.0 degrees on Robot_1
+        commands.add(new Drive_Straight(26.0));
+        commands.add(new Drive_Turn(95.0, 0.5));
+
+        if(glyphLocation==0)        //LEFT
+            commands.add(new Drive_Straight(CENTER_DISTANCE-7.0));
+        else if (glyphLocation==1)  //CENTER
+            commands.add(new Drive_Straight(CENTER_DISTANCE));
+        else if (glyphLocation==2)  //RIGHT
+            commands.add(new Drive_Straight(CENTER_DISTANCE+7.0));
+
+        commands.add(new Drive_Turn(-90.0, 0.5));
+        commands.add(new Drive_Straight(10.0));
+        commands.add(new Servo_Glyph(Servo_Command.OPEN));
+    }
+}
+
+@SuppressWarnings("unused")
+@Autonomous(name="AUTO", group ="Competition")
+class FTC_AUTO_BLUE_2 extends FTC_AUTO{
+
+    //TODO: CENTER_DISTANCE for BLUE_2 and RED_2 are not 21.0
+    private double CENTER_DISTANCE = 21.0;
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        if(firstTimeInit) {
+            //Initialize VuMark Code
+            VuMarkInit();
+
+            //initialize hardwareMap in both command classes
+            Drive_Command.hardwareMap = hardwareMap;
+            Servo_Command.hardwareMap = hardwareMap;
+
+            //initialize Glyph servos before Autonomous begins
+            Servo_Command.initGlyphServos();
+        }
+        firstTimeInit = false;
+        waitForStart();
+
+        while (opModeIsActive()) {
+            if(firstTime) {
+                //check the relic to determine which position to place the glyph
+                checkRelicPosition();
+
+                //do all the jewel commands before the drive commands
+                runJewelCommands();
+
+                //set and run the commands for autonomous driving
+                setCommands();
+                runCommands();
+
+                //drive robot backwards manually
+                driveRobotBackwards();
+            }
+            firstTime = false;
+            idle();
+        }
+    }
+
+    @Override
+    void setCommands() {
+        //Drive Commands
+
+    }
+}
+
+@SuppressWarnings("unused")
+@Autonomous(name="AUTO", group ="Competition")
+class FTC_AUTO_RED_2 extends FTC_AUTO{
+
+    //TODO: CENTER_DISTANCE for BLUE_2 and RED_2 are not 21.0
+    private double CENTER_DISTANCE = 21.0;
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        if(firstTimeInit) {
+            //Initialize VuMark Code
+            VuMarkInit();
+
+            //initialize hardwareMap in both command classes
+            Drive_Command.hardwareMap = hardwareMap;
+            Servo_Command.hardwareMap = hardwareMap;
+
+            //initialize Glyph servos before Autonomous begins
+            Servo_Command.initGlyphServos();
+        }
+        firstTimeInit = false;
+        waitForStart();
+
+        while (opModeIsActive()) {
+            if(firstTime) {
+                //check the relic to determine which position to place the glyph
+                checkRelicPosition();
+
+                //do all the jewel commands before the drive commands
+                runJewelCommands();
+
+                //set and run the commands for autonomous driving
+                setCommands();
+                runCommands();
+
+                //drive robot backwards manually
+                driveRobotBackwards();
+            }
+            firstTime = false;
+            idle();
+        }
+    }
+
+    @Override
+    void setCommands() {
+        //Drive Commands
+
     }
 }
