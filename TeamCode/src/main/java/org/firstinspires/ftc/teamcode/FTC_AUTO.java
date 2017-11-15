@@ -49,8 +49,8 @@ public class FTC_AUTO extends LinearOpMode {
     private VuforiaLocalizer vuforia;
     private VuforiaTrackable relicTemplate;
     private Queue<Command> commands = new LinkedList<>();   //list of commands that will run autonomous
-    private final double CENTER_DISTANCE = 12.5;
-    private double relicPositionDistance = 12.5;
+    private final double CENTER_DISTANCE = 21.0;
+    private double relicPositionDistance = CENTER_DISTANCE ;
     private boolean firstTime = true;
     private boolean firstTimeInit = true;
 
@@ -83,8 +83,12 @@ public class FTC_AUTO extends LinearOpMode {
                 setCommands();
                 runCommands();
 
+                telemetry.addLine("Before Run Backwards");
+                telemetry.update();
                 //drive robot backwards manually
                 driveRobotBackwards();
+                telemetry.addLine("After Run Backwards");
+                telemetry.update();
             }
             firstTime = false;
             idle();
@@ -117,7 +121,7 @@ public class FTC_AUTO extends LinearOpMode {
         commands.add(new Drive_Straight(relicPositionDistance));
 
         commands.add(new Drive_Turn(90.0, 0.5));
-        commands.add(new Drive_Straight(6.0));
+        commands.add(new Drive_Straight(10.0));
         commands.add(new Servo_Glyph(Servo_Command.OPEN));
     }
 

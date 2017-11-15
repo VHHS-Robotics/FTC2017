@@ -56,10 +56,10 @@ public abstract class Drive_Command implements Command{
         MotorBackLeft.setPower(0.0);
         MotorBackRight.setPower(0.0);
 
-        MotorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        MotorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        MotorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        MotorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        MotorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        MotorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        MotorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 }
 

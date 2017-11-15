@@ -162,6 +162,14 @@ public class FTC_Robot extends LinearOpMode {
             if(gamepad1.left_bumper){
                 BigRelicServo.setPosition(0.585);
             }
+
+            //jewel servo up
+            if  (gamepad1.left_stick_button) {
+                JewelServo.setPosition(1.0);
+            }//jewel servo down
+            if  (gamepad1.right_stick_button) {
+                JewelServo.setPosition(0.0);
+            }
         }
     }
 
