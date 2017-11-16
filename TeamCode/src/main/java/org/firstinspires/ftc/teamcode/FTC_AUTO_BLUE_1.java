@@ -2,54 +2,23 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Drive_Command;
-import org.firstinspires.ftc.teamcode.Drive_Straight;
-import org.firstinspires.ftc.teamcode.Drive_Turn;
-import org.firstinspires.ftc.teamcode.FTC_AUTO;
-import org.firstinspires.ftc.teamcode.Servo_Command;
-import org.firstinspires.ftc.teamcode.Servo_Glyph;
+/**
+ commands.add(new Command());
+ List of Commands:
 
+ Drive_Straight(inches)               inches is a double, positive moves forward, negative moves backwards
+ Drive_Turn(degrees)                  degrees is a double, positive moves clockwise, negative moves counter-clockwise
+ Servo_Glyph(Servo_Command.OPEN))     opens the block holder
+ Servo_Glyph(Servo_Command.CLOSE))    closes the block holder
+ Servo_Jewel_Sensor(Servo_Command.UP) move the color sensor up
+ Servo_Jewel_Sensor.getColor()        returns either Servo_Jewel_Sensor.BLUE or Servo_Jewel_Sensor.RED or null
+ Command_Wait(milliseconds)           makes the robot wait the desired time in milliseconds (thousandths of a second)
+ */
 @SuppressWarnings({"FieldCanBeLocal","unused"})
 @Autonomous(name="AUTO_BLUE_1", group ="Autonomous")
 public class FTC_AUTO_BLUE_1 extends FTC_AUTO {
 
     private double CENTER_DISTANCE = 21.0;
-
-    @Override
-    public void runOpMode() throws InterruptedException{
-        if(firstTimeInit) {
-            //Initialize VuMark Code
-            VuMarkInit();
-
-            //initialize hardwareMap in both command classes
-            Drive_Command.hardwareMap = hardwareMap;
-            Servo_Command.hardwareMap = hardwareMap;
-
-            //initialize Glyph servos before Autonomous begins
-            Servo_Command.initGlyphServos();
-        }
-        firstTimeInit = false;
-        waitForStart();
-
-        while (opModeIsActive()) {
-            if(firstTime) {
-                //check the relic to determine which position to place the glyph
-                checkRelicPosition();
-
-                //do all the jewel commands before the drive commands
-                runJewelCommands();
-
-                //set and run the commands for autonomous driving
-                setCommands();
-                runCommands();
-
-                //drive robot backwards manually
-                driveRobotBackwards();
-            }
-            firstTime = false;
-            idle();
-        }
-    }
 
     @Override
     void setCommands(){
