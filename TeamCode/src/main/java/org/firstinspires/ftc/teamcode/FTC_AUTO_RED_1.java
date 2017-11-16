@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  List of Commands:
 
  Drive_Straight(inches)               inches is a double, positive moves forward, negative moves backwards
- Drive_Turn(degrees)                  degrees is a double, positive moves clockwise, negative moves counter-clockwise
+ Drive_Turn(degrees, speed)           degrees is a double, positive moves clockwise, negative moves counter-clockwise, speed is a double between 0.0 and 1.0
  Servo_Glyph(Servo_Command.OPEN))     opens the block holder
  Servo_Glyph(Servo_Command.CLOSE))    closes the block holder
  Servo_Jewel_Sensor(Servo_Command.UP) move the color sensor up
@@ -17,6 +17,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 @SuppressWarnings({"FieldCanBeLocal","unused"})
 @Autonomous(name="AUTO_RED_1", group ="Competition")
 public class FTC_AUTO_RED_1 extends FTC_AUTO {
+
+    public FTC_AUTO_RED_1(){
+        weAreBlue = false;
+    }
 
     private double CENTER_DISTANCE = 21.0;
 

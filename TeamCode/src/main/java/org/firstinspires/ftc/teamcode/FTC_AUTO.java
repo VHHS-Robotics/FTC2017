@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -21,8 +20,11 @@ public abstract class FTC_AUTO extends LinearOpMode{
     protected VuforiaTrackable relicTemplate;
     protected Queue<Command> commands = new LinkedList<>();   //list of commands that will run autonomous
     protected int glyphLocation = 0; //LEFT=0, CENTER=1, RIGHT=2
-    protected boolean firstTime = true;
+    protected boolean firstTimeActive = true;
     protected boolean firstTimeInit = true;
+    protected boolean weAreBlue = true;
+
+    abstract void setCommands();
 
     @Override
     public void runOpMode() throws InterruptedException{
@@ -41,7 +43,7 @@ public abstract class FTC_AUTO extends LinearOpMode{
         waitForStart();
 
         while (opModeIsActive()) {
-            if(firstTime) {
+            if(firstTimeActive) {
                 //check the relic to determine which position to place the glyph
                 checkRelicPosition();
 
@@ -55,12 +57,10 @@ public abstract class FTC_AUTO extends LinearOpMode{
                 //drive robot backwards manually
                 driveRobotBackwards();
             }
-            firstTime = false;
+            firstTimeActive = false;
             idle();
         }
     }
-
-    abstract void setCommands();
 
     protected void runCommands(){
         Command command;
@@ -102,7 +102,7 @@ public abstract class FTC_AUTO extends LinearOpMode{
     }
 
     protected void checkRelicPosition(){
-        //Check Vumark and set relicPositionDistance based on Vumark seen
+        //Check Vumark and set glyphLocation based on Vumark seen
         if(VuMarkCheck().equals(RelicRecoveryVuMark.LEFT)){
             glyphLocation = 0;
             telemetry.addLine("Left");
@@ -115,14 +115,14 @@ public abstract class FTC_AUTO extends LinearOpMode{
             glyphLocation = 2;
             telemetry.addLine("Right");
         }
-        else{
+        else{   //default to center if no relic found
             glyphLocation = 1;
             telemetry.addLine("No Relic Found");
         }
         telemetry.update();
     }
 
-    //TODO: Fix this workaround, figure out why it does not work after a servo_command OPEN
+    //TODO: Fix this workaround, figure out why it does not work after a Servo_Command.OPEN
     protected void driveRobotBackwards(){
         //move backwards at 0.5 speed for 250 milliseconds
         long time = 250;
@@ -163,34 +163,55 @@ public abstract class FTC_AUTO extends LinearOpMode{
         telemetry.addLine("color"+color+"");
         telemetry.update();
 
-        //assuming we are BLUE
         Command jewelTurn;
-        if(color != null){
-            //if we see BLUE
-            if(color.equals(Servo_Jewel_Sensor.BLUE)){
-                //rotate clockwise
-                jewelTurn = new Drive_Turn(30.0, 0.2);
-                jewelTurn.start();
-                jewelTurn = new Drive_Turn(-30.0, 0.2);
-                jewelTurn.start();
-            }//if we see RED
-            else{
-                //rotate counter-clockwise
-                jewelTurn = new Drive_Turn(-30.0, 0.2);
-                jewelTurn.start();
-                jewelTurn = new Drive_Turn(30.0, 0.2);
-                jewelTurn.start();
+        if(weAreBlue) {     //we are BLUE
+            if (color != null) {
+                //if we see BLUE
+                if (color.equals(Servo_Jewel_Sensor.BLUE)) {
+                    //rotate clockwise
+                    jewelTurn = new Drive_Turn(30.0, 0.2);
+                    jewelTurn.start();
+                    jewelTurn = new Drive_Turn(-30.0, 0.2);
+                    jewelTurn.start();
+                }
+                else { //if we see RED
+                    //rotate counter-clockwise
+                    jewelTurn = new Drive_Turn(-30.0, 0.2);
+                    jewelTurn.start();
+                    jewelTurn = new Drive_Turn(30.0, 0.2);
+                    jewelTurn.start();
+                }
+            }
+            else {  //if we did not detect a color
+                telemetry.addLine("Do nothing for jewel turn");
+                telemetry.update();
             }
         }
-        else{
-            //if we did not detect a color
-            telemetry.addLine("Do nothing for jewel turn");
+        else{               //we are RED    if(!weAreBlue)
+            if (color != null) {
+                //if we see BLUE
+                if (color.equals(Servo_Jewel_Sensor.BLUE)) {
+                    //rotate counter-clockwise
+                    jewelTurn = new Drive_Turn(-30.0, 0.2);
+                    jewelTurn.start();
+                    jewelTurn = new Drive_Turn(30.0, 0.2);
+                    jewelTurn.start();
+                }
+                else {  //if we see RED
+                    //rotate clockwise
+                    jewelTurn = new Drive_Turn(30.0, 0.2);
+                    jewelTurn.start();
+                    jewelTurn = new Drive_Turn(-30.0, 0.2);
+                    jewelTurn.start();
+                }
+            } else {    //if we did not detect a color
+                telemetry.addLine("Do nothing for jewel turn");
+                telemetry.update();
+            }
         }
-        telemetry.update();
 
         //move jewel servo UP
         jewelDownCommand = new Servo_Jewel_Sensor(Servo_Command.UP);
         jewelDownCommand.start();
     }
-
 }
