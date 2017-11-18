@@ -18,7 +18,7 @@ abstract class Servo_Command implements Command {
     //protected DcMotor GlyphMotor;       //up and down very quickly
     protected static Servo GlyphServoRight;    //close and open
     protected static Servo GlyphServoLeft;     //close and open
-    protected Servo JewelServo;         //Move jewel sensor up and down
+    protected static Servo JewelServo;         //Move jewel sensor up and down
     protected DcMotor RelicMotor;
     protected static Servo BigRelicServo;
     protected Servo SmallRelicServo;
@@ -33,15 +33,16 @@ abstract class Servo_Command implements Command {
         GlyphServoLeft = hardwareMap.servo.get("servo5");
         GlyphServoRight = hardwareMap.servo.get("servo6");
         BigRelicServo = hardwareMap.servo.get("servo1");
+        JewelServo = hardwareMap.servo.get("servo4");
 
         GlyphServoLeft.setPosition(0.5);
         GlyphServoRight.setPosition(0.5);
         BigRelicServo.setPosition(0.5);
+        JewelServo.setPosition(0.9);
     }
 
     private void initializeServos(){
         //Glyph arm Motors and Servos
-        //GlyphMotor = hardwareMap.dcMotor.get("motor5");
         GlyphServoLeft = hardwareMap.servo.get("servo5");
         GlyphServoRight = hardwareMap.servo.get("servo6");
         JewelServo = hardwareMap.servo.get("servo4");
@@ -56,12 +57,12 @@ abstract class Servo_Command implements Command {
         GlyphServoLeft.setPosition(0.5);
         JewelServo.setPosition(0.9);
         BigRelicServo.setPosition(0.5);
+        SmallRelicServo.setPosition(0.5);
     }
 }
 
 @SuppressWarnings({"FieldCanBeLocal", "WeakerAccess"})
 class Servo_Glyph extends Servo_Command{
-    //private double incrementValue = 0.05;
     private long timeToOpenClose = 1000;
     private String position;
 
@@ -79,22 +80,10 @@ class Servo_Glyph extends Servo_Command{
         if(position.equals(OPEN)){
             GlyphServoLeft.setPosition(0.0);
             GlyphServoRight.setPosition(1.0);
-            /*
-            while(System.currentTimeMillis()-startTime<=timeToOpenClose){
-                GlyphServoRight.setPosition(GlyphServoRight.getPosition()+incrementValue);
-                GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()-incrementValue);
-            }
-            */
         }
         else if(position.equals(CLOSE)){
             GlyphServoLeft.setPosition(0.2);
             GlyphServoRight.setPosition(0.8);
-            /*
-            while(System.currentTimeMillis()-startTime<=timeToOpenClose){
-                GlyphServoRight.setPosition(GlyphServoRight.getPosition()-incrementValue);
-                GlyphServoLeft.setPosition(GlyphServoLeft.getPosition()+incrementValue);
-            }
-            */
         }
         while(System.currentTimeMillis()-startTime<timeToOpenClose){
             //wait while it moves to position
@@ -138,7 +127,7 @@ class Servo_Jewel_Sensor extends Servo_Command{
         long timeToMove = 1000;
 
         if(upDown.equals(DOWN))
-            JewelServo.setPosition(0.1);
+            JewelServo.setPosition(0.0);
 
         //do not check color if moving motor up
         if(upDown.equals(UP)){

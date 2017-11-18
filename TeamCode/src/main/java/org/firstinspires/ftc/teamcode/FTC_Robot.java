@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.util.Range;
 
 /**
  * TeleOp Mode
- * <p>
  * Enables control of the robot via the gamepad
  */
 
@@ -78,7 +77,7 @@ public class FTC_Robot extends LinearOpMode {
         GlyphServoRight.setPosition(1.0);
         GlyphServoLeft.setPosition(0.0);
 
-        JewelServo.setPosition(0.1);
+        JewelServo.setPosition(0.9);
         SmallRelicServo.setPosition(0.5);
         BigRelicServo.setPosition(0.5);
 
@@ -150,7 +149,7 @@ public class FTC_Robot extends LinearOpMode {
             if(gamepad1.b) {
                 SmallRelicServo.setPosition(SmallRelicServo.getPosition()+0.05);
             }
-            else if(gamepad1.y){
+            if(gamepad1.y){
                 SmallRelicServo.setPosition(SmallRelicServo.getPosition()-0.05);
             }
 
@@ -165,7 +164,7 @@ public class FTC_Robot extends LinearOpMode {
 
             //jewel servo up
             if  (gamepad1.left_stick_button) {
-                JewelServo.setPosition(1.0);
+                JewelServo.setPosition(0.9);
             }//jewel servo down
             if  (gamepad1.right_stick_button) {
                 JewelServo.setPosition(0.0);

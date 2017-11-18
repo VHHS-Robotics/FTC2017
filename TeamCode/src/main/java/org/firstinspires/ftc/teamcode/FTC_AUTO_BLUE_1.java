@@ -26,6 +26,7 @@ public class FTC_AUTO_BLUE_1 extends FTC_AUTO {
 
     @Override
     void setCommands(){
+
         //Drive commands
         commands.add(new Drive_Straight(34.0));
         commands.add(new Drive_Turn(-95.0, 0.5));   //turns out 95.0 degrees equates to about 90.0 degrees on Robot_1

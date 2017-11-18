@@ -30,11 +30,13 @@ public abstract class Drive_Command implements Command{
 
     private void initializeMotors(){
         MotorFrontLeft = hardwareMap.dcMotor.get("motor1");
+        //MotorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         MotorFrontRight = hardwareMap.dcMotor.get("motor2");
-        MotorFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        MotorFrontRight.setDirection(DcMotor.Direction.REVERSE);       //robot1
         MotorBackLeft = hardwareMap.dcMotor.get("motor3");
+        //MotorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         MotorBackRight = hardwareMap.dcMotor.get("motor4");
-        MotorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        MotorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);  //robot1
 
         MotorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         MotorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
