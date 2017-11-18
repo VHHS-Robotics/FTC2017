@@ -23,13 +23,13 @@ public class FTC_AUTO_BLUE_2 extends FTC_AUTO {
     }
 
     //TODO: CENTER_DISTANCE for BLUE_2 and RED_2 are not 21.0
-    private double CENTER_DISTANCE = 26.0;
+    private double CENTER_DISTANCE = 41.5;
 
     @Override
     void setCommands() {
         //Drive Commands
-        commands.add(new Drive_Straight(34.0));
-        commands.add(new Drive_Turn(-130.0, 0.5));
+        commands.add(new Drive_Straight(27.5));
+        commands.add(new Drive_Turn(-125.0, 0.5));
 
         if(glyphLocation==0)        //LEFT
             commands.add(new Drive_Straight(CENTER_DISTANCE-7.0));
@@ -38,8 +38,8 @@ public class FTC_AUTO_BLUE_2 extends FTC_AUTO {
         else if (glyphLocation==2)  //RIGHT
             commands.add(new Drive_Straight(CENTER_DISTANCE+7.0));
 
-        commands.add(new Drive_Turn(-50.0, 0.5));
-        commands.add(new Drive_Straight(14.0));
+        commands.add(new Drive_Turn(-73.5, 0.5));
+        commands.add(new Drive_Straight(25.0));
         commands.add(new Servo_Glyph(Servo_Command.OPEN));
     }
 }

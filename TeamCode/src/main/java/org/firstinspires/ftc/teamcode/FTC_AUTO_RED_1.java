@@ -25,7 +25,7 @@ public class FTC_AUTO_RED_1 extends FTC_AUTO {
     private double CENTER_DISTANCE = 21.0;
 
     @Override
-    void setCommands() {
+    void setCommands(){
         //Drive commands
         commands.add(new Drive_Straight(34.0));
         commands.add(new Drive_Turn(95.0, 0.5));   //turns out 95.0 degrees equates to about 90.0 degrees on Robot_1
