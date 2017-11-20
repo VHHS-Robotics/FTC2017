@@ -21,7 +21,7 @@ abstract class Servo_Command implements Command {
     protected static Servo JewelServo;         //Move jewel sensor up and down
     protected DcMotor RelicMotor;
     protected static Servo BigRelicServo;
-    protected Servo SmallRelicServo;
+   // protected Servo SmallRelicServo;
 
     public static HardwareMap hardwareMap;
 
@@ -50,14 +50,14 @@ abstract class Servo_Command implements Command {
         //Relic arm motors and Servos
         RelicMotor = hardwareMap.dcMotor.get("motor6");
         BigRelicServo = hardwareMap.servo.get("servo1");
-        SmallRelicServo = hardwareMap.servo.get("servo2");
+      //  SmallRelicServo = hardwareMap.servo.get("servo2");
 
 
         GlyphServoRight.setPosition(0.5);
         GlyphServoLeft.setPosition(0.5);
         JewelServo.setPosition(0.9);
         BigRelicServo.setPosition(0.5);
-        SmallRelicServo.setPosition(0.5);
+       // SmallRelicServo.setPosition(0.5);
     }
 }
 
@@ -74,7 +74,7 @@ class Servo_Glyph extends Servo_Command{
     }
 
     @Override
-    public void start() {
+    public void startCommand() {
         long startTime = System.currentTimeMillis();
 
         if(position.equals(OPEN)){
@@ -122,12 +122,12 @@ class Servo_Jewel_Sensor extends Servo_Command{
     }
 
     @Override
-    public void start() {
+    public void startCommand() {
 
         long timeToMove = 1000;
 
         if(upDown.equals(DOWN))
-            JewelServo.setPosition(0.0);
+            JewelServo.setPosition(0.1);
 
         //do not check color if moving motor up
         if(upDown.equals(UP)){
@@ -141,7 +141,6 @@ class Servo_Jewel_Sensor extends Servo_Command{
         }
 
         Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
-
 
         if(colorSensor.red() > colorSensor.blue())       //check values for red
             colorDetected = RED;

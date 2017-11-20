@@ -72,13 +72,13 @@ public class FTC_Robot extends LinearOpMode {
         //Relic arm motors and Servos
         RelicMotor = hardwareMap.dcMotor.get("motor6");
         BigRelicServo = hardwareMap.servo.get("servo1");
-        SmallRelicServo = hardwareMap.servo.get("servo2");
+      //  SmallRelicServo = hardwareMap.servo.get("servo2");
 
         GlyphServoRight.setPosition(1.0);
         GlyphServoLeft.setPosition(0.0);
 
         JewelServo.setPosition(0.9);
-        SmallRelicServo.setPosition(0.5);
+      //  SmallRelicServo.setPosition(0.5);
         BigRelicServo.setPosition(0.5);
 
         waitForStart();
@@ -144,15 +144,16 @@ public class FTC_Robot extends LinearOpMode {
             }
             RelicMotor.setPower(0.0);
 
-
+/*
             // Relic Servo Controller Code
-            if(gamepad1.b) {
-                SmallRelicServo.setPosition(SmallRelicServo.getPosition()+0.05);
+            while(gamepad1.b) {
+                SmallRelicServo.setPosition(1.0);
             }
-            if(gamepad1.y){
-                SmallRelicServo.setPosition(SmallRelicServo.getPosition()-0.05);
+            while(gamepad1.y){
+                SmallRelicServo.setPosition(0.0);
             }
-
+            SmallRelicServo.setPosition(0.5);
+*/
 
             //1 degree equals 0.00055 decimal
             if(gamepad1.right_bumper){
@@ -167,7 +168,7 @@ public class FTC_Robot extends LinearOpMode {
                 JewelServo.setPosition(0.9);
             }//jewel servo down
             if  (gamepad1.right_stick_button) {
-                JewelServo.setPosition(0.0);
+                JewelServo.setPosition(0.1);
             }
         }
     }

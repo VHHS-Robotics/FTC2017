@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 @SuppressWarnings("unused")
 interface Command {
-    void start();
+    void startCommand();
     String printString();
 }
 
@@ -16,7 +16,7 @@ class Command_Wait implements Command {
     }
 
     @Override
-    public void start() {
+    public void startCommand() {
         long startTime = System.currentTimeMillis();
         while(System.currentTimeMillis()-startTime<waitTime){
             //wait

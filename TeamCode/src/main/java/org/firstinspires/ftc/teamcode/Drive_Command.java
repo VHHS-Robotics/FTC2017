@@ -30,13 +30,11 @@ public abstract class Drive_Command implements Command{
 
     private void initializeMotors(){
         MotorFrontLeft = hardwareMap.dcMotor.get("motor1");
-        //MotorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         MotorFrontRight = hardwareMap.dcMotor.get("motor2");
-        MotorFrontRight.setDirection(DcMotor.Direction.REVERSE);       //robot1
+        MotorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         MotorBackLeft = hardwareMap.dcMotor.get("motor3");
-        //MotorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         MotorBackRight = hardwareMap.dcMotor.get("motor4");
-        MotorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);  //robot1
+        MotorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         MotorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         MotorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -76,7 +74,7 @@ class Drive_Straight extends Drive_Command {
     }
 
     @Override
-    public void start() {
+    public void startCommand() {
         long startTime = System.currentTimeMillis();
         long timeToDistance = (long) (distanceInches/CIRCUMFERENCE * 1250.0); //this is only true if DRIVE_SPEED = 0.5
         startMotors();
@@ -136,7 +134,7 @@ class Drive_Turn extends Drive_Command {
     }
 
     @Override
-    public void start() {
+    public void startCommand() {
         long startTime = System.currentTimeMillis();
         long timeToDistance = (long) (distanceInches/CIRCUMFERENCE * (-1666.67*speed+2083.33)); //time based on speed
         startMotors();

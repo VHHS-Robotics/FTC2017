@@ -69,10 +69,10 @@ public abstract class FTC_AUTO extends LinearOpMode{
             command = commands.poll();
             telemetry.addLine(command.printString());       //print what the robot is doing
             telemetry.update();
-            command.start();
+            command.startCommand();
             //always wait after a command to kill momentum
             command = new Command_Wait(200);
-            command.start();
+            command.startCommand();
         }
     }
 
@@ -135,7 +135,7 @@ public abstract class FTC_AUTO extends LinearOpMode{
         DcMotor MotorBackRight = hardwareMap.dcMotor.get("motor4");
         MotorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        //start the motors
+        //startCommand the motors
         long startTime = System.currentTimeMillis();
         MotorFrontLeft.setPower(power);
         MotorBackLeft.setPower(power);
@@ -156,11 +156,13 @@ public abstract class FTC_AUTO extends LinearOpMode{
     protected void runJewelCommands(){
         //move the Servo_Jewel_Sensor DOWN to detect the color
         Servo_Command jewelDownCommand = new Servo_Jewel_Sensor(Servo_Command.DOWN);
-        jewelDownCommand.start();
+        jewelDownCommand.startCommand();
+        telemetry.addLine(jewelDownCommand.printString());
+        telemetry.update();
 
         //get color that the sensor detected
         String color = Servo_Jewel_Sensor.getColor();
-        telemetry.addLine("color"+color+"");
+        telemetry.addLine("color = "+color+"");
         telemetry.update();
 
         Command jewelTurn;
@@ -169,49 +171,53 @@ public abstract class FTC_AUTO extends LinearOpMode{
                 //if we see BLUE
                 if (color.equals(Servo_Jewel_Sensor.BLUE)) {
                     //rotate clockwise
+                    telemetry.addLine("We are BLUE, rotate CLOCKWISE");
                     jewelTurn = new Drive_Turn(30.0, 0.2);
-                    jewelTurn.start();
+                    jewelTurn.startCommand();
                     jewelTurn = new Drive_Turn(-30.0, 0.2);
-                    jewelTurn.start();
+                    jewelTurn.startCommand();
                 }
                 else { //if we see RED
                     //rotate counter-clockwise
+                    telemetry.addLine("We are BLUE, rotate COUNTER-CLOCKWISE");
                     jewelTurn = new Drive_Turn(-30.0, 0.2);
-                    jewelTurn.start();
+                    jewelTurn.startCommand();
                     jewelTurn = new Drive_Turn(30.0, 0.2);
-                    jewelTurn.start();
+                    jewelTurn.startCommand();
                 }
             }
             else {  //if we did not detect a color
                 telemetry.addLine("Do nothing for jewel turn");
-                telemetry.update();
             }
+            telemetry.update();
         }
         else{               //we are RED    if(!weAreBlue)
             if (color != null) {
                 //if we see BLUE
                 if (color.equals(Servo_Jewel_Sensor.BLUE)) {
                     //rotate counter-clockwise
+                    telemetry.addLine("We are RED, rotate COUNTER-CLOCKWISE");
                     jewelTurn = new Drive_Turn(-30.0, 0.2);
-                    jewelTurn.start();
+                    jewelTurn.startCommand();
                     jewelTurn = new Drive_Turn(30.0, 0.2);
-                    jewelTurn.start();
+                    jewelTurn.startCommand();
                 }
                 else {  //if we see RED
                     //rotate clockwise
+                    telemetry.addLine("We are RED, rotate CLOCKWISE");
                     jewelTurn = new Drive_Turn(30.0, 0.2);
-                    jewelTurn.start();
+                    jewelTurn.startCommand();
                     jewelTurn = new Drive_Turn(-30.0, 0.2);
-                    jewelTurn.start();
+                    jewelTurn.startCommand();
                 }
             } else {    //if we did not detect a color
                 telemetry.addLine("Do nothing for jewel turn");
-                telemetry.update();
             }
+            telemetry.update();
         }
 
         //move jewel servo UP
         jewelDownCommand = new Servo_Jewel_Sensor(Servo_Command.UP);
-        jewelDownCommand.start();
+        jewelDownCommand.startCommand();
     }
 }
