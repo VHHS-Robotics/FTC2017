@@ -25,7 +25,6 @@ public abstract class Drive_Command implements Command{
     protected static boolean firstInit = true;
     protected static Telemetry telemetry;
 
-    //protected double power = 0.3;
     protected static DcMotor MotorFrontLeft;
     protected static DcMotor MotorFrontRight;
     protected static DcMotor MotorBackLeft;
@@ -34,26 +33,31 @@ public abstract class Drive_Command implements Command{
 
     protected Drive_Command(){
         if(firstInit) {
-            initializeMotors();
+            initMotors();
             firstInit = false;
         }
     }
 
-    private void initializeMotors(){
+    static void initGyro(){
+        telemetry.addLine("GETTING GYRO");
+        telemetry.update();
+        GyroSensor = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyroSensor");
+        GyroSensor.calibrate();
+        while(GyroSensor.isCalibrating()){
+            //wait
+        }
+        telemetry.addLine("GYRO done calibrating, heading="+GyroSensor.getHeading());
+        telemetry.update();
+    }
+
+    static void initMotors(){
         MotorFrontLeft = hardwareMap.dcMotor.get("motor1");
         MotorFrontRight = hardwareMap.dcMotor.get("motor2");
         MotorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         MotorBackLeft = hardwareMap.dcMotor.get("motor3");
         MotorBackRight = hardwareMap.dcMotor.get("motor4");
         MotorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        telemetry.addLine("GETTING GYRO");
-        GyroSensor = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyroSensor");
-        GyroSensor.calibrate();
-        while(GyroSensor.isCalibrating()){
-            //wait
-        }
-        telemetry.addLine("GYRO done calibrating");
+        firstInit = false;
 
         //resetEncoders();
         //setRunWithEncoders();
@@ -81,7 +85,7 @@ public abstract class Drive_Command implements Command{
     }
 
     @SuppressWarnings("unused")
-    abstract void startMotors();
+    abstract void runMotors();
 
     protected void stopMotors(){
         MotorFrontLeft.setPower(0.0);
@@ -99,7 +103,6 @@ class Drive_Straight extends Drive_Command {
     private double distanceInches;
 
     protected Drive_Straight(double distanceInches) {
-        super();
         super.setRunWithEncoders();
         this.distanceInches = distanceInches;
     }
@@ -108,10 +111,9 @@ class Drive_Straight extends Drive_Command {
     public void startCommand() {
         long startTime = System.currentTimeMillis();
         long timeToDistance = (long) (distanceInches/CIRCUMFERENCE * 1500.0); //this is only true if DRIVE_SPEED = 0.5
-        startMotors();
+        runMotors();
         while(System.currentTimeMillis()-startTime<=timeToDistance){
             //wait
-            Thread.yield();
         }
         stopMotors();
     }
@@ -121,7 +123,7 @@ class Drive_Straight extends Drive_Command {
         return "Drive Straight "+distanceInches+" inches.";
     }
 
-    void startMotors() {
+    void runMotors() {
         MotorFrontLeft.setTargetPosition(MotorFrontLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
         MotorBackLeft.setTargetPosition(MotorBackLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
         MotorFrontRight.setTargetPosition(MotorFrontRight.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
@@ -155,20 +157,31 @@ class Drive_Turn extends Drive_Command {
     private double gyroTargetHeading;
 
     protected Drive_Turn(double degrees, double speed){
-        super();
         super.setRunWithoutEncoders();
 
         if(degrees==0.0)
             return;
 
         this.speed = Math.abs(speed);   //no negative speed for turning
-        if(degrees<0.0){
+        /*if(degrees<0.0){
             isPositive = false;
             degrees = Math.abs(degrees);
             gyroTargetHeading = 360.0-degrees;
         }
         else{
             gyroTargetHeading = degrees;
+        }
+        */
+        //GYRO runs counter-clockwise from 0 to 360, GYRO does not have negative values
+        if(degrees<0.0){    //turning left
+            isPositive = false;             //turn left
+            degrees = Math.abs(degrees);    //left is positive on the gyro, ex -90.0 degrees = 90 on gyro
+            gyroTargetHeading = degrees;
+        }
+        else{                               //turn right
+            isPositive = true;
+            degrees = Math.abs(degrees);
+            gyroTargetHeading = 360-degrees;//right is negative, ex: 90.0 degrees = 360-90 = 270 on gyro
         }
         //this.degrees = degrees;
         //distanceInches = Math.abs(degrees)*ONE_DEGREE_INCHES;
@@ -178,22 +191,24 @@ class Drive_Turn extends Drive_Command {
     public void startCommand() {
         //long startTime = System.currentTimeMillis();
        // long timeToDistance = 1000;//(long) (distanceInches/CIRCUMFERENCE * (-1666.67*speed+2083.33)); //time based on speed
-        startMotors();
+        runMotors();        //TODO: Try runMotors() in while loop
        // while(System.currentTimeMillis()-startTime<=timeToDistance){
       //      //wait
        // }
         telemetry.addLine("In turn before loop, targetHeading"+gyroTargetHeading+" currentHeading="+GyroSensor.getHeading());
         telemetry.update();
         if(isPositive) {    //positive turn right
-            while (GyroSensor.getHeading() < gyroTargetHeading) {
-                telemetry.addLine("In Turn While loop");
+            while (GyroSensor.getHeading() > gyroTargetHeading || (GyroSensor.getHeading()<10.0 && GyroSensor.getHeading()>=0.0)) {
+                telemetry.addLine("In Turn While loop, RIGHT");
                 telemetry.addLine("targetHeading=" + gyroTargetHeading + " currentHeading=" + GyroSensor.getHeading());
+                telemetry.update();
             }
         }
         else{   //negative turn left
-            while (GyroSensor.getHeading() > gyroTargetHeading) {
-                telemetry.addLine("In Turn While loop");
+            while (GyroSensor.getHeading() < gyroTargetHeading || (GyroSensor.getHeading()>350.0 && GyroSensor.getHeading()<=0.0)) {
+                telemetry.addLine("In Turn While loop: LEFT");
                 telemetry.addLine("targetHeading=" + gyroTargetHeading + " currentHeading=" + GyroSensor.getHeading());
+                telemetry.update();
             }
         }
         telemetry.addLine("after Turn While loop, stop motors");
@@ -207,8 +222,8 @@ class Drive_Turn extends Drive_Command {
     }
 
     @Override
-    void startMotors() {
-        if(isPositive) {
+    void runMotors() {
+        if(isPositive) {        //turn right
             /*
             MotorFrontLeft.setTargetPosition(MotorFrontLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
             MotorBackLeft.setTargetPosition(MotorBackLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
@@ -220,7 +235,7 @@ class Drive_Turn extends Drive_Command {
             MotorFrontRight.setPower(-speed);
             MotorBackRight.setPower(-speed);
         }
-        else{
+        else{                   //turn left
             /*
             MotorFrontLeft.setTargetPosition(MotorFrontLeft.getCurrentPosition() - (int) (distanceInches * COUNTS_PER_INCH));
             MotorBackLeft.setTargetPosition(MotorBackLeft.getCurrentPosition() - (int) (distanceInches * COUNTS_PER_INCH));

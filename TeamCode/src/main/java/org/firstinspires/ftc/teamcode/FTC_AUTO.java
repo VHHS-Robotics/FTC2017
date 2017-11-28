@@ -37,10 +37,18 @@ public abstract class FTC_AUTO extends LinearOpMode{
             Servo_Command.hardwareMap = hardwareMap;
             Drive_Command.telemetry = telemetry;
 
+            //Initialize Gyro in Drive_Command Class
+            Drive_Command.initGyro();
+
+            //Initialize Motors in the Drive_Command Class
+            Drive_Command.initMotors();
+
             //initialize Glyph servos before Autonomous begins
             Servo_Command.initGlyphServos();
         }
         firstTimeInit = false;
+        telemetry.addLine("Ready to Start AUTONOMOUS");
+        telemetry.update();
         waitForStart();
 
         while (opModeIsActive()) {
