@@ -35,6 +35,7 @@ public abstract class FTC_AUTO extends LinearOpMode{
             //initialize hardwareMap in both command classes
             Drive_Command.hardwareMap = hardwareMap;
             Servo_Command.hardwareMap = hardwareMap;
+            Drive_Command.telemetry = telemetry;
 
             //initialize Glyph servos before Autonomous begins
             Servo_Command.initGlyphServos();
@@ -172,17 +173,17 @@ public abstract class FTC_AUTO extends LinearOpMode{
                 if (color.equals(Servo_Jewel_Sensor.BLUE)) {
                     //rotate clockwise
                     telemetry.addLine("We are BLUE, rotate CLOCKWISE");
-                    jewelTurn = new Drive_Turn(30.0, 0.2);
+                    jewelTurn = new Drive_Turn(15.0, 0.2);
                     jewelTurn.startCommand();
-                    jewelTurn = new Drive_Turn(-30.0, 0.2);
+                    jewelTurn = new Drive_Turn(-15.0, 0.2);
                     jewelTurn.startCommand();
                 }
                 else { //if we see RED
                     //rotate counter-clockwise
                     telemetry.addLine("We are BLUE, rotate COUNTER-CLOCKWISE");
-                    jewelTurn = new Drive_Turn(-30.0, 0.2);
+                    jewelTurn = new Drive_Turn(-15.0, 0.2);
                     jewelTurn.startCommand();
-                    jewelTurn = new Drive_Turn(30.0, 0.2);
+                    jewelTurn = new Drive_Turn(15.0, 0.2);
                     jewelTurn.startCommand();
                 }
             }
@@ -197,17 +198,17 @@ public abstract class FTC_AUTO extends LinearOpMode{
                 if (color.equals(Servo_Jewel_Sensor.BLUE)) {
                     //rotate counter-clockwise
                     telemetry.addLine("We are RED, rotate COUNTER-CLOCKWISE");
-                    jewelTurn = new Drive_Turn(-30.0, 0.2);
+                    jewelTurn = new Drive_Turn(-15.0, 0.2);
                     jewelTurn.startCommand();
-                    jewelTurn = new Drive_Turn(30.0, 0.2);
+                    jewelTurn = new Drive_Turn(15.0, 0.2);
                     jewelTurn.startCommand();
                 }
                 else {  //if we see RED
                     //rotate clockwise
                     telemetry.addLine("We are RED, rotate CLOCKWISE");
-                    jewelTurn = new Drive_Turn(30.0, 0.2);
+                    jewelTurn = new Drive_Turn(15.0, 0.2);
                     jewelTurn.startCommand();
-                    jewelTurn = new Drive_Turn(-30.0, 0.2);
+                    jewelTurn = new Drive_Turn(-15.0, 0.2);
                     jewelTurn.startCommand();
                 }
             } else {    //if we did not detect a color

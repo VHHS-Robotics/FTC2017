@@ -110,7 +110,7 @@ class Servo_Jewel_Sensor extends Servo_Command{
         super();
 
         //get colorSensor reference and turn the light on
-        colorSensor = hardwareMap.get(ColorSensor.class, "sensor");
+        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
         colorSensor.enableLed(true);
 
         colorDetected = null;
