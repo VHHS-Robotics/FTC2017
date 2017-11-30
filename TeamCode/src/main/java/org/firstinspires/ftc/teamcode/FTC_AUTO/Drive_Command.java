@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.FTC_AUTO;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -149,69 +149,84 @@ class Drive_Straight extends Drive_Command {
 @SuppressWarnings("WeakerAccess")
 class Drive_Turn extends Drive_Command {
 
-    private boolean isPositive = true;
+    private boolean turnRight = true;
     //private double distanceInches;
     //private double degrees;
     private double speed;
     //private double gyroStartHeading = GyroSensor.getHeading();
     private double gyroTargetHeading;
+    private String leftRight = "LEFT";
 
-    protected Drive_Turn(double degrees, double speed){
-        super.setRunWithoutEncoders();
-
-        if(degrees==0.0)
+    protected Drive_Turn(double targetHeading, double speed, String leftRight){
+        if(targetHeading<0.0)
             return;
 
-        this.speed = Math.abs(speed);   //no negative speed for turning
-        /*if(degrees<0.0){
-            isPositive = false;
-            degrees = Math.abs(degrees);
-            gyroTargetHeading = 360.0-degrees;
+        super.resetEncoders();
+        super.setRunWithoutEncoders();
+
+        MotorFrontLeft = hardwareMap.dcMotor.get("motor1");
+        MotorFrontRight = hardwareMap.dcMotor.get("motor2");
+        MotorFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        MotorBackLeft = hardwareMap.dcMotor.get("motor3");
+        MotorBackRight = hardwareMap.dcMotor.get("motor4");
+        MotorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        if(leftRight.equals("LEFT")){
+            turnRight = false;
         }
         else{
-            gyroTargetHeading = degrees;
+            turnRight = true;
         }
-        */
+        this.speed = Math.abs(speed);   //no negative speed for turning
+
         //GYRO runs counter-clockwise from 0 to 360, GYRO does not have negative values
-        if(degrees<0.0){    //turning left
-            isPositive = false;             //turn left
-            degrees = Math.abs(degrees);    //left is positive on the gyro, ex -90.0 degrees = 90 on gyro
-            gyroTargetHeading = degrees;
-        }
-        else{                               //turn right
-            isPositive = true;
-            degrees = Math.abs(degrees);
-            gyroTargetHeading = 360-degrees;//right is negative, ex: 90.0 degrees = 360-90 = 270 on gyro
-        }
-        //this.degrees = degrees;
-        //distanceInches = Math.abs(degrees)*ONE_DEGREE_INCHES;
+        gyroTargetHeading = targetHeading;
     }
 
     @Override
     public void startCommand() {
         //long startTime = System.currentTimeMillis();
        // long timeToDistance = 1000;//(long) (distanceInches/CIRCUMFERENCE * (-1666.67*speed+2083.33)); //time based on speed
-        runMotors();        //TODO: Try runMotors() in while loop
+        //runMotors();        //TODO: Try runMotors() in while loop
        // while(System.currentTimeMillis()-startTime<=timeToDistance){
       //      //wait
        // }
         telemetry.addLine("In turn before loop, targetHeading"+gyroTargetHeading+" currentHeading="+GyroSensor.getHeading());
         telemetry.update();
-        if(isPositive) {    //positive turn right
-            while (GyroSensor.getHeading() > gyroTargetHeading || (GyroSensor.getHeading()<10.0 && GyroSensor.getHeading()>=0.0)) {
-                telemetry.addLine("In Turn While loop, RIGHT");
-                telemetry.addLine("targetHeading=" + gyroTargetHeading + " currentHeading=" + GyroSensor.getHeading());
-                telemetry.update();
+        while (true) {
+            if(gyroTargetHeading>=2 && gyroTargetHeading<=357) {
+                if (GyroSensor.getHeading() <= (gyroTargetHeading + 2) && (GyroSensor.getHeading() >= (gyroTargetHeading - 2))) {
+                    telemetry.addLine("Broke in if");
+                    break;
+                }
+            }
+            else{   //in the case where 2>heading>358
+                if(GyroSensor.getHeading()<=1 || GyroSensor.getHeading()>=358){
+                    telemetry.addLine("Broke in else");
+                    break;
+                }
+            }
+            if(turnRight)
+                telemetry.addLine("In Turn loop, RIGHT");
+            else
+                telemetry.addLine("In Turn loop, LEFT");
+            telemetry.addLine("targetHeading=" + gyroTargetHeading + " currentHeading=" + GyroSensor.getHeading());
+            telemetry.update();
+            //runMotors();
+            if(turnRight){
+                MotorFrontLeft.setPower(speed);
+                MotorBackLeft.setPower(speed);
+                MotorFrontRight.setPower(-speed);
+                MotorBackRight.setPower(-speed);
+            }
+            if(!turnRight){
+                MotorFrontLeft.setPower(-speed);
+                MotorBackLeft.setPower(-speed);
+                MotorFrontRight.setPower(speed);
+                MotorBackRight.setPower(speed);
             }
         }
-        else{   //negative turn left
-            while (GyroSensor.getHeading() < gyroTargetHeading || (GyroSensor.getHeading()>350.0 && GyroSensor.getHeading()<=0.0)) {
-                telemetry.addLine("In Turn While loop: LEFT");
-                telemetry.addLine("targetHeading=" + gyroTargetHeading + " currentHeading=" + GyroSensor.getHeading());
-                telemetry.update();
-            }
-        }
-        telemetry.addLine("after Turn While loop, stop motors");
+        telemetry.addLine("after Turn While loop, stop motors, targetHeading="+gyroTargetHeading+" currentHeading="+GyroSensor.getHeading());
         telemetry.update();
         stopMotors();
     }
@@ -223,7 +238,7 @@ class Drive_Turn extends Drive_Command {
 
     @Override
     void runMotors() {
-        if(isPositive) {        //turn right
+        if(turnRight) {        //turn right
             /*
             MotorFrontLeft.setTargetPosition(MotorFrontLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));
             MotorBackLeft.setTargetPosition(MotorBackLeft.getCurrentPosition() + (int) (distanceInches * COUNTS_PER_INCH));

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.FTC_AUTO;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -15,22 +15,21 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  Command_Wait(milliseconds)           makes the robot wait the desired time in milliseconds (thousandths of a second)
  */
 @SuppressWarnings({"FieldCanBeLocal","unused"})
-@Autonomous(name="AUTO_RED_1", group ="Competition")
-public class FTC_AUTO_RED_1 extends FTC_AUTO {
+//@Autonomous(name="AUTO_RED_2", group ="Competition")
+public class FTC_AUTO_RED_2 extends FTC_AUTO {
 
-    public FTC_AUTO_RED_1(){
+    public FTC_AUTO_RED_2(){
         weAreBlue = false;
     }
 
-    private double CENTER_DISTANCE = 21.0;
+    //TODO: CENTER_DISTANCE for BLUE_2 and RED_2 are not 21.0
+    private double CENTER_DISTANCE = 41.5;
 
     @Override
-    void setCommands(){
-        //Drive commands
-        commands.add(new Drive_Straight(34.0));
-        commands.add(new Drive_Turn(95.0, 0.5));   //turns out 95.0 degrees equates to about 90.0 degrees on Robot_1
-        commands.add(new Drive_Straight(26.0));
-        commands.add(new Drive_Turn(95.0, 0.5));
+    void setCommands() {
+        //Drive Commands
+        commands.add(new Drive_Straight(27.5));
+        commands.add(new Drive_Turn(125.0, 0.5, "RIGHT"));
 
         if(glyphLocation==0)        //LEFT
             commands.add(new Drive_Straight(CENTER_DISTANCE-7.0));
@@ -39,8 +38,8 @@ public class FTC_AUTO_RED_1 extends FTC_AUTO {
         else if (glyphLocation==2)  //RIGHT
             commands.add(new Drive_Straight(CENTER_DISTANCE+7.0));
 
-        commands.add(new Drive_Turn(-90.0, 0.5));
-        commands.add(new Drive_Straight(10.0));
+        commands.add(new Drive_Turn(73.5, 0.5, "LEFT"));
+        commands.add(new Drive_Straight(25.0));
         commands.add(new Servo_Glyph(Servo_Command.OPEN));
     }
 }

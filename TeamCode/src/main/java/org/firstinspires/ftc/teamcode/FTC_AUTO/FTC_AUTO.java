@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.FTC_AUTO;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -57,7 +57,7 @@ public abstract class FTC_AUTO extends LinearOpMode{
                 checkRelicPosition();
 
                 //do all the jewel commands before the drive commands
-                runJewelCommands();
+               // runJewelCommands();
 
                 //set and run the commands for autonomous driving
                 setCommands();
@@ -181,18 +181,29 @@ public abstract class FTC_AUTO extends LinearOpMode{
                 if (color.equals(Servo_Jewel_Sensor.BLUE)) {
                     //rotate clockwise
                     telemetry.addLine("We are BLUE, rotate CLOCKWISE");
-                    jewelTurn = new Drive_Turn(15.0, 0.2);
+                    telemetry.update();
+
+                    jewelTurn = new Drive_Turn(15.0, 0.5, "LEFT");
                     jewelTurn.startCommand();
-                    jewelTurn = new Drive_Turn(-15.0, 0.2);
+                    telemetry.addLine(jewelTurn.printString());
+                    telemetry.update();
+                    jewelTurn = new Drive_Turn(0.0, 0.5, "RIGHT");
                     jewelTurn.startCommand();
+                    telemetry.addLine(jewelTurn.printString());
+                    telemetry.update();
                 }
                 else { //if we see RED
                     //rotate counter-clockwise
                     telemetry.addLine("We are BLUE, rotate COUNTER-CLOCKWISE");
-                    jewelTurn = new Drive_Turn(-15.0, 0.2);
+                    telemetry.update();
+                    jewelTurn = new Drive_Turn(345.0, 0.5, "RIGHT");
                     jewelTurn.startCommand();
-                    jewelTurn = new Drive_Turn(15.0, 0.2);
+                    telemetry.addLine(jewelTurn.printString());
+                    telemetry.update();
+                    jewelTurn = new Drive_Turn(0.0, 0.5, "LEFT");
                     jewelTurn.startCommand();
+                    telemetry.addLine(jewelTurn.printString());
+                    telemetry.update();
                 }
             }
             else {  //if we did not detect a color
@@ -206,18 +217,31 @@ public abstract class FTC_AUTO extends LinearOpMode{
                 if (color.equals(Servo_Jewel_Sensor.BLUE)) {
                     //rotate counter-clockwise
                     telemetry.addLine("We are RED, rotate COUNTER-CLOCKWISE");
-                    jewelTurn = new Drive_Turn(-15.0, 0.2);
+                    telemetry.update();
+
+
+                    jewelTurn = new Drive_Turn(345.0, 0.5, "RIGHT");
                     jewelTurn.startCommand();
-                    jewelTurn = new Drive_Turn(15.0, 0.2);
+                    telemetry.addLine(jewelTurn.printString());
+                    telemetry.update();
+                    jewelTurn = new Drive_Turn(0.0, 0.5, "LEFT");
                     jewelTurn.startCommand();
+                    telemetry.addLine(jewelTurn.printString());
+                    telemetry.update();
                 }
                 else {  //if we see RED
                     //rotate clockwise
                     telemetry.addLine("We are RED, rotate CLOCKWISE");
-                    jewelTurn = new Drive_Turn(15.0, 0.2);
+                    telemetry.update();
+
+                    jewelTurn = new Drive_Turn(15.0, 0.5, "LEFT");
                     jewelTurn.startCommand();
-                    jewelTurn = new Drive_Turn(-15.0, 0.2);
+                    telemetry.addLine(jewelTurn.printString());
+                    telemetry.update();
+                    jewelTurn = new Drive_Turn(0.0, 0.5, "RIGHT");
                     jewelTurn.startCommand();
+                    telemetry.addLine(jewelTurn.printString());
+                    telemetry.update();
                 }
             } else {    //if we did not detect a color
                 telemetry.addLine("Do nothing for jewel turn");

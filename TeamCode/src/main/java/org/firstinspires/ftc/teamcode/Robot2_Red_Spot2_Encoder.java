@@ -43,6 +43,7 @@ public class Robot2_Red_Spot2_Encoder extends LinearOpMode {
     private DcMotor RelicMotor;     //Extending arm
     private Servo BigRelicServo;    // Vertical and Horizontal lift
     //    private Servo SmallRelicServo;  //Open and close claw
+    private Servo SlideServo;
     private Servo JewelServo;       //Jewel Servo
     private ColorSensor ColorSensor; // Jewel Color Sensor
     ModernRoboticsI2cRangeSensor RangeSensor = null;
@@ -87,6 +88,9 @@ public class Robot2_Red_Spot2_Encoder extends LinearOpMode {
         GlyphServoLeft = hardwareMap.servo.get("servo5");
         GlyphServoRight = hardwareMap.servo.get("servo6");
 
+        //Slide Servo
+        SlideServo = hardwareMap.servo.get("servo3");
+
         //Jewel Servo
         JewelServo = hardwareMap.servo.get("servo4");
 
@@ -105,7 +109,7 @@ public class Robot2_Red_Spot2_Encoder extends LinearOpMode {
         GlyphServoRight.setPosition(0.40);
         GlyphServoLeft.setPosition(0.60);
         JewelServo.setPosition(0.9);
-//        SmallRelicServo.setPosition(0.5);
+        SlideServo.setPosition(1.0);
         BigRelicServo.setPosition(0.5);
 
         boolean turnright = false;

@@ -27,6 +27,7 @@ public class FTC_Robot extends LinearOpMode {
     private DcMotor RelicMotor;     //Extending arm
     private Servo BigRelicServo;    // Vertical and Horizontal lift
     private Servo SmallRelicServo;  //Open and close claw
+    private Servo SlideServo;           //Slide Servo (hook)
     private Servo JewelServo;       //Jewel Servo
 
     //Driving
@@ -66,19 +67,23 @@ public class FTC_Robot extends LinearOpMode {
         GlyphServoLeft = hardwareMap.servo.get("servo5");
         GlyphServoRight = hardwareMap.servo.get("servo6");
 
+        //Slide Servo
+        SlideServo = hardwareMap.servo.get("servo3");
+
         //Jewel Servo
         JewelServo = hardwareMap.servo.get("servo4");
 
         //Relic arm motors and Servos
         RelicMotor = hardwareMap.dcMotor.get("motor6");
         BigRelicServo = hardwareMap.servo.get("servo1");
-      //  SmallRelicServo = hardwareMap.servo.get("servo2");
+        SmallRelicServo = hardwareMap.servo.get("servo2");
 
         GlyphServoRight.setPosition(1.0);
         GlyphServoLeft.setPosition(0.0);
 
-        JewelServo.setPosition(0.9);
-      //  SmallRelicServo.setPosition(0.5);
+        SlideServo.setPosition(1.0);
+        JewelServo.setPosition(1.0);
+        SmallRelicServo.setPosition(0.5);
         BigRelicServo.setPosition(0.5);
 
         waitForStart();
@@ -144,16 +149,16 @@ public class FTC_Robot extends LinearOpMode {
             }
             RelicMotor.setPower(0.0);
 
-/*
+
             // Relic Servo Controller Code
-            while(gamepad1.b) {
-                SmallRelicServo.setPosition(1.0);
+            //open
+            if(gamepad1.y) {
+                SmallRelicServo.setPosition(SmallRelicServo.getPosition()+0.05);
             }
-            while(gamepad1.y){
-                SmallRelicServo.setPosition(0.0);
+            //close
+            if(gamepad1.b){
+                SmallRelicServo.setPosition(SmallRelicServo.getPosition()-0.05);
             }
-            SmallRelicServo.setPosition(0.5);
-*/
 
             //1 degree equals 0.00055 decimal
             if(gamepad1.right_bumper){
@@ -165,10 +170,10 @@ public class FTC_Robot extends LinearOpMode {
 
             //jewel servo up
             if  (gamepad1.left_stick_button) {
-                JewelServo.setPosition(0.9);
+                SlideServo.setPosition(1.0);
             }//jewel servo down
             if  (gamepad1.right_stick_button) {
-                JewelServo.setPosition(0.1);
+                SlideServo.setPosition(0.0);
             }
         }
     }

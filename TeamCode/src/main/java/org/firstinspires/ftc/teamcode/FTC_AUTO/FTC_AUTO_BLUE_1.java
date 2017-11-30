@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.FTC_AUTO;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
  Command_Wait(milliseconds)           makes the robot wait the desired time in milliseconds (thousandths of a second)
  */
 @SuppressWarnings({"FieldCanBeLocal","unused"})
-@Autonomous(name="AUTO_BLUE_1", group ="Autonomous")
+//@Autonomous(name="AUTO_BLUE_1", group ="Autonomous")
 public class FTC_AUTO_BLUE_1 extends FTC_AUTO {
 
     public FTC_AUTO_BLUE_1(){
@@ -27,10 +27,11 @@ public class FTC_AUTO_BLUE_1 extends FTC_AUTO {
     @Override
     void setCommands(){
         //Drive commands
-        commands.add(new Drive_Straight(34.0));
-        commands.add(new Drive_Turn(-95.0, 0.5));   //turns out 95.0 degrees equates to about 90.0 degrees on Robot_1
+        commands.add(new Drive_Straight(18.0));     //was 34
+        commands.add(new Drive_Turn(90.0, 0.8, "LEFT"));   //turns out 95.0 degrees equates to about 90.0 degrees on Robot_1
+        /*
         commands.add(new Drive_Straight(26.0));
-        commands.add(new Drive_Turn(-95.0, 0.5));
+        commands.add(new Drive_Turn(90.0, 0.5, "LEFT"));
 
         if(glyphLocation==0)        //LEFT
             commands.add(new Drive_Straight(CENTER_DISTANCE+7.0));
@@ -39,8 +40,9 @@ public class FTC_AUTO_BLUE_1 extends FTC_AUTO {
         else if (glyphLocation==2)  //RIGHT
             commands.add(new Drive_Straight(CENTER_DISTANCE-7.0));
 
-        commands.add(new Drive_Turn(90.0, 0.5));
+        commands.add(new Drive_Turn(270.0, 0.5, "RIGHT"));
         commands.add(new Drive_Straight(10.0));
         commands.add(new Servo_Glyph(Servo_Command.OPEN));
+        */
     }
 }

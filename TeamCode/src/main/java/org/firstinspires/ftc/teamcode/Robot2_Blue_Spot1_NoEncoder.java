@@ -42,7 +42,7 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
     private Servo GlyphServoLeft;   // close and open
     private DcMotor RelicMotor;     //Extending arm
     private Servo BigRelicServo;    // Vertical and Horizontal lift
-    //    private Servo SmallRelicServo;  //Open and close claw
+    private Servo SlideServo;
     private Servo JewelServo;       //Jewel Servo
     private ColorSensor ColorSensor; // Jewel Color Sensor
     ModernRoboticsI2cRangeSensor RangeSensor = null;
@@ -87,13 +87,15 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
         GlyphServoLeft = hardwareMap.servo.get("servo5");
         GlyphServoRight = hardwareMap.servo.get("servo6");
 
+        //Slide Servo
+        SlideServo = hardwareMap.servo.get("servo3");
+
         //Jewel Servo
         JewelServo = hardwareMap.servo.get("servo4");
 
         //Relic arm motors and Servos
         RelicMotor = hardwareMap.dcMotor.get("motor6");
         BigRelicServo = hardwareMap.servo.get("servo1");
-//        SmallRelicServo = hardwareMap.servo.get("servo2");
 
         //Sensors
         ColorSensor = hardwareMap.colorSensor.get("colorSensor");
@@ -105,7 +107,7 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
         GlyphServoRight.setPosition(0.40);
         GlyphServoLeft.setPosition(0.60);
         JewelServo.setPosition(0.9);
-//        SmallRelicServo.setPosition(0.5);
+        SlideServo.setPosition(1.0);
         BigRelicServo.setPosition(0.5);
 
         boolean turnright = false;
@@ -181,8 +183,7 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
             if (runtime.seconds() > 3.0 && runtime.seconds() < 7.5) {
 
                 if(glyphLocation==0) {    //LEFT
-                    targetHeading = 80.00; // left
-
+                    targetHeading = 77;
                 }
                 else if (glyphLocation==1) { //CENTER
                     targetHeading = 70.00;
