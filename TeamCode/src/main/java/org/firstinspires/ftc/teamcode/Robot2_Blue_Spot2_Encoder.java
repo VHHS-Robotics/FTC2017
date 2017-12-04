@@ -110,7 +110,7 @@ public class Robot2_Blue_Spot2_Encoder extends LinearOpMode {
         GlyphServoLeft.setPosition(0.60);
         JewelServo.setPosition(0.9);
         SlideServo.setPosition(1.0);
-        BigRelicServo.setPosition(0.5);
+        BigRelicServo.setPosition(0.49);
 
         boolean turnright = false;
 
@@ -184,7 +184,7 @@ public class Robot2_Blue_Spot2_Encoder extends LinearOpMode {
 
             if (runtime.seconds() > 3.0 && runtime.seconds() < 7.5) {
 
-                double targetHeading = 90.00;
+                double targetHeading = 85.00;
 
                 double currentHeading = GyroSensor.getHeading();
                 double leftSpeed, rightSpeed;
@@ -218,12 +218,12 @@ public class Robot2_Blue_Spot2_Encoder extends LinearOpMode {
                 }
                 else if (glyphLocation==2) {  //RIGHT
                     encoderDrive(0.4, 45.5, 45.5, 12.0); // left
-                    sleep(500);
+                    sleep(750);
                 }
             }
             if (runtime.seconds() > 12.5 && runtime.seconds() < 17.0) {
 
-                double targetHeading = 180.00;
+                double targetHeading = 175.00;
 
                 double currentHeading = GyroSensor.getHeading();
                 double leftSpeed, rightSpeed;
@@ -278,7 +278,7 @@ public class Robot2_Blue_Spot2_Encoder extends LinearOpMode {
             if (runtime.seconds() > 23.00  && runtime.seconds() < 30.00) { // following the white line
                 stopRobot();
             }
-                idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
 
         GyroSensor.resetZAxisIntegrator();

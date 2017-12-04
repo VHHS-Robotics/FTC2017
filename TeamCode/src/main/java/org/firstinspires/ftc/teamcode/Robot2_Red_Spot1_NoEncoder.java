@@ -110,7 +110,7 @@ public class Robot2_Red_Spot1_NoEncoder extends LinearOpMode {
         GlyphServoLeft.setPosition(0.60);
         JewelServo.setPosition(0.9);
         SlideServo.setPosition(1.0);
-        BigRelicServo.setPosition(0.5);
+        BigRelicServo.setPosition(0.49);
 
         boolean turnright = false;
 
@@ -146,7 +146,7 @@ public class Robot2_Red_Spot1_NoEncoder extends LinearOpMode {
             telemetry.update();
 
             if (runtime.seconds() > 0.00 && runtime.seconds() < 0.50) { // bring servo to relic
-                JewelServo.setPosition(0.1);
+                JewelServo.setPosition(0.0);
             }
             if (runtime.seconds() > 0.5 && runtime.seconds() < 1.00){ //algo to decide which ball to knock off
                 //if turnright=false it will turn left
@@ -169,7 +169,7 @@ public class Robot2_Red_Spot1_NoEncoder extends LinearOpMode {
                 }
             }
             if (runtime.seconds() > 1.50 && runtime.seconds() <2.00) {
-                JewelServo.setPosition(0.9);
+                JewelServo.setPosition(1.0);
                 if (turnright == false) {
                     goRight(.15);
                 }
@@ -189,7 +189,7 @@ public class Robot2_Red_Spot1_NoEncoder extends LinearOpMode {
 
                 }
                 else if (glyphLocation==1) { //CENTER
-                    targetHeading = 300.00;
+                    targetHeading = 295.00;
                 }
                 else if (glyphLocation==0) {  //LEFT
                     targetHeading = 304.00;

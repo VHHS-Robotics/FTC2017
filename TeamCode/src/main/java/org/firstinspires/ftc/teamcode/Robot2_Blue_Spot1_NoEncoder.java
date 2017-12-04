@@ -108,7 +108,7 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
         GlyphServoLeft.setPosition(0.60);
         JewelServo.setPosition(0.9);
         SlideServo.setPosition(1.0);
-        BigRelicServo.setPosition(0.5);
+        BigRelicServo.setPosition(0.49);
 
         boolean turnright = false;
 
@@ -186,7 +186,7 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
                     targetHeading = 77;
                 }
                 else if (glyphLocation==1) { //CENTER
-                    targetHeading = 70.00;
+                    targetHeading = 69.00;
                 }
                 else if (glyphLocation==2) {  //RIGHT
                     targetHeading = 60.00;
