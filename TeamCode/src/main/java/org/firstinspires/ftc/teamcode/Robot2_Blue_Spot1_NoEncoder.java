@@ -45,7 +45,6 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
     private Servo SlideServo;
     private Servo JewelServo;       //Jewel Servo
     private ColorSensor ColorSensor; // Jewel Color Sensor
-    ModernRoboticsI2cRangeSensor RangeSensor = null;
 
 
     ModernRoboticsI2cGyro GyroSensor; //need this
@@ -100,12 +99,11 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
         //Sensors
         ColorSensor = hardwareMap.colorSensor.get("colorSensor");
         GyroSensor = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyroSensor");
-        RangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
 
 
         //initialize servos
-        GlyphServoRight.setPosition(0.40);
-        GlyphServoLeft.setPosition(0.60);
+        GlyphServoRight.setPosition(0.7);
+        GlyphServoLeft.setPosition(0.4);
         JewelServo.setPosition(0.9);
         SlideServo.setPosition(1.0);
         BigRelicServo.setPosition(0.49);
@@ -195,7 +193,7 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
                 double currentHeading = GyroSensor.getHeading();
                 double leftSpeed, rightSpeed;
 
-                while (currentHeading < targetHeading || currentHeading == 359 || currentHeading == 358 || currentHeading == 357 || currentHeading == 356 || currentHeading == 355) {
+                while (currentHeading < targetHeading || currentHeading >= 300) {
                     leftSpeed = -0.1; // to turn left
                     rightSpeed = 0.1; // to turn left
                     MotorFrontLeft.setPower(leftSpeed);
@@ -231,8 +229,8 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
                 goBack(.3);
             }
             if (runtime.seconds() > 13.75  && runtime.seconds() < 14.25) { // following the white line
-                GlyphServoRight.setPosition(0.5);
-                GlyphServoLeft.setPosition(0.5);
+                GlyphServoRight.setPosition(0.7);
+                GlyphServoLeft.setPosition(0.4);
             }
             if (runtime.seconds() > 14.25  && runtime.seconds() < 14.75) { // following the white line
                 goStraight(.5);

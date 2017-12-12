@@ -78,8 +78,8 @@ public class FTC_Robot extends LinearOpMode {
         BigRelicServo = hardwareMap.servo.get("servo1");
         SmallRelicServo = hardwareMap.servo.get("servo2");
 
-        GlyphServoRight.setPosition(1.0);
-        GlyphServoLeft.setPosition(0.0);
+        GlyphServoRight.setPosition(0.9);
+        GlyphServoLeft.setPosition(0.1);
 
         SlideServo.setPosition(1.0);
         JewelServo.setPosition(1.0);
@@ -131,10 +131,10 @@ public class FTC_Robot extends LinearOpMode {
 
             // Glyph Servo Controller Code
             if(gamepad1.a){    //close
-                GlyphServoRight.setPosition(0.20);
-                GlyphServoLeft.setPosition(0.80);
+                GlyphServoRight.setPosition(0.7);
+                GlyphServoLeft.setPosition(0.4);
             }
-            else if(gamepad1.x){//open
+            if(gamepad1.x){//open
                 GlyphServoRight.setPosition(1.0);
                 GlyphServoLeft.setPosition(0.0);
             }
@@ -170,9 +170,11 @@ public class FTC_Robot extends LinearOpMode {
 
             //jewel servo up
             if  (gamepad1.left_stick_button) {
+                //JewelServo.setPosition(0.9);
                 SlideServo.setPosition(1.0);
             }//jewel servo down
             if  (gamepad1.right_stick_button) {
+                //JewelServo.setPosition(0.1);
                 SlideServo.setPosition(0.0);
             }
         }

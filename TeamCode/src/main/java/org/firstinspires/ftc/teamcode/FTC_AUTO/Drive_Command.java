@@ -193,6 +193,7 @@ class Drive_Turn extends Drive_Command {
        // }
         telemetry.addLine("In turn before loop, targetHeading"+gyroTargetHeading+" currentHeading="+GyroSensor.getHeading());
         telemetry.update();
+        runMotors();
         while (true) {
             if(gyroTargetHeading>=2 && gyroTargetHeading<=357) {
                 if (GyroSensor.getHeading() <= (gyroTargetHeading + 2) && (GyroSensor.getHeading() >= (gyroTargetHeading - 2))) {
@@ -212,19 +213,6 @@ class Drive_Turn extends Drive_Command {
                 telemetry.addLine("In Turn loop, LEFT");
             telemetry.addLine("targetHeading=" + gyroTargetHeading + " currentHeading=" + GyroSensor.getHeading());
             telemetry.update();
-            //runMotors();
-            if(turnRight){
-                MotorFrontLeft.setPower(speed);
-                MotorBackLeft.setPower(speed);
-                MotorFrontRight.setPower(-speed);
-                MotorBackRight.setPower(-speed);
-            }
-            if(!turnRight){
-                MotorFrontLeft.setPower(-speed);
-                MotorBackLeft.setPower(-speed);
-                MotorFrontRight.setPower(speed);
-                MotorBackRight.setPower(speed);
-            }
         }
         telemetry.addLine("after Turn While loop, stop motors, targetHeading="+gyroTargetHeading+" currentHeading="+GyroSensor.getHeading());
         telemetry.update();

@@ -46,7 +46,6 @@ public class Robot2_Red_Spot2_Encoder extends LinearOpMode {
     private Servo SlideServo;
     private Servo JewelServo;       //Jewel Servo
     private ColorSensor ColorSensor; // Jewel Color Sensor
-    ModernRoboticsI2cRangeSensor RangeSensor = null;
 
 
     ModernRoboticsI2cGyro GyroSensor; //need this
@@ -102,12 +101,11 @@ public class Robot2_Red_Spot2_Encoder extends LinearOpMode {
         //Sensors
         ColorSensor = hardwareMap.colorSensor.get("colorSensor");
         GyroSensor = (ModernRoboticsI2cGyro) hardwareMap.gyroSensor.get("gyroSensor");
-        RangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
 
 
         //initialize servos
-        GlyphServoRight.setPosition(0.40);
-        GlyphServoLeft.setPosition(0.60);
+        GlyphServoRight.setPosition(0.7);
+        GlyphServoLeft.setPosition(0.4);
         JewelServo.setPosition(0.9);
         SlideServo.setPosition(1.0);
         BigRelicServo.setPosition(0.49);
@@ -191,7 +189,7 @@ public class Robot2_Red_Spot2_Encoder extends LinearOpMode {
                 double currentHeading = GyroSensor.getHeading();
                 double leftSpeed, rightSpeed;
 
-                while (currentHeading > targetHeading  || currentHeading == 0 || currentHeading == 1 || currentHeading == 2 || currentHeading == 3 || currentHeading == 4 || currentHeading == 5) {
+                while (currentHeading > targetHeading  || currentHeading <= 30) {
                     leftSpeed = 0.1; // to turn right
                     rightSpeed = -0.1; // to turn rights
                     MotorFrontLeft.setPower(leftSpeed);
@@ -268,8 +266,8 @@ public class Robot2_Red_Spot2_Encoder extends LinearOpMode {
                 goBack(.3);
             }
             if (runtime.seconds() > 22.5  && runtime.seconds() < 23.0) { // following the white line
-                GlyphServoRight.setPosition(0.5);
-                GlyphServoLeft.setPosition(0.5);
+                GlyphServoRight.setPosition(0.7);
+                GlyphServoLeft.setPosition(0.4);
             }
             if (runtime.seconds() > 23.0  && runtime.seconds() < 23.5) { // following the white line
                 goStraight(.5);
