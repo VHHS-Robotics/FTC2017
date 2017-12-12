@@ -131,12 +131,12 @@ public class FTC_Robot extends LinearOpMode {
 
             // Glyph Servo Controller Code
             if(gamepad1.a){    //close
-                GlyphServoRight.setPosition(0.7);
+                GlyphServoRight.setPosition(0.6);
                 GlyphServoLeft.setPosition(0.4);
             }
             if(gamepad1.x){//open
-                GlyphServoRight.setPosition(1.0);
-                GlyphServoLeft.setPosition(0.0);
+                GlyphServoRight.setPosition(0.9);
+                GlyphServoLeft.setPosition(0.1);
             }
 
 
