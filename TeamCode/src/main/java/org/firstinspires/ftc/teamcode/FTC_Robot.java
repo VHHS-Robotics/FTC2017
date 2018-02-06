@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 /**
  * TeleOp Mode
@@ -26,7 +27,7 @@ public class FTC_Robot extends LinearOpMode {
     private Servo GlyphServoLeft;   // close and open
     private DcMotor RelicMotor;     //Extending arm
     private Servo BigRelicServo;    // Vertical and Horizontal lift
-    private Servo SmallRelicServo;  //Open and close claw
+    private CRServo SmallRelicServo;  //Open and close claw
     private Servo SlideServo;           //Slide Servo (hook)
     private Servo JewelServo;       //Jewel Servo
 
@@ -76,20 +77,25 @@ public class FTC_Robot extends LinearOpMode {
         //Relic arm motors and Servos
         RelicMotor = hardwareMap.dcMotor.get("motor6");
         BigRelicServo = hardwareMap.servo.get("servo1");
-        SmallRelicServo = hardwareMap.servo.get("servo2");
+
+
+        SmallRelicServo = hardwareMap.crservo.get("servo2");
+
 
         GlyphServoRight.setPosition(0.9);
         GlyphServoLeft.setPosition(0.1);
 
         SlideServo.setPosition(1.0);
         JewelServo.setPosition(1.0);
-        SmallRelicServo.setPosition(0.5);
+
+        SmallRelicServo.setPower(0);
         BigRelicServo.setPosition(0.5);
 
         waitForStart();
 
         // Ramp motor speeds till stop pressed.
         while(opModeIsActive()) {
+
             throttle = -gamepad1.left_stick_y;
             direction = -gamepad1.left_stick_x;
 
@@ -153,11 +159,15 @@ public class FTC_Robot extends LinearOpMode {
             // Relic Servo Controller Code
             //open
             if(gamepad1.y) {
-                SmallRelicServo.setPosition(SmallRelicServo.getPosition()+0.05);
+                SmallRelicServo.setPower(0.5);
+                sleep(50);
+                SmallRelicServo.setPower(0);
             }
             //close
             if(gamepad1.b){
-                SmallRelicServo.setPosition(SmallRelicServo.getPosition()-0.05);
+                SmallRelicServo.setPower(-0.5);
+                sleep(50);
+                SmallRelicServo.setPower(0);
             }
 
             //1 degree equals 0.00055 decimal
@@ -177,6 +187,7 @@ public class FTC_Robot extends LinearOpMode {
                 //JewelServo.setPosition(0.1);
                 SlideServo.setPosition(0.0);
             }
+
         }
     }
 
