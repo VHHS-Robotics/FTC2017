@@ -184,7 +184,7 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
                     targetHeading = 55.00; //was 57
                 }
                 else if (glyphLocation==1) { //CENTER
-                    targetHeading = 69.00; //was 67
+                    targetHeading = 64.00; //was 67
                 }
                 else if (glyphLocation==0) {  //Left
                     targetHeading = 77.00;
