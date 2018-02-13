@@ -86,7 +86,7 @@ public class FTC_Robot extends LinearOpMode {
         GlyphServoLeft.setPosition(0.1);
 
         SlideServo.setPosition(1.0);
-        JewelServo.setPosition(1.0);
+        JewelServo.setPosition(0.68);
 
         SmallRelicServo.setPower(0);
         BigRelicServo.setPosition(0.5);
@@ -148,10 +148,10 @@ public class FTC_Robot extends LinearOpMode {
 
             // Relic Linear slide motor
             while(gamepad1.dpad_left){
-                RelicMotor.setPower(-0.5);
+                RelicMotor.setPower(1.00);
             }
             while(gamepad1.dpad_right){
-                RelicMotor.setPower(0.5);
+                RelicMotor.setPower(-0.5);
             }
             RelicMotor.setPower(0.0);
 

@@ -106,7 +106,7 @@ public class Robot2_Red_Spot1_NoEncoder extends LinearOpMode {
         //initialize servos
         GlyphServoRight.setPosition(0.7);
         GlyphServoLeft.setPosition(0.4);
-        JewelServo.setPosition(0.9);
+        JewelServo.setPosition(0.68);
         SlideServo.setPosition(1.0);
         BigRelicServo.setPosition(0.49);
 
@@ -167,7 +167,7 @@ public class Robot2_Red_Spot1_NoEncoder extends LinearOpMode {
                 }
             }
             if (runtime.seconds() > 1.50 && runtime.seconds() <2.00) {
-                JewelServo.setPosition(1.0);
+                JewelServo.setPosition(0.68);
                 if (turnright == false) {
                     goRight(.15);
                 }
@@ -183,7 +183,7 @@ public class Robot2_Red_Spot1_NoEncoder extends LinearOpMode {
             if (runtime.seconds() > 3.0 && runtime.seconds() < 7.5) {
 
                 if(glyphLocation==2) {    //RIGHT
-                    targetHeading = 284.00;
+                    targetHeading = 285.00; //was 286
 
                 }
                 else if (glyphLocation==1) { //CENTER
@@ -196,7 +196,7 @@ public class Robot2_Red_Spot1_NoEncoder extends LinearOpMode {
                 double currentHeading = GyroSensor.getHeading();
                 double leftSpeed, rightSpeed;
 
-                while (currentHeading > targetHeading || currentHeading <=30) {
+                while (currentHeading > targetHeading || currentHeading == 0 || currentHeading == 1 || currentHeading == 2 || currentHeading == 3 || currentHeading == 4 || currentHeading == 5 || currentHeading == 6 || currentHeading == 7 || currentHeading == 8 || currentHeading == 9 || currentHeading == 10) {
                     leftSpeed = 0.1; // to turn right
                     rightSpeed = -0.1; // to turn right
                     MotorFrontLeft.setPower(leftSpeed);

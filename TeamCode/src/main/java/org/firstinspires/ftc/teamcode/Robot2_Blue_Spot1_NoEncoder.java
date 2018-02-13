@@ -104,7 +104,7 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
         //initialize servos
         GlyphServoRight.setPosition(0.7);
         GlyphServoLeft.setPosition(0.4);
-        JewelServo.setPosition(0.9);
+        JewelServo.setPosition(0.68);
         SlideServo.setPosition(1.0);
         BigRelicServo.setPosition(0.49);
 
@@ -142,7 +142,7 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
             telemetry.update();
 
             if (runtime.seconds() > 0.00 && runtime.seconds() < 0.50) { // bring servo to relic
-                JewelServo.setPosition(0.1);
+                JewelServo.setPosition(0.0);
             }
             if (runtime.seconds() > 0.5 && runtime.seconds() < 1.00){ //algo to decide which ball to knock off
                 //if turnright=false it will turn left
@@ -165,7 +165,7 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
                 }
             }
             if (runtime.seconds() > 1.50 && runtime.seconds() <2.00) {
-                JewelServo.setPosition(0.9);
+                JewelServo.setPosition(0.68);
                 if (turnright == false) {
                     goRight(.15);
                 }
@@ -180,20 +180,20 @@ public class Robot2_Blue_Spot1_NoEncoder extends LinearOpMode {
 
             if (runtime.seconds() > 3.0 && runtime.seconds() < 7.5) {
 
-                if(glyphLocation==0) {    //LEFT
-                    targetHeading = 77;
+                if(glyphLocation==2) {    //Right
+                    targetHeading = 55.00; //was 57
                 }
                 else if (glyphLocation==1) { //CENTER
-                    targetHeading = 69.00;
+                    targetHeading = 69.00; //was 67
                 }
-                else if (glyphLocation==2) {  //RIGHT
-                    targetHeading = 60.00;
+                else if (glyphLocation==0) {  //Left
+                    targetHeading = 77.00;
                 }
 
                 double currentHeading = GyroSensor.getHeading();
                 double leftSpeed, rightSpeed;
 
-                while (currentHeading < targetHeading || currentHeading >= 300) {
+                while (currentHeading < targetHeading || currentHeading == 359 || currentHeading == 358 || currentHeading == 357 || currentHeading == 356 || currentHeading == 355 || currentHeading == 354 || currentHeading == 353 || currentHeading == 352 || currentHeading == 351 || currentHeading == 350) {
                     leftSpeed = -0.1; // to turn left
                     rightSpeed = 0.1; // to turn left
                     MotorFrontLeft.setPower(leftSpeed);

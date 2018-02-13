@@ -106,7 +106,7 @@ public class Robot2_Blue_Spot2_Encoder extends LinearOpMode {
         //initialize servos
         GlyphServoRight.setPosition(0.7);
         GlyphServoLeft.setPosition(0.4);
-        JewelServo.setPosition(0.9);
+        JewelServo.setPosition(0.68);
         SlideServo.setPosition(1.0);
         BigRelicServo.setPosition(0.49);
 
@@ -144,7 +144,7 @@ public class Robot2_Blue_Spot2_Encoder extends LinearOpMode {
             telemetry.update();
 
             if (runtime.seconds() > 0.00 && runtime.seconds() < 0.50) { // bring servo to relic
-                JewelServo.setPosition(0.1);
+                JewelServo.setPosition(0.0);
             }
             if (runtime.seconds() > 0.5 && runtime.seconds() < 1.00){ //algo to decide which ball to knock off
                 //if turnright=false it will turn left
@@ -167,7 +167,7 @@ public class Robot2_Blue_Spot2_Encoder extends LinearOpMode {
                 }
             }
             if (runtime.seconds() > 1.50 && runtime.seconds() <2.00) {
-                JewelServo.setPosition(0.9);
+                JewelServo.setPosition(0.68);
                 if (turnright == false) {
                     goRight(.15);
                 }
@@ -187,7 +187,7 @@ public class Robot2_Blue_Spot2_Encoder extends LinearOpMode {
                 double currentHeading = GyroSensor.getHeading();
                 double leftSpeed, rightSpeed;
 
-                while (currentHeading < targetHeading || currentHeading >= 300) {
+                while (currentHeading < targetHeading || currentHeading == 359 || currentHeading == 358 || currentHeading == 357 || currentHeading == 356 || currentHeading == 355 || currentHeading == 354 || currentHeading == 353 || currentHeading == 352 || currentHeading == 351 || currentHeading == 350) {
                     leftSpeed = -0.1; // to turn left
                     rightSpeed = 0.1; // to turn left
                     MotorFrontLeft.setPower(leftSpeed);
@@ -207,7 +207,7 @@ public class Robot2_Blue_Spot2_Encoder extends LinearOpMode {
             }
             if (runtime.seconds() > 7.5  && runtime.seconds() < 12.5) { //All of them off by +3 in?
                 if(glyphLocation==0) {    //LEFT
-                    encoderDrive(0.4, 30.5, 30.5, 11.5); // left
+                    encoderDrive(0.4, 31.0, 31.0, 11.5); // left
                     sleep(1000);
                 }
                 else if (glyphLocation==1) { //CENTER
@@ -265,7 +265,7 @@ public class Robot2_Blue_Spot2_Encoder extends LinearOpMode {
                 GlyphServoLeft.setPosition(0.4);
             }
             if (runtime.seconds() > 21.5  && runtime.seconds() < 22.0) { // following the white line
-                goStraight(.5);
+                goStraight(.55);
             }
             if (runtime.seconds() > 22.0  && runtime.seconds() < 22.5) { // following the white line
                 goLeft(.3);
