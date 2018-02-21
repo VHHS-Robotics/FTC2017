@@ -143,6 +143,13 @@ public class Robot2_Red_Spot2_Encoder extends LinearOpMode {
             telemetry.addData("I see", glyphLocation);
             telemetry.update();
 
+            MotorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //motor 1
+            MotorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 2
+            MotorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 3
+            MotorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 4
+            GlyphMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 5
+            RelicMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 6
+
             if (runtime.seconds() > 0.00 && runtime.seconds() < 0.50) { // bring servo to relic
                 JewelServo.setPosition(0.0);
             }

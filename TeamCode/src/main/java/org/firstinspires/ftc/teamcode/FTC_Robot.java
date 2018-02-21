@@ -96,6 +96,8 @@ public class FTC_Robot extends LinearOpMode {
         // Ramp motor speeds till stop pressed.
         while(opModeIsActive()) {
 
+            JewelServo.setPosition(0.68);
+
             throttle = -gamepad1.left_stick_y;
             direction = -gamepad1.left_stick_x;
 
@@ -116,6 +118,13 @@ public class FTC_Robot extends LinearOpMode {
             MotorFrontRight.setPower(left); // motor 2
             MotorBackLeft.setPower(right); // motor 3
             MotorBackRight.setPower(left); // motor 4
+
+            MotorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //motor 1
+            MotorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 2
+            MotorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 3
+            MotorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 4
+            GlyphMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 5
+            RelicMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 6
 
 
             //Move Glyph motor UP and DOWN
@@ -139,6 +148,9 @@ public class FTC_Robot extends LinearOpMode {
             if(gamepad1.a){    //close
                 GlyphServoRight.setPosition(0.55);
                 GlyphServoLeft.setPosition(0.45);
+
+                //Added to make sure these are closedy0
+                JewelServo.setPosition(0.68);
             }
             if(gamepad1.x){//open
                 GlyphServoRight.setPosition(0.9);
@@ -217,7 +229,7 @@ public class FTC_Robot extends LinearOpMode {
     private double lowSensitivityScaleInput(double joystickInputValue){
         boolean positive = true;
         if(joystickInputValue<0){
-            positive = false;
+            positive = false; //
         }
         joystickInputValue = Math.abs(joystickInputValue);
         double scaledValue;
