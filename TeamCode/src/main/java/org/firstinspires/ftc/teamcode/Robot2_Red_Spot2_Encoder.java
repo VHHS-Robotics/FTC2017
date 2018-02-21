@@ -144,7 +144,7 @@ public class Robot2_Red_Spot2_Encoder extends LinearOpMode {
             telemetry.update();
 
             MotorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //motor 1
-            MotorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 2
+            MotorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 2 change for rev robotics
             MotorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 3
             MotorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 4
             GlyphMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 5
