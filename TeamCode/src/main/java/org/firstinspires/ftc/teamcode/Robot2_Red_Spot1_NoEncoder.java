@@ -136,18 +136,13 @@ public class Robot2_Red_Spot1_NoEncoder extends LinearOpMode {
         telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
         telemetry.update();
 
-        runWithEncoder();
         waitForStart();
+
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 30.0)) {
             telemetry.addData("I see", glyphLocation);
             telemetry.update();
-            MotorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //motor 1
-            MotorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 2
-            MotorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 3
-            MotorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 4
-            GlyphMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 5
-            RelicMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 6
+
             if (runtime.seconds() > 0.00 && runtime.seconds() < 0.50) { // bring servo to relic
                 JewelServo.setPosition(0.0);
             }
@@ -217,7 +212,7 @@ public class Robot2_Red_Spot1_NoEncoder extends LinearOpMode {
                     telemetry.addData("GyroZ value.", "%d", GyroSensor.getIntegratedZValue());
                     telemetry.update();
                 }
-                stopRobot();
+                //stopRobot();
             }
             if (runtime.seconds() > 7.5  && runtime.seconds() < 8.5) { // following the white line
                 stopRobot();

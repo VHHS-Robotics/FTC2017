@@ -119,13 +119,6 @@ public class FTC_Robot extends LinearOpMode {
             MotorBackLeft.setPower(right); // motor 3
             MotorBackRight.setPower(left); // motor 4
 
-            MotorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //motor 1
-            MotorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 2
-            MotorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 3
-            MotorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 4
-            GlyphMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 5
-            RelicMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // motor 6
-
 
             //Move Glyph motor UP and DOWN
             if(gamepad1.dpad_up && !GlyphMotorMoving){
@@ -210,7 +203,7 @@ public class FTC_Robot extends LinearOpMode {
             return;
         }
 
-        GlyphMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //GlyphMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         GlyphMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         if(motorUpDown == GLYPH_MOTOR_UP){
@@ -256,7 +249,7 @@ public class FTC_Robot extends LinearOpMode {
 
     private double scaleInput(double dVal)  {
         double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
-                0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00 };
+                0.30, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.00, 1.00 };
 
         // get the corresponding index for the scaleInput array.
         int index = (int) (dVal * 16.0);
