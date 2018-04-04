@@ -129,8 +129,28 @@ public class RalleyInTheValley_withoutTime extends LinearOpMode {
             sleep(500);
             JewelServo.setPosition(0.68);
             encoderDrive(0.6,24,24);
-            sleep(1000);
             encoderTurn(0.6,90);
+            encoderDrive(0.6, 72, 72);
+            encoderTurn(0.6,90);
+            encoderDrive(0.6, 24, 24);
+            encoderTurn(0.6,135);
+            encoderDrive(0.6, 22, 22);
+            encoderTurn(0.6, -180);
+            encoderDrive(0.6, 12, 12);
+            encoderDrive(0.6, -12, -12);
+            encoderTurn(0.6, 180);
+            //
+            JewelServo.setPosition(0.2);
+            GlyphMotor.setPower(0.6);
+            sleep(500);
+            JewelServo.setPosition(0.68);
+            GlyphMotor.setPower(-0.6);
+            sleep(500);
+            GlyphMotor.setPower(0.0);
+            encoderTurn(0.6, 45);
+
+
+
 
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
             return;
@@ -149,45 +169,32 @@ public void encoderTurn(double speed,double targetHeading){
     int newFrontRightTarget = 0;
     int newBackRightTarget = 0;
     resetEncoder();
+    double leftInches = Math.abs(targetHeading*2*Math.PI*8.29/360);
+    double rightInches = Math.abs(targetHeading*2*Math.PI*8.29/360);
+
+    newFrontLeftTarget = MotorFrontLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
+    newBackLeftTarget = MotorBackLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
+    newFrontRightTarget = MotorFrontRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
+    newBackRightTarget = MotorBackRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
+
+    MotorFrontLeft.setTargetPosition(newFrontLeftTarget);
+    MotorBackLeft.setTargetPosition(newBackLeftTarget);
+    MotorFrontRight.setTargetPosition(newFrontRightTarget);
+    MotorBackRight.setTargetPosition(newBackRightTarget);
     if (targetHeading > 0){
-        double leftInches = targetHeading*2*Math.PI*8.25/360;
-        double rightInches = -(targetHeading*2*Math.PI*8.25/360);
-
-        newFrontLeftTarget = MotorFrontLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
-        newBackLeftTarget = MotorBackLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
-        newFrontRightTarget = MotorFrontRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
-        newBackRightTarget = MotorBackRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
-
-        MotorFrontLeft.setTargetPosition(newFrontLeftTarget);
-        MotorBackLeft.setTargetPosition(newBackLeftTarget);
-        MotorFrontRight.setTargetPosition(newFrontRightTarget);
-        MotorBackRight.setTargetPosition(newBackRightTarget);
-
-        MotorFrontLeft.setPower(Math.abs(speed));
-        MotorBackLeft.setPower(Math.abs(speed));
-        MotorFrontRight.setPower(-Math.abs(speed));
-        MotorBackRight.setPower(-Math.abs(speed));
+        MotorFrontLeft.setPower(speed);
+        MotorBackLeft.setPower(speed);
+        MotorFrontRight.setPower(-speed);
+        MotorBackRight.setPower(-speed);
     }
     else{
-        double leftInches = (targetHeading*2*Math.PI*9/360);
-        double rightInches = -(targetHeading*2*Math.PI*9/360);
-        newFrontLeftTarget = MotorFrontLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
-        newBackLeftTarget = MotorBackLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
-        newFrontRightTarget = MotorFrontRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
-        newBackRightTarget = MotorBackRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
-
-        MotorFrontLeft.setTargetPosition(newFrontLeftTarget);
-        MotorBackLeft.setTargetPosition(newBackLeftTarget);
-        MotorFrontRight.setTargetPosition(newFrontRightTarget);
-        MotorBackRight.setTargetPosition(newBackRightTarget);
-
-        MotorFrontLeft.setPower(-Math.abs(speed));
-        MotorBackLeft.setPower(-Math.abs(speed));
-        MotorFrontRight.setPower(Math.abs(speed));
-        MotorBackRight.setPower(Math.abs(speed));
+        MotorFrontLeft.setPower(-speed);
+        MotorBackLeft.setPower(-speed);
+        MotorFrontRight.setPower(speed);
+        MotorBackRight.setPower(speed);
     }
 
-    while(MotorFrontLeft.getCurrentPosition() < MotorFrontLeft.getTargetPosition()) {
+    while(Math.abs(MotorFrontLeft.getCurrentPosition()) < MotorFrontLeft.getTargetPosition()) {
         telemetry.addLine("Target Heading: "+MotorBackLeft.getTargetPosition());
         telemetry.addLine("Current Heading: "+MotorFrontLeft.getCurrentPosition());
         telemetry.update();
