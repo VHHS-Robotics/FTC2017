@@ -98,47 +98,32 @@ public class RalleyInTheValley_withoutTime extends LinearOpMode {
         SlideServo.setPosition(1.0);
         BigRelicServo.setPosition(0.49);
 
-        //calibrate gyro
-        GyroSensor.calibrate();
-        telemetry.addData(">", "Gyro Calibrating. Do Not move!");
-        telemetry.update();
 
-        // make sure the gyro is calibrated before continuing
-        while (GyroSensor.isCalibrating()) {
-            Thread.sleep(50);
-            telemetry.addData(">", "time reseted");
-            telemetry.update();
-            runtime.reset();
-            idle();
-        }
 
-        telemetry.addData(">", "Gyro Calibrated.  Press Start.");
-        telemetry.addData("GyroZ value.", "%d", GyroSensor.getIntegratedZValue());
-        telemetry.addData("Gyro heading.", "%d", GyroSensor.getHeading());
-        telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-        telemetry.update();
 
         runWithEncoder();
         waitForStart();
         runtime.reset();
+        telemetry.addLine("I am ready");
+        telemetry.update();
         while (opModeIsActive()) {
-            telemetry.addData("I see", glyphLocation);
-            telemetry.update();
 
             JewelServo.setPosition(0.2);
             sleep(500);
             JewelServo.setPosition(0.68);
             encoderDrive(0.6,24,24);
-            encoderTurn(0.6,90);
+            encoderTurn(0.6,-90);
             encoderDrive(0.6, 72, 72);
-            encoderTurn(0.6,90);
-            encoderDrive(0.6, 24, 24);
-            encoderTurn(0.6,135);
-            encoderDrive(0.6, 22, 22);
-            encoderTurn(0.6, -180);
+            encoderTurn(0.6,-90);
+            encoderDrive(0.6, 48, 48);
+            encoderTurn(0.6,-90);
             encoderDrive(0.6, 12, 12);
-            encoderDrive(0.6, -12, -12);
+            encoderTurn(0.6,-45);
+            encoderDrive(0.6, 34, 34);
             encoderTurn(0.6, 180);
+            encoderDrive(0.6, 34, 34);
+            encoderDrive(0.6, -34, -34);
+            encoderTurn(0.6, -180);
             //
             JewelServo.setPosition(0.2);
             GlyphMotor.setPower(0.6);
@@ -147,7 +132,21 @@ public class RalleyInTheValley_withoutTime extends LinearOpMode {
             GlyphMotor.setPower(-0.6);
             sleep(500);
             GlyphMotor.setPower(0.0);
-            encoderTurn(0.6, 45);
+            encoderTurn(0.6, -45);
+            encoderDrive(0.6, 6, 6);
+            encoderTurn(0.6,-90);
+            encoderDrive(0.6, 48, 48);
+            encoderTurn(0.6,90);
+            encoderDrive(0.6,24,24);
+            encoderTurn(0.6, -180);
+            JewelServo.setPosition(0.2);
+            sleep(500);
+            JewelServo.setPosition(0.68); //end of page
+            encoderTurn(0.6, 180);
+            encoderDrive(0.6,24,24);
+            encoderTurn(0.6,-90);
+            encoderDrive(0.6,6,6);
+            JewelServo.setPosition(0.2);
 
 
 

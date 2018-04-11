@@ -198,11 +198,10 @@ public class VerdugoDay extends LinearOpMode {
 
     private void moveGlyphMotor(int motorUpDown){
         GlyphMotorPosition += motorUpDown;
-        if(GlyphMotorPosition<0 || GlyphMotorPosition>2){
+        if(GlyphMotorPosition<0 || GlyphMotorPosition>1){
             GlyphMotorPosition -= motorUpDown;
             return;
         }
-
         //GlyphMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         GlyphMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
