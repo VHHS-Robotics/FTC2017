@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.FTC_AUTO;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -17,8 +17,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
  * Created by ivane on 11/28/2016.
  */
 
-@Autonomous(name = "RallyInTheValley_withoutTime", group = "Linear Opmode")
-public class RalleyInTheValley_withoutTime extends LinearOpMode {
+@Autonomous(name = "RallyInTheValley2", group = "Linear Opmode")
+public class RalleyInTheValley2 extends LinearOpMode {
 
     // Define class members
     private DcMotor MotorFrontLeft;
@@ -107,49 +107,43 @@ public class RalleyInTheValley_withoutTime extends LinearOpMode {
         telemetry.addLine("I am ready");
         telemetry.update();
         while (opModeIsActive()) {
-
-            JewelServo.setPosition(0.2);
-            sleep(500);
-            JewelServo.setPosition(0.68);
-            encoderDrive(0.6,24,24);
+            //positive is to turn right
+//            encoderDrive(0.6,24,24);
+//            JewelServo.setPosition(0.2);
+//            sleep(500);
+//            JewelServo.setPosition(0.68);
+//            encoderDrive(0.6, 72, 72);
             encoderTurn(0.6,-90);
-            encoderDrive(0.6, 72, 72);
-            encoderTurn(0.6,-90);
-            encoderDrive(0.6, 48, 48);
-            encoderTurn(0.6,-90);
-            encoderDrive(0.6, 12, 12);
-            encoderTurn(0.6,-45);
-            encoderDrive(0.6, 34, 34);
-            encoderTurn(0.6, 180);
-            encoderDrive(0.6, 34, 34);
-            encoderDrive(0.6, -34, -34);
-            encoderTurn(0.6, -180);
-            //
-            JewelServo.setPosition(0.2);
-            GlyphMotor.setPower(0.6);
-            sleep(500);
-            JewelServo.setPosition(0.68);
-            GlyphMotor.setPower(-0.6);
-            sleep(500);
-            GlyphMotor.setPower(0.0);
-            encoderTurn(0.6, -45);
-            encoderDrive(0.6, 6, 6);
-            encoderTurn(0.6,-90);
-            encoderDrive(0.6, 48, 48);
-            encoderTurn(0.6,90);
-            encoderDrive(0.6,24,24);
-            encoderTurn(0.6, -180);
-            JewelServo.setPosition(0.2);
-            sleep(500);
-            JewelServo.setPosition(0.68); //end of page
-            encoderTurn(0.6, 180);
-            encoderDrive(0.6,24,24);
-            encoderTurn(0.6,-90);
-            encoderDrive(0.6,6,6);
-            JewelServo.setPosition(0.2);
-
-
-
+//            encoderDrive(0.6, 36, 36);
+//            encoderTurn(0.6,-90);
+//            encoderDrive(0.6, 12, 12);
+//            encoderTurn(0.6,-45);
+//            encoderDrive(0.6, 34, 34);
+//            encoderTurn(0.6, 180);
+//            encoderDrive(0.6, 28, 28);
+//            encoderDrive(0.6, -28, -28);
+//            encoderTurn(0.6, -180);
+//            JewelServo.setPosition(0.2);
+//            GlyphMotor.setPower(0.6);
+//            sleep(500);
+//            JewelServo.setPosition(0.68);
+//            GlyphMotor.setPower(-0.6);
+//            sleep(500);
+//            GlyphMotor.setPower(0.0);
+//            encoderTurn(0.6, -45);
+//            encoderDrive(0.6, 6, 6);
+//            encoderTurn(0.6,-90);
+//            encoderDrive(0.6, 60, 60);
+//            encoderTurn(0.6, -180);
+//            encoderDrive(0.6,36,36);
+//            JewelServo.setPosition(0.2);
+//            sleep(500);
+//            JewelServo.setPosition(0.68); //end of page
+//            encoderTurn(0.6, 180);
+//            encoderDrive(0.6,24,24);
+//            encoderTurn(0.6,-90);
+//            encoderDrive(0.6,6,6);
+//            JewelServo.setPosition(0.2);
 
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
             return;
@@ -168,8 +162,8 @@ public void encoderTurn(double speed,double targetHeading){
     int newFrontRightTarget = 0;
     int newBackRightTarget = 0;
     resetEncoder();
-    double leftInches = Math.abs(targetHeading*2*Math.PI*8.29/360);
-    double rightInches = Math.abs(targetHeading*2*Math.PI*8.29/360);
+    double leftInches = Math.abs(targetHeading*2*Math.PI*7/360);
+    double rightInches = Math.abs(targetHeading*2*Math.PI*7/360);
 
     newFrontLeftTarget = MotorFrontLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
     newBackLeftTarget = MotorBackLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
@@ -280,16 +274,33 @@ public void encoderTurn(double speed,double targetHeading){
 
             // reset the timeout time and start motion.
             //runtime.reset();
+            if (leftInches < 0){
+                MotorFrontLeft.setPower(-Math.abs(speed));
+                MotorBackLeft.setPower(-Math.abs(speed));
+            } else {
+                MotorFrontLeft.setPower(Math.abs(speed));
+                MotorBackLeft.setPower(Math.abs(speed));
+            }
+            if (rightInches < 0) {
+                MotorFrontRight.setPower(-Math.abs(speed));
+                MotorBackRight.setPower(-Math.abs(speed));
+            } else {
+                MotorFrontRight.setPower(Math.abs(speed));
+                MotorBackRight.setPower(Math.abs(speed));
+            }
 
-            MotorFrontLeft.setPower(Math.abs(speed));
-            MotorBackLeft.setPower(Math.abs(speed));
-            MotorFrontRight.setPower(Math.abs(speed));
-            MotorBackRight.setPower(Math.abs(speed));
-
-            while(MotorFrontLeft.getCurrentPosition() < MotorFrontLeft.getTargetPosition()) {
-                telemetry.addLine("Target Position: "+MotorBackLeft.getTargetPosition());
-                telemetry.addLine("Current Position: "+MotorFrontLeft.getCurrentPosition());
-                telemetry.update();
+            if(leftInches < 0){
+                while(MotorFrontLeft.getCurrentPosition() > MotorFrontLeft.getTargetPosition()) {
+                    telemetry.addLine("Target Position: "+MotorBackLeft.getTargetPosition());
+                    telemetry.addLine("Current Position: "+MotorFrontLeft.getCurrentPosition());
+                    telemetry.update();
+                }
+            } else{
+                while(MotorFrontLeft.getCurrentPosition() < MotorFrontLeft.getTargetPosition()) {
+                    telemetry.addLine("Target Position: "+MotorBackLeft.getTargetPosition());
+                    telemetry.addLine("Current Position: "+MotorFrontLeft.getCurrentPosition());
+                    telemetry.update();
+                }
             }
             stopRobot();
         }

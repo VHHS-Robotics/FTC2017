@@ -9,11 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 
 /**
@@ -104,179 +101,52 @@ public class RalleyInTheValley extends LinearOpMode {
 
 
 
-
-        //calibrate gyro
-        GyroSensor.calibrate();
-        telemetry.addData(">", "Gyro Calibrating. Do Not move!");
-        telemetry.update();
-
-        // make sure the gyro is calibrated before continuing
-        while (GyroSensor.isCalibrating()) {
-            Thread.sleep(50);
-            telemetry.addData(">", "time reseted");
-            telemetry.update();
-            runtime.reset();
-            idle();
-        }
-
-        telemetry.addData(">", "Gyro Calibrated.  Press Start.");
-        telemetry.addData("GyroZ value.", "%d", GyroSensor.getIntegratedZValue());
-        telemetry.addData("Gyro heading.", "%d", GyroSensor.getHeading());
-        telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-        telemetry.update();
-
         runWithEncoder();
         waitForStart();
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 65.0)) {
-            telemetry.addData("I see", glyphLocation);
-            telemetry.update();
+        telemetry.addLine("I am ready");
+        telemetry.update();
+        while (opModeIsActive()) {
+            //positive is to turn right
+            encoderDrive(0.6,24,24);
+            JewelServo.setPosition(0.2);
+            sleep(500);
+            JewelServo.setPosition(0.68);
+            encoderDrive(0.6, 72, 72);
+            encoderTurn(0.6,-90);
+            encoderDrive(0.6, 36, 36);
+            encoderTurn(0.6,-90);
+            encoderDrive(0.6, 12, 12);
+            encoderTurn(0.6,-45);
+            encoderDrive(0.6, 34, 34);
+            encoderTurn(0.6, 180);
+            encoderDrive(0.6, 28, 28);
+            encoderDrive(0.6, -28, -28);
+            encoderTurn(0.6, -180);
+            JewelServo.setPosition(0.2);
+            GlyphMotor.setPower(0.6);
+            sleep(500);
+            JewelServo.setPosition(0.68);
+            GlyphMotor.setPower(-0.6);
+            sleep(500);
+            GlyphMotor.setPower(0.0);
+            encoderTurn(0.6, -45);
+            encoderDrive(0.6, 6, 6);
+            encoderTurn(0.6,-90);
+            encoderDrive(0.6, 60, 60);
+            encoderTurn(0.6, -180);
+            encoderDrive(0.6,36,36);
+            JewelServo.setPosition(0.2);
+            sleep(500);
+            JewelServo.setPosition(0.68); //end of page
+            encoderTurn(0.6, 180);
+            encoderDrive(0.6,24,24);
+            encoderTurn(0.6,-90);
+            encoderDrive(0.6,6,6);
+            JewelServo.setPosition(0.2);
 
-
-
-
-
-
-//            if (runtime.seconds() > 36.00  && runtime.seconds() < 37.00) { // following the white line
-//                double targetHeading = 0.00;
-//
-//                double currentHeading = GyroSensor.getHeading();
-//                double leftSpeed, rightSpeed;
-//
-//                while (currentHeading > targetHeading) {
-//                    leftSpeed = -0.3; // to turn left
-//                    rightSpeed = 0.3; // to turn left
-//                    MotorFrontLeft.setPower(leftSpeed);
-//                    MotorBackLeft.setPower(leftSpeed);
-//                    MotorFrontRight.setPower(rightSpeed);
-//                    MotorBackRight.setPower(rightSpeed);
-//
-//                    currentHeading = GyroSensor.getHeading();
-//                    telemetry.addData("Target", "%5.2f", targetHeading);
-//                    telemetry.addData("Heading", "%d", GyroSensor.getHeading());
-//                    telemetry.addData("Current Heading", "%5.2f", currentHeading);
-//
-//                    telemetry.addData("GyroZ value.", "%d", GyroSensor.getIntegratedZValue());
-//                    telemetry.update();
-//                }
-//                stopRobot();
-//            }
-//            if (runtime.seconds() > 37.0  && runtime.seconds() < 39.00) { // following the white line
-//                encoderDrive(0.6, 6, 6, 38.0);
-//            }
-//            if (runtime.seconds() > 35.0  && runtime.seconds() < 36.00) { // following the white line
-//                double targetHeading = 90.00;
-//
-//                double currentHeading = GyroSensor.getHeading();
-//                double leftSpeed, rightSpeed;
-//
-//                while (currentHeading < targetHeading) {
-//                    leftSpeed = -0.3; // to turn left
-//                    rightSpeed = 0.3; // to turn left
-//                    MotorFrontLeft.setPower(leftSpeed);
-//                    MotorBackLeft.setPower(leftSpeed);
-//                    MotorFrontRight.setPower(rightSpeed);
-//                    MotorBackRight.setPower(rightSpeed);
-//
-//                    currentHeading = GyroSensor.getHeading();
-//                    telemetry.addData("Target", "%5.2f", targetHeading);
-//                    telemetry.addData("Heading", "%d", GyroSensor.getHeading());
-//                    telemetry.addData("Current Heading", "%5.2f", currentHeading);
-//
-//                    telemetry.addData("GyroZ value.", "%d", GyroSensor.getIntegratedZValue());
-//                    telemetry.update();
-//                }
-//                stopRobot();
-//            }
-//            if (runtime.seconds() > 39.0  && runtime.seconds() < 43.00) { // following the white line
-//                encoderDrive(0.6, 48, 48, 43.0);
-//                sleep(100);
-//            }
-//            if (runtime.seconds() > 43.0  && runtime.seconds() < 47.00) { // following the white line
-//                double targetHeading = 270.00;
-//
-//                double currentHeading = GyroSensor.getHeading();
-//                double leftSpeed, rightSpeed;
-//
-//                while (currentHeading < targetHeading) {
-//                    leftSpeed = -0.3; // to turn left
-//                    rightSpeed = 0.3; // to turn left
-//                    MotorFrontLeft.setPower(leftSpeed);
-//                    MotorBackLeft.setPower(leftSpeed);
-//                    MotorFrontRight.setPower(rightSpeed);
-//                    MotorBackRight.setPower(rightSpeed);
-//
-//                    currentHeading = GyroSensor.getHeading();
-//                    telemetry.addData("Target", "%5.2f", targetHeading);
-//                    telemetry.addData("Heading", "%d", GyroSensor.getHeading());
-//                    telemetry.addData("Current Heading", "%5.2f", currentHeading);
-//
-//                    telemetry.addData("GyroZ value.", "%d", GyroSensor.getIntegratedZValue());
-//                    telemetry.update();
-//                }
-//                stopRobot();
-//            }
-//            if (runtime.seconds() > 47.0  && runtime.seconds() < 51.00) { // following the white line
-//                encoderDrive(0.6, 48, 48, 43.0);
-//                sleep(100);
-//            }if (runtime.seconds() > 51.0  && runtime.seconds() < 53.00) { // following the white line
-//                double targetHeading = 180.00;
-//
-//                double currentHeading = GyroSensor.getHeading();
-//                double leftSpeed, rightSpeed;
-//
-//                while (currentHeading > targetHeading) {
-//                    leftSpeed = 0.3; // to turn left
-//                    rightSpeed = -0.3; // to turn left
-//                    MotorFrontLeft.setPower(leftSpeed);
-//                    MotorBackLeft.setPower(leftSpeed);
-//                    MotorFrontRight.setPower(rightSpeed);
-//                    MotorBackRight.setPower(rightSpeed);
-//
-//                    currentHeading = GyroSensor.getHeading();
-//                    telemetry.addData("Target", "%5.2f", targetHeading);
-//                    telemetry.addData("Heading", "%d", GyroSensor.getHeading());
-//                    telemetry.addData("Current Heading", "%5.2f", currentHeading);
-//
-//                    telemetry.addData("GyroZ value.", "%d", GyroSensor.getIntegratedZValue());
-//                    telemetry.update();
-//                }
-//                stopRobot();
-//            }if (runtime.seconds() > 53.0  && runtime.seconds() < 56.00) { // following the white line
-//                encoderDrive(0.6, 36, 36, 56.0);
-//                sleep(100);
-//            }if (runtime.seconds() > 56.0  && runtime.seconds() < 60.00) { // following the white line
-//                double targetHeading = 1.00;
-//
-//                double currentHeading = GyroSensor.getHeading();
-//                double leftSpeed, rightSpeed;
-//
-//                while (currentHeading >  targetHeading) {
-//                    leftSpeed = -0.3; // to turn left
-//                    rightSpeed = 0.3; // to turn left
-//                    MotorFrontLeft.setPower(leftSpeed);
-//                    MotorBackLeft.setPower(leftSpeed);
-//                    MotorFrontRight.setPower(rightSpeed);
-//                    MotorBackRight.setPower(rightSpeed);
-//
-//                    currentHeading = GyroSensor.getHeading();
-//                    telemetry.addData("Target", "%5.2f", targetHeading);
-//                    telemetry.addData("Heading", "%d", GyroSensor.getHeading());
-//                    telemetry.addData("Current Heading", "%5.2f", currentHeading);
-//
-//                    telemetry.addData("GyroZ value.", "%d", GyroSensor.getIntegratedZValue());
-//                    telemetry.update();
-//                }
-//                stopRobot();
-//            }if (runtime.seconds() > 60.0  && runtime.seconds() < 63.00) { // following the white line
-//                encoderDrive(0.6, 36, 36, 43.0);
-//                sleep(100);
-//            }
-            if (runtime.seconds() > 10.0  && runtime.seconds() < 65.00) { // following the white line
-                stopRobot();
-                JewelServo.setPosition(0.2);
-            }
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+            return;
         }
 
         GyroSensor.resetZAxisIntegrator();
@@ -286,74 +156,97 @@ public class RalleyInTheValley extends LinearOpMode {
     }
 
 
+public void encoderTurn(double speed,double targetHeading){
+    int newFrontLeftTarget = 0;
+    int newBackLeftTarget = 0;
+    int newFrontRightTarget = 0;
+    int newBackRightTarget = 0;
+    resetEncoder();
+    double leftInches = Math.abs(targetHeading*2*Math.PI*8.29/360);
+    double rightInches = Math.abs(targetHeading*2*Math.PI*8.29/360);
 
+    newFrontLeftTarget = MotorFrontLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
+    newBackLeftTarget = MotorBackLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
+    newFrontRightTarget = MotorFrontRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
+    newBackRightTarget = MotorBackRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
 
-    public void gyroTurnleft(double speed, double angle)
+    MotorFrontLeft.setTargetPosition(newFrontLeftTarget);
+    MotorBackLeft.setTargetPosition(newBackLeftTarget);
+    MotorFrontRight.setTargetPosition(newFrontRightTarget);
+    MotorBackRight.setTargetPosition(newBackRightTarget);
+    if (targetHeading > 0){
+        MotorFrontLeft.setPower(speed);
+        MotorBackLeft.setPower(speed);
+        MotorFrontRight.setPower(-speed);
+        MotorBackRight.setPower(-speed);
+    }
+    else{
+        MotorFrontLeft.setPower(-speed);
+        MotorBackLeft.setPower(-speed);
+        MotorFrontRight.setPower(speed);
+        MotorBackRight.setPower(speed);
+    }
+
+    while(Math.abs(MotorFrontLeft.getCurrentPosition()) < MotorFrontLeft.getTargetPosition()) {
+        telemetry.addLine("Target Heading: "+MotorBackLeft.getTargetPosition());
+        telemetry.addLine("Current Heading: "+MotorFrontLeft.getCurrentPosition());
+        telemetry.update();
+    }
+    stopRobot();
+}
+
+    public void gyroTurnleft(double targetHeading)
             throws InterruptedException {
 
-        boolean onTarget = false;
+
+        double currentHeading = GyroSensor.getHeading();
         double leftSpeed, rightSpeed;
-        //get the heading here
 
-        //loop until the correct angle within a threshold
-        do {
-            double variance;
-            variance = GyroSensor.getHeading() - angle;
+        while (currentHeading < targetHeading || currentHeading == 359 || currentHeading == 358 || currentHeading == 357 || currentHeading == 356 || currentHeading == 355 || currentHeading == 354 || currentHeading == 353 || currentHeading == 352 || currentHeading == 351 || currentHeading == 350) {
+            leftSpeed = -0.3; // to turn left
+            rightSpeed = 0.3; // to turn left
+            MotorFrontLeft.setPower(leftSpeed);
+            MotorBackLeft.setPower(leftSpeed);
+            MotorFrontRight.setPower(rightSpeed);
+            MotorBackRight.setPower(rightSpeed);
 
-            if (Math.abs(variance) < HEADING_THRESHOLD) {
-                onTarget = true; // Add stop robot here?
-            } else {
-                leftSpeed = -0.1; // to turn left
-                rightSpeed = 0.1; // to turn left
-                MotorFrontLeft.setPower(leftSpeed);
-                MotorBackLeft.setPower(leftSpeed);
-                MotorFrontRight.setPower(rightSpeed);
-                MotorBackRight.setPower(rightSpeed);
-            }
-            telemetry.addData("Target", "%5.2f", angle);
+            currentHeading = GyroSensor.getHeading();
+            telemetry.addData("Target", "%5.2f", targetHeading);
             telemetry.addData("Heading", "%d", GyroSensor.getHeading());
-            telemetry.addData("Variance", "%5.2f", variance);
+            telemetry.addData("Current Heading", "%5.2f", currentHeading);
 
             telemetry.addData("GyroZ value.", "%d", GyroSensor.getIntegratedZValue());
             telemetry.update();
-        } while (!onTarget); // Add stop robot or here?
-
+        }
+        stopRobot();
     }
-    public void gyroTurnRight(double speed, double angle)
+    public void gyroTurnRight(double targetHeading)
             throws InterruptedException {
 
-        boolean onTarget = false;
+        double currentHeading = GyroSensor.getHeading();
         double leftSpeed, rightSpeed;
-        //get the heading here
 
-        //loop until the correct angle within a threshold
-        do {
-            double variance;
-            variance = GyroSensor.getHeading() - angle;
+        while (currentHeading < targetHeading || currentHeading == 0 || currentHeading == 1 || currentHeading == 2 || currentHeading == 3 || currentHeading == 4 || currentHeading == 5 || currentHeading == 6 || currentHeading == 7 || currentHeading == 8 || currentHeading == 9) {
+            leftSpeed = 0.3; // to turn right
+            rightSpeed = -0.3; // to turn right
+            MotorFrontLeft.setPower(leftSpeed);
+            MotorBackLeft.setPower(leftSpeed);
+            MotorFrontRight.setPower(rightSpeed);
+            MotorBackRight.setPower(rightSpeed);
 
-            if (Math.abs(variance) < HEADING_THRESHOLD) {
-                onTarget = true;
-            } else {
-                leftSpeed = 0.1; // to turn right
-                rightSpeed = -0.1; // to turn right
-                MotorFrontLeft.setPower(leftSpeed);
-                MotorBackLeft.setPower(leftSpeed);
-                MotorFrontRight.setPower(rightSpeed);
-                MotorBackRight.setPower(rightSpeed);
-            }
-            telemetry.addData("Target", "%5.2f", angle);
+            currentHeading = GyroSensor.getHeading();
+            telemetry.addData("Target", "%5.2f", targetHeading);
             telemetry.addData("Heading", "%d", GyroSensor.getHeading());
-            telemetry.addData("Variance", "%5.2f", variance);
+            telemetry.addData("Current Heading", "%5.2f", currentHeading);
 
             telemetry.addData("GyroZ value.", "%d", GyroSensor.getIntegratedZValue());
             telemetry.update();
-        } while (!onTarget);
+        }
+        stopRobot();
 
     }
 
-    public void encoderDrive(double speed,
-                             double leftInches, double rightInches,
-                             double timeoutS) throws InterruptedException {
+    public void encoderDrive(double speed,double leftInches, double rightInches) throws InterruptedException {
         int newFrontLeftTarget;
         int newBackLeftTarget;
         int newFrontRightTarget;
@@ -361,7 +254,6 @@ public class RalleyInTheValley extends LinearOpMode {
         resetEncoder();
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
-
             // Determine new target position, and pass to motor controller
             newFrontLeftTarget = MotorFrontLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
             newBackLeftTarget = MotorBackLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
@@ -382,36 +274,35 @@ public class RalleyInTheValley extends LinearOpMode {
 
             // reset the timeout time and start motion.
             //runtime.reset();
-
-            MotorFrontLeft.setPower(Math.abs(speed));
-            MotorBackLeft.setPower(Math.abs(speed));
-            MotorFrontRight.setPower(Math.abs(speed));
-            MotorBackRight.setPower(Math.abs(speed));
-
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (MotorFrontLeft.isBusy() && MotorFrontRight.isBusy())) {
-
-                // Display it for the driver.
-                telemetry.addData("Path1", "Running to %7d :%7d", newFrontLeftTarget, newFrontRightTarget);
-                telemetry.addData("Path2", "Running at %7d :%7d",
-                        MotorFrontLeft.getCurrentPosition(),
-                        MotorFrontRight.getCurrentPosition());
-                telemetry.update();
-
-                // Allow time for other processes to run.
-                idle();
+            if (leftInches < 0){
+                MotorFrontLeft.setPower(-Math.abs(speed));
+                MotorBackLeft.setPower(-Math.abs(speed));
+            } else {
+                MotorFrontLeft.setPower(Math.abs(speed));
+                MotorBackLeft.setPower(Math.abs(speed));
+            }
+            if (rightInches < 0) {
+                MotorFrontRight.setPower(-Math.abs(speed));
+                MotorBackRight.setPower(-Math.abs(speed));
+            } else {
+                MotorFrontRight.setPower(Math.abs(speed));
+                MotorBackRight.setPower(Math.abs(speed));
             }
 
-            // Stop all motion;
+            if(leftInches < 0){
+                while(MotorFrontLeft.getCurrentPosition() > MotorFrontLeft.getTargetPosition()) {
+                    telemetry.addLine("Target Position: "+MotorBackLeft.getTargetPosition());
+                    telemetry.addLine("Current Position: "+MotorFrontLeft.getCurrentPosition());
+                    telemetry.update();
+                }
+            } else{
+                while(MotorFrontLeft.getCurrentPosition() < MotorFrontLeft.getTargetPosition()) {
+                    telemetry.addLine("Target Position: "+MotorBackLeft.getTargetPosition());
+                    telemetry.addLine("Current Position: "+MotorFrontLeft.getCurrentPosition());
+                    telemetry.update();
+                }
+            }
             stopRobot();
-
-            // Turn off RUN_TO_POSITION
-            runWithEncoder();
-
-
-            //  sleep(250);   // optional pause after each move
         }
     }
 
@@ -420,6 +311,7 @@ public class RalleyInTheValley extends LinearOpMode {
         MotorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         MotorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         MotorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        runWithEncoder();
     }
 
     public void runWithEncoder() {
@@ -429,51 +321,12 @@ public class RalleyInTheValley extends LinearOpMode {
         MotorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void goStraight(double intensity) {
-        MotorFrontLeft.setPower(1.0 * intensity);
-        MotorFrontRight.setPower(1.0 * intensity);
-        MotorBackLeft.setPower(1.0 * intensity);
-        MotorBackRight.setPower(1.0 * intensity);
-    }
-
-    public void goBack(double intensity) {
-        MotorFrontLeft.setPower(-1.0 * intensity);
-        MotorFrontRight.setPower(-1.0 * intensity);
-        MotorBackLeft.setPower(-1.0 * intensity);
-        MotorBackRight.setPower(-1.0 * intensity);
-    }
-
-    public void goRight(double intensity) {
-        MotorFrontLeft.setPower(1.0 * intensity);
-        MotorFrontRight.setPower(-1.0 * intensity);
-        MotorBackLeft.setPower(1.0 * intensity);
-        MotorBackRight.setPower(-1.0 * intensity);
-
-    }
-
-    public void goLeft(double intensity) {
-        MotorFrontLeft.setPower(-1.0 * intensity);
-        MotorFrontRight.setPower(1.0 * intensity);
-        MotorBackLeft.setPower(-1.0 * intensity);
-        MotorBackRight.setPower(1.0 * intensity);
-
-    }
 
     public void stopRobot() {
         MotorFrontLeft.setPower(0.0);
         MotorFrontRight.setPower(0.0);
         MotorBackLeft.setPower(0.0);
         MotorBackRight.setPower(0.0);
-    }
-
-    public void goLeftCurved(double intensity) {
-        MotorFrontLeft.setPower(-1.0 * intensity);
-        MotorBackLeft.setPower(-1.0 * intensity);
-    }
-
-    public void goRightCurved(double intensity) {
-        MotorFrontRight.setPower(-1.0 * intensity);
-        MotorBackRight.setPower(-1.0 * intensity);
     }
 
 
