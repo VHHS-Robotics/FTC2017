@@ -100,7 +100,6 @@ public class RalleyInTheValley2 extends LinearOpMode {
 
 
 
-
         runWithEncoder();
         waitForStart();
         runtime.reset();
